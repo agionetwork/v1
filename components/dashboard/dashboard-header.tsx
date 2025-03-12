@@ -1,11 +1,11 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Shield, Settings } from "lucide-react"
+import { Shield } from "lucide-react"
 
 import WalletConnect from "@/components/wallet-connect"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { NotificationsPopover } from "@/components/notifications/notifications-popover"
-import { Button } from "@/components/ui/button"
+import { SettingsDialog } from "@/components/settings-dialog"
 
 export default function DashboardHeader() {
   return (
@@ -46,14 +46,7 @@ export default function DashboardHeader() {
         <div className="ml-auto flex items-center gap-2">
           <NotificationsPopover />
           <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="rounded-lg text-white hover:bg-white/10"
-            aria-label="Settings"
-          >
-            <Settings className="h-5 w-5" />
-          </Button>
+          <SettingsDialog />
           <WalletConnect />
         </div>
       </div>
