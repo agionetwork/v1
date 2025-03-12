@@ -22,12 +22,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen bg-background`}>
+    <html lang="en" suppressHydrationWarning className="dark">
+      <body className={`${inter.className} min-h-screen bg-background dark:bg-black`}>
         <Providers>
-          <div className="min-h-screen bg-background transition-all duration-300">
+          <div className="min-h-screen bg-background dark:bg-black">
             <WalletProviderWrapper>
-              {children}
+              <div className="layout-container">
+                {children}
+              </div>
               <Toaster />
             </WalletProviderWrapper>
           </div>

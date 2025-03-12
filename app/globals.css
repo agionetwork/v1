@@ -51,23 +51,23 @@ body {
   .dark {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 100%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 0 0% 100%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 100%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
@@ -94,7 +94,7 @@ body {
   }
 
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
+    @apply bg-background text-foreground;
   }
 
   .dark body {
@@ -114,6 +114,67 @@ body {
 
 .dark main {
   background-color: black;
+}
+
+/* Classes utilitárias para layout */
+.layout-container {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.card-grid {
+  @apply grid gap-6 md:grid-cols-2 lg:grid-cols-3;
+}
+
+.section-spacing {
+  @apply space-y-6;
+}
+
+.flex-center {
+  @apply flex items-center justify-center;
+}
+
+.flex-between {
+  @apply flex items-center justify-between;
+}
+
+/* Ajustes para cards no tema escuro */
+.dark .card {
+  @apply bg-card border-border;
+}
+
+.dark .card-header {
+  @apply border-border;
+}
+
+.dark .card-content {
+  @apply text-card-foreground;
+}
+
+/* Ajustes para botões no tema escuro */
+.dark .btn-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+.dark .btn-secondary {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+}
+
+/* Ajustes para inputs no tema escuro */
+.dark .input {
+  @apply bg-input text-foreground border-border;
+}
+
+/* Ajustes para texto no tema escuro */
+.dark .text-primary {
+  @apply text-primary;
+}
+
+.dark .text-secondary {
+  @apply text-secondary;
+}
+
+.dark .text-muted {
+  @apply text-muted-foreground;
 }
 
 /* Estilos personalizados para o modal da carteira */
