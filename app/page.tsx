@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import HeroSection from "@/components/hero-section"
 import StatsSection from "@/components/stats-section"
-import WalletConnect from "@/components/wallet-connect"
 
 export default function Home() {
   return (
@@ -27,7 +26,11 @@ export default function Home() {
           </Link>
         </nav>
         <div className="ml-4">
-          <WalletConnect />
+          <Link href="/dashboard">
+            <Button className="bg-white text-primary hover:bg-white/90">
+              LAUNCH APP
+            </Button>
+          </Link>
         </div>
       </header>
       <main className="flex-1">
@@ -37,20 +40,20 @@ export default function Home() {
               <div className="flex flex-col justify-center space-y-4 text-left">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Empréstimos P2P Seguros na Blockchain
+                    The SocialFi Lending Platform.
                   </h1>
                   <p className="text-muted-foreground md:text-xl">
-                    Faça empréstimos de tokens para amigos, família e empresas. Empreste e tome emprestado diretamente com outros usuários.
+                    Agio Network is a peer-to-peer lending platform that allows you to borrow and lend from your friends, family and business.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="/marketplace">
+                  <Link href="/borrow-lend">
                     <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-                      P2P MARKETPLACE <ArrowRight className="ml-2 h-4 w-4" />
+                      LAUNCH APP <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link href="/dashboard">
-                    <Button variant="outline">LAUNCH APP</Button>
+                  <Link href="/loan-offers/marketplace">
+                    <Button variant="outline">LOAN OFFERS</Button>
                   </Link>
                 </div>
               </div>
@@ -126,11 +129,18 @@ export default function Home() {
                   Connect your wallet and join thousands of users already lending and borrowing on our platform.
                 </p>
               </div>
-              <Link href="/dashboard">
-                <Button className="mt-4 bg-primary text-primary-foreground hover:bg-primary/90">
-                  Launch App <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                <Link href="/loan-offers/marketplace">
+                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
+                    LOAN OFFERS
+                  </Button>
+                </Link>
+                <Link href="/borrow-lend">
+                  <Button size="lg" className="w-full sm:w-auto">
+                    Launch App
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </section>

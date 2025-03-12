@@ -21,52 +21,52 @@ export function RiskAssessment() {
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold dark:text-white">Loan Risk Assessment</h2>
-      <div className="grid gap-4">
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="loan-amount" className="text-right dark:text-white">
+    <div className="space-y-3 max-w-sm mx-auto">
+      <h2 className="text-lg font-semibold dark:text-white">Loan Risk Assessment</h2>
+      <div className="grid gap-3">
+        <div className="grid grid-cols-3 items-center gap-3">
+          <Label htmlFor="loan-amount" className="text-right text-sm dark:text-white">
             Loan Amount (SOL)
           </Label>
           <Input
             id="loan-amount"
             type="number"
-            className="col-span-3"
+            className="col-span-2 h-8 text-sm"
             value={loanAmount}
             onChange={(e) => setLoanAmount(Number(e.target.value))}
           />
         </div>
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="collateral" className="text-right dark:text-white">
+        <div className="grid grid-cols-3 items-center gap-3">
+          <Label htmlFor="collateral" className="text-right text-sm dark:text-white">
             Collateral (SOL)
           </Label>
           <Input
             id="collateral"
             type="number"
-            className="col-span-3"
+            className="col-span-2 h-8 text-sm"
             value={collateral}
             onChange={(e) => setCollateral(Number(e.target.value))}
           />
         </div>
-        <div className="grid grid-cols-4 items-center gap-4">
-          <Label htmlFor="term" className="text-right dark:text-white">
+        <div className="grid grid-cols-3 items-center gap-3">
+          <Label htmlFor="term" className="text-right text-sm dark:text-white">
             Term (Days)
           </Label>
           <Input
             id="term"
             type="number"
-            className="col-span-3"
+            className="col-span-2 h-8 text-sm"
             value={term}
             onChange={(e) => setTerm(Number(e.target.value))}
           />
         </div>
       </div>
-      <Button onClick={calculateRisk} className="dark:text-white">Calculate Risk</Button>
+      <Button onClick={calculateRisk} className="w-full h-8 text-sm dark:text-white">Calculate Risk</Button>
       {riskScore > 0 && (
-        <div className="space-y-2">
-          <Label className="dark:text-white">Risk Score</Label>
-          <Progress value={riskScore} className="w-full" />
-          <p className="text-sm text-muted-foreground dark:text-gray-400">
+        <div className="space-y-1">
+          <Label className="text-sm dark:text-white">Risk Score</Label>
+          <Progress value={riskScore} className="w-full h-2" />
+          <p className="text-xs text-muted-foreground dark:text-gray-400">
             {riskScore < 33 ? "High Risk" : riskScore < 66 ? "Medium Risk" : "Low Risk"}
           </p>
         </div>

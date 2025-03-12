@@ -20,19 +20,19 @@ export function ReferralProgram() {
   }
 
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Referral Program</h2>
-      <p className="text-muted-foreground">Invite friends and earn rewards when they join AGIO NETWORK.</p>
-      <div className="flex items-center space-x-2">
-        <Input value={referralCode} readOnly />
-        <Button onClick={copyReferralCode}>Copy</Button>
+    <div className="space-y-3 max-w-sm mx-auto">
+      <h2 className="text-lg font-semibold">Referral Program</h2>
+      <p className="text-sm text-muted-foreground">Invite friends and earn rewards when they join AGIO NETWORK.</p>
+      <div className="flex items-center gap-2">
+        <Input value={referralCode} readOnly className="h-8 text-sm" />
+        <Button onClick={copyReferralCode} className="h-8 text-sm px-3">Copy</Button>
       </div>
-      <div className="space-y-2">
-        <Label>Your Rewards</Label>
-        <p className="text-2xl font-bold">5 SOL</p>
-        <p className="text-sm text-muted-foreground">Earned from 10 referrals</p>
+      <div className="space-y-1">
+        <Label className="text-sm">Invited Users</Label>
+        <p className="text-lg font-semibold">10</p>
+        <p className="text-xs text-muted-foreground">Earned from 10 referrals</p>
       </div>
-      <Button className="w-full">Share Referral Link</Button>
+      <Button className="w-full h-8 text-sm">Share Referral Link</Button>
     </div>
   )
 }
