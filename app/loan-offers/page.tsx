@@ -4,16 +4,14 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import DashboardHeader from "@/components/dashboard/dashboard-header"
-import DashboardNav from "@/components/dashboard/dashboard-nav"
 import { Search, SlidersHorizontal } from "lucide-react"
 
 export default function MarketplacePage() {
   return (
     <div className="flex min-h-screen flex-col">
       <DashboardHeader />
-      <div className="flex flex-1">
-        <DashboardNav />
-        <main className="flex-1 p-6">
+      <main className="flex-1 p-6">
+        <div className="container mx-auto">
           <div className="flex flex-col space-y-6">
             <div className="flex flex-col space-y-2">
               <h1 className="text-3xl font-bold tracking-tight dark:text-white">P2P AGIO MARKETPLACE</h1>
@@ -169,8 +167,8 @@ export default function MarketplacePage() {
               </TabsContent>
             </Tabs>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   )
 }

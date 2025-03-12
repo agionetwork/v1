@@ -1,5 +1,4 @@
 import DashboardHeader from "@/components/dashboard/dashboard-header"
-import DashboardNav from "@/components/dashboard/dashboard-nav"
 import SocialFeed from "@/components/social-feed"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -11,9 +10,8 @@ export default function CommunityPage() {
   return (
     <div className="flex min-h-screen flex-col">
       <DashboardHeader />
-      <div className="flex flex-1">
-        <DashboardNav />
-        <main className="flex-1 p-6">
+      <main className="flex-1 p-6">
+        <div className="container mx-auto">
           <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
             <div className="space-y-6">
               <div className="flex flex-col space-y-2">
@@ -132,8 +130,8 @@ export default function CommunityPage() {
               </Card>
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   )
 }
