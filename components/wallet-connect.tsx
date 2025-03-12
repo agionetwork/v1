@@ -1,0 +1,33 @@
+"use client"
+
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { Wallet } from "lucide-react"
+import { useEffect, useState } from "react"
+
+export default function WalletConnect() {
+  const { publicKey, connected, connecting } = useWallet()
+  const [mounted, setMounted] = useState(false)
+
+  // Evita problemas de hidratação
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
+  return (
+    <WalletMultiButton 
+      className="bg-white hover:bg-white/90 text-agio font-semibold rounded-md px-4 py-2 flex items-center border border-agio"
+      startIcon={<Wallet className="mr-2 h-4 w-4 text-agio" />}
+    >
+      {connecting 
+        ? "Connecting..." 
+        : connected && publicKey 
+          ? publicKey.toString().slice(0, 4) + "..." + publicKey.toString().slice(-4) 
+          : "CONNECT WALLET"
+      }
+    </WalletMultiButton>
+  )
+}
+
