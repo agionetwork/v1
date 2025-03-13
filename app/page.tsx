@@ -1,165 +1,59 @@
-import Link from "next/link"
-import { ArrowRight, BarChart3, Shield, Users } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import HeroSection from "@/components/hero-section"
 import StatsSection from "@/components/stats-section"
+import FeaturesSection from "@/components/features-section"
+import Footer from "@/components/footer"
+import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { ArrowRight } from "lucide-react"
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground">
-      <header className="px-4 lg:px-6 h-14 flex items-center bg-primary text-primary-foreground">
-        <Link className="flex items-center justify-center" href="#">
-          <Shield className="h-6 w-6 text-agio" />
-          <span className="ml-2 text-xl font-bold">AGIO NETWORK</span>
-        </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
-            FEATURES
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
-            ABOUT
-          </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#">
-            DOCS
-          </Link>
-        </nav>
-        <div className="ml-4">
-          <Link href="/dashboard">
-            <Button className="bg-white text-primary hover:bg-white/90">
-              LAUNCH APP
-            </Button>
-          </Link>
-        </div>
-      </header>
+    <div className="flex min-h-screen flex-col bg-background">
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6 mx-auto max-w-6xl">
-            <div className="grid gap-6 lg:grid-cols-2 lg:gap-12 items-center">
-              <div className="flex flex-col justify-center space-y-4 text-left">
+        <section className="w-full min-h-screen flex items-center justify-center py-8 md:py-12 lg:py-16 xl:py-24">
+          <div className="container px-4 md:px-6 mx-auto max-w-7xl">
+            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
+              <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    The SocialFi Lending Platform.
+                    Make money by lending tokens to friends, family and businesses.
                   </h1>
-                  <p className="text-muted-foreground md:text-xl">
-                    Agio Network is a peer-to-peer lending platform that allows you to borrow and lend from your friends, family and business.
+                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                    Borrow and lend directly with other users, using Solana tokens as collaterals. Build your reputation, earn interest, and
+                    access liquidity with lightning-fast transactions and minimal fees.
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="/borrow-lend">
-                    <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Link href="/dashboard?tab=overview">
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white">
                       LAUNCH APP <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
                   <Link href="/loan-offers/marketplace">
-                    <Button variant="outline">LOAN OFFERS</Button>
+                    <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+                      LOAN OFFERS
+                    </Button>
                   </Link>
                 </div>
               </div>
-              <div className="mx-auto flex w-full items-center justify-center">
-                <img
-                  alt="Lending Platform"
-                  className="aspect-[4/3] overflow-hidden rounded-xl object-contain object-center"
-                  src="/images/lending-hero.png"
-                  width={600}
-                  height={400}
+              <div className="relative w-[300px] h-[300px] hidden lg:block mx-auto">
+                <Image
+                  src="/images/blue-hat.png"
+                  alt="Blue Hat"
+                  width={300}
+                  height={300}
+                  priority
+                  className="object-contain"
                 />
               </div>
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-          <div className="container px-4 md:px-6 mx-auto">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2 max-w-3xl mx-auto">
-                <div className="inline-block rounded-lg bg-primary px-3 py-1 text-sm text-primary-foreground">
-                  Key Features
-                </div>
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Why Choose AGIO NETWORK?</h2>
-                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  AGIO combines the best of DeFi with Social Media to create a trustworthy lending ecosystem.
-                </p>
-              </div>
-            </div>
-            <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 lg:gap-12 mt-12">
-              <Card className="text-center">
-                <CardHeader className="flex flex-col items-center gap-4 pb-2">
-                  <Shield className="h-8 w-8 text-agio" />
-                  <CardTitle className="text-xl">Secure Lending</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Smart contracts ensure all lending agreements are secure, transparent, and immutable.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              <Card className="text-center">
-                <CardHeader className="flex flex-col items-center gap-4 pb-2">
-                  <Users className="h-8 w-8 text-agio" />
-                  <CardTitle className="text-xl">Social Reputation</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Build your reputation through successful transactions and community engagement.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              <Card className="text-center">
-                <CardHeader className="flex flex-col items-center gap-4 pb-2">
-                  <BarChart3 className="h-8 w-8 text-agio" />
-                  <CardTitle className="text-xl">Transparent Rates</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Market-driven interest rates with no hidden fees or complicated terms.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
         <StatsSection />
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6 mx-auto">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center max-w-3xl mx-auto">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Ready to Start?</h2>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed mx-auto">
-                  Connect your wallet and join thousands of users already lending and borrowing on our platform.
-                </p>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                <Link href="/loan-offers/marketplace">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                    LOAN OFFERS
-                  </Button>
-                </Link>
-                <Link href="/borrow-lend">
-                  <Button size="lg" className="w-full sm:w-auto">
-                    Launch App
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        <FeaturesSection />
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t bg-primary text-primary-foreground">
-        <p className="text-xs text-white">© 2025 AGIO NETWORK. All rights reserved.</p>
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Terms of Service
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Privacy
-          </Link>
-          <Link className="text-xs hover:underline underline-offset-4" href="#">
-            Docs
-          </Link>
-        </nav>
-      </footer>
+      <Footer />
     </div>
   )
-}
-
+} 

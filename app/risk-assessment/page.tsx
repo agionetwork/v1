@@ -1,18 +1,135 @@
-import DashboardHeader from "@/components/dashboard/dashboard-header"
-import { RiskAssessment } from "@/components/risk-assessment"
+"use client"
+
+import { useState } from "react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
+type RiskScore = {
+  overall: number
+  factors: {
+    reputation: number
+    collateral: number
+    history: number
+    activity: number
+  }
+}
+
+const mockRiskScore: RiskScore = {
+  overall: 85,
+  factors: {
+    reputation: 90,
+    collateral: 80,
+    history: 85,
+    activity: 85
+  }
+}
+
+function RiskFactorCard({ title, score }: { title: string; score: number }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-sm font-medium">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{score}%</div>
+        <div className="mt-4 h-2 w-full bg-muted rounded-full overflow-hidden">
+          <div
+            className="h-full bg-primary"
+            style={{ width: `${score}%` }}
+          />
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
 
 export default function RiskAssessmentPage() {
+  const [address, setAddress] = useState("")
+  const [token, setToken] = useState("SOL")
+  const [amount, setAmount] = useState("")
+
+  const handleAssess = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Implementar lógica de avaliação de risco
+    console.log({ address, token, amount })
+  }
+
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-background to-background/95">
-      <DashboardHeader />
-      <div className="flex-1 relative">
-        <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:60px_60px]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/5 via-background/50 to-background/95" />
-        <main className="container relative mx-auto p-6">
-          <div className="rounded-xl border bg-card p-8 shadow-lg backdrop-blur-sm">
-            <RiskAssessment />
-          </div>
-        </main>
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-8">Risk Assessment</h1>
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_400px]">
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Risk Score</CardTitle>
+              <CardDescription>Overall risk assessment based on multiple factors</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center mb-8">
+                <div className="text-5xl font-bold mb-2">{mockRiskScore.overall}%</div>
+                <p className="text-muted-foreground">Overall Risk Score</p>
+              </div>
+              <div className="grid gap-4">
+                <RiskFactorCard title="Reputation Score" score={mockRiskScore.factors.reputation} />
+                <RiskFactorCard title="Collateral Rating" score={mockRiskScore.factors.collateral} />
+                <RiskFactorCard title="Loan History" score={mockRiskScore.factors.history} />
+                <RiskFactorCard title="Platform Activity" score={mockRiskScore.factors.activity} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Assess New Address</CardTitle>
+              <CardDescription>Enter details to assess risk for a new loan</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleAssess} className="space-y-6">
+                <div className="space-y-2">
+                  <Label htmlFor="address">Wallet Address</Label>
+                  <Input
+                    id="address"
+                    placeholder="Enter wallet address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="token">Token</Label>
+                  <Select value={token} onValueChange={setToken}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select token" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="SOL">SOL</SelectItem>
+                      <SelectItem value="USDC">USDC</SelectItem>
+                      <SelectItem value="USDT">USDT</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="amount">Amount</Label>
+                  <Input
+                    id="amount"
+                    type="number"
+                    placeholder="Enter amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  Assess Risk
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

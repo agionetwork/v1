@@ -156,13 +156,13 @@ export default function BorrowDashboard() {
     <TooltipProvider>
       <div className="space-y-6">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+          <Card className="bg-blue-600">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium dark:text-white flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
                 Total Borrowed
                 <Tooltip>
                   <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-muted-foreground" />
+                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Total value of assets you have borrowed</p>
@@ -171,27 +171,27 @@ export default function BorrowDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold dark:text-white flex items-center gap-2">
+              <div className="text-2xl font-bold text-white flex items-center gap-2">
                 ${totalBorrowed.toLocaleString()}
-                <span className="text-sm text-green-500 flex items-center">
+                <span className="text-sm text-green-300 flex items-center">
                   <ArrowUpIcon className="h-4 w-4" />
                   +8.3%
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground dark:text-gray-400 flex items-center gap-1">
+              <p className="text-xs text-white/70 flex items-center gap-1">
                 <BiWallet className="h-3 w-3" />
                 Across {activeLoans.length} assets
               </p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-blue-600">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium dark:text-white flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
                 Interest Due
                 <Tooltip>
                   <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-muted-foreground" />
+                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Total interest due on your active loans</p>
@@ -200,24 +200,24 @@ export default function BorrowDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold dark:text-white flex items-center gap-2">
+              <div className="text-2xl font-bold text-white flex items-center gap-2">
                 ${totalInterest.toLocaleString()}
-                <span className="text-sm text-red-500 flex items-center">
+                <span className="text-sm text-red-300 flex items-center">
                   <ArrowDownIcon className="h-4 w-4" />
                   -2.1%
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground dark:text-gray-400">Next payment: {activeLoans[0]?.dueDate}</p>
+              <p className="text-xs text-white/70">Next payment: {activeLoans[0]?.dueDate}</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-blue-600">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium dark:text-white flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
                 Average APR
                 <Tooltip>
                   <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-muted-foreground" />
+                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Average annual percentage rate across your loans</p>
@@ -226,24 +226,24 @@ export default function BorrowDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold dark:text-white flex items-center gap-2">
+              <div className="text-2xl font-bold text-white flex items-center gap-2">
                 5.2%
-                <span className="text-sm text-red-500 flex items-center">
+                <span className="text-sm text-red-300 flex items-center">
                   <ArrowDownIcon className="h-4 w-4" />
                   -0.3%
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground dark:text-gray-400">Market avg: 4.8%</p>
+              <p className="text-xs text-white/70">Market avg: 4.8%</p>
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-blue-600">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium dark:text-white flex items-center gap-2">
+              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
                 Active Loans
                 <Tooltip>
                   <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-muted-foreground" />
+                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Number of currently active loans</p>
@@ -252,8 +252,8 @@ export default function BorrowDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold dark:text-white">{activeLoans.length}</div>
-              <p className="text-xs text-muted-foreground dark:text-gray-400 flex items-center gap-1">
+              <div className="text-2xl font-bold text-white">{activeLoans.length}</div>
+              <p className="text-xs text-white/70 flex items-center gap-1">
                 <BiTimer className="h-3 w-3" />
                 {activeLoans.length} due this month
               </p>
@@ -273,9 +273,19 @@ export default function BorrowDashboard() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="active-loans">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="active-loans">Active Loans</TabsTrigger>
-                <TabsTrigger value="opportunities">Opportunities</TabsTrigger>
+              <TabsList className="bg-transparent border dark:border-white/10">
+                <TabsTrigger 
+                  value="active-loans"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                >
+                  Active Loans
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="opportunities"
+                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                >
+                  Opportunities
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="active-loans" className="mt-4">
                 <div className="rounded-lg border bg-card p-2 mb-4">
@@ -445,7 +455,7 @@ export default function BorrowDashboard() {
             </Tabs>
             <div className="flex justify-center mt-4">
               <Link href="/loan-offers/marketplace?tab=borrow">
-                <Button className="h-8 px-4 text-sm">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white h-8 px-4 text-sm">
                   View All Opportunities
                 </Button>
               </Link>

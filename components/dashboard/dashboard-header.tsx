@@ -1,52 +1,53 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Shield } from "lucide-react"
+"use client"
 
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 import WalletConnect from "@/components/wallet-connect"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { NotificationsPopover } from "@/components/notifications/notifications-popover"
-import { SettingsDialog } from "@/components/settings-dialog"
+import { SettingsPopover } from "@/components/settings/settings-popover"
+import { Sun, Moon } from "lucide-react"
+import { useTheme } from "next-themes"
 
 export default function DashboardHeader() {
-  return (
-    <header className="sticky top-0 z-50 w-full border-b bg-agio">
-      <div className="container flex h-16 items-center">
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.png" alt="AGIO Logo" width={32} height={32} />
-          <span className="text-lg font-bold text-white">AGIO NETWORK</span>
-        </Link>
-        
-        <nav className="ml-8 hidden md:flex items-center space-x-1">
-          <Link 
-            href="/dashboard?tab=overview" 
-            className="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Dashboard
-          </Link>
-          <Link 
-            href="/borrow-lend" 
-            className="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Borrow / Lend
-          </Link>
-          <Link 
-            href="/loan-offers/marketplace" 
-            className="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Loan Offers
-          </Link>
-          <Link 
-            href="/socialfi/community" 
-            className="rounded-lg px-3 py-2 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            SocialFi
-          </Link>
-        </nav>
+  const { theme, setTheme } = useTheme()
 
-        <div className="ml-auto flex items-center gap-2">
-          <NotificationsPopover />
-          <ThemeToggle />
-          <SettingsDialog />
+  return (
+    <header className="sticky top-0 z-50 w-full border-b bg-background dark:bg-background">
+      <div className="container flex h-16 items-center justify-between">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="font-bold text-xl text-blue-600">
+            AGIO NETWORK
+          </Link>
+          <nav className="flex items-center gap-6">
+            <Link href="/dashboard" className="text-sm font-medium dark:text-white text-black hover:text-blue-600">
+              Dashboard
+            </Link>
+            <Link href="/borrow-lend" className="text-sm font-medium dark:text-white text-black hover:text-blue-600">
+              Borrow / Lend
+            </Link>
+            <Link href="/loan-offers/marketplace" className="text-sm font-medium dark:text-white text-black hover:text-blue-600">
+              Loan Offers
+            </Link>
+            <Link href="/socialfi" className="text-sm font-medium dark:text-white text-black hover:text-blue-600">
+              SocialFi
+            </Link>
+          </nav>
+        </div>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="hover:bg-transparent"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-5 w-5 text-white" />
+            ) : (
+              <Moon className="h-5 w-5 text-black" />
+            )}
+          </Button>
+          <NotificationsPopover className="dark:text-white text-black hover:bg-transparent" />
+          <SettingsPopover className="dark:text-white text-black hover:bg-transparent" />
           <WalletConnect />
         </div>
       </div>

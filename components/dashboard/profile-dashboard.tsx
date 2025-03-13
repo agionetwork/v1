@@ -29,8 +29,8 @@ export default function ProfileDashboard() {
                 <AvatarFallback>JD</AvatarFallback>
               </Avatar>
               <div>
-                <CardTitle className="dark:text-white">John Doe</CardTitle>
-                <CardDescription className="dark:text-gray-400">Member since March 2025</CardDescription>
+                <CardTitle className="dark:text-white">Web 3 Surfer</CardTitle>
+                <CardDescription className="dark:text-gray-400">@w3_surfer</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -40,7 +40,9 @@ export default function ProfileDashboard() {
                 <span className="text-sm font-medium dark:text-white">Reputation Score</span>
                 <span className="text-sm font-medium dark:text-white">92/100</span>
               </div>
-              <Progress value={92} className="h-2" />
+              <Progress value={92} className="h-2 bg-gray-200 dark:bg-gray-700">
+                <div className="h-full bg-blue-600" style={{ width: '92%' }} />
+              </Progress>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
@@ -73,19 +75,19 @@ export default function ProfileDashboard() {
           <TabsList className="grid w-full grid-cols-3 bg-muted">
             <TabsTrigger 
               value="achievements" 
-              className="flex-1 data-[state=active]:bg-agio data-[state=active]:text-white dark:text-white"
+              className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white dark:text-white"
             >
               Achievements
             </TabsTrigger>
             <TabsTrigger 
               value="reputation" 
-              className="flex-1 data-[state=active]:bg-agio data-[state=active]:text-white dark:text-white"
+              className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white dark:text-white"
             >
               Reputation
             </TabsTrigger>
             <TabsTrigger 
               value="social" 
-              className="flex-1 data-[state=active]:bg-agio data-[state=active]:text-white dark:text-white"
+              className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white dark:text-white"
             >
               Social
             </TabsTrigger>
@@ -141,28 +143,36 @@ export default function ProfileDashboard() {
                     <span className="text-sm font-medium dark:text-white">Repayment History</span>
                     <span className="text-sm font-medium dark:text-white">100/100</span>
                   </div>
-                  <Progress value={100} className="h-2" />
+                  <Progress value={100} className="h-2 bg-gray-200 dark:bg-gray-700">
+                    <div className="h-full bg-blue-600" style={{ width: '100%' }} />
+                  </Progress>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm font-medium dark:text-white">Transaction Volume</span>
                     <span className="text-sm font-medium dark:text-white">85/100</span>
                   </div>
-                  <Progress value={85} className="h-2" />
+                  <Progress value={85} className="h-2 bg-gray-200 dark:bg-gray-700">
+                    <div className="h-full bg-blue-600" style={{ width: '85%' }} />
+                  </Progress>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm font-medium dark:text-white">Account Age</span>
                     <span className="text-sm font-medium dark:text-white">70/100</span>
                   </div>
-                  <Progress value={70} className="h-2" />
+                  <Progress value={70} className="h-2 bg-gray-200 dark:bg-gray-700">
+                    <div className="h-full bg-blue-600" style={{ width: '70%' }} />
+                  </Progress>
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm font-medium dark:text-white">Community Engagement</span>
                     <span className="text-sm font-medium dark:text-white">95/100</span>
                   </div>
-                  <Progress value={95} className="h-2" />
+                  <Progress value={95} className="h-2 bg-gray-200 dark:bg-gray-700">
+                    <div className="h-full bg-blue-600" style={{ width: '95%' }} />
+                  </Progress>
                 </div>
               </CardContent>
             </Card>

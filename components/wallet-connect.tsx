@@ -4,8 +4,13 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { Wallet } from "lucide-react"
 import { useEffect, useState } from "react"
+import { cn } from "@/lib/utils"
 
-export default function WalletConnect() {
+interface WalletConnectProps {
+  className?: string
+}
+
+export default function WalletConnect({ className }: WalletConnectProps) {
   const { publicKey, connected, connecting } = useWallet()
   const [mounted, setMounted] = useState(false)
 
@@ -18,8 +23,8 @@ export default function WalletConnect() {
 
   return (
     <WalletMultiButton 
-      className="bg-white hover:bg-white/90 text-agio font-semibold rounded-md px-4 py-2 flex items-center border border-agio"
-      startIcon={<Wallet className="mr-2 h-4 w-4 text-agio" />}
+      className={cn("bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md px-4 py-2 flex items-center border-none", className)}
+      startIcon={<Wallet className="mr-2 h-4 w-4 text-white" />}
     >
       {connecting 
         ? "Connecting..." 

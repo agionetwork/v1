@@ -1,15 +1,11 @@
-import type { Metadata } from 'next'
+"use client"
+
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
-import { ClientProviders } from '@/components/providers/client-providers'
+import { RootLayoutClient } from '@/components/layout/root-layout-client'
+import { ThemeProvider } from "next-themes"
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
-
-export const metadata: Metadata = {
-  title: 'AGIO Network',
-  description: 'Decentralized Lending Protocol',
-}
 
 export default function RootLayout({
   children,
@@ -21,15 +17,15 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <ClientProviders>
+          <RootLayoutClient>
             {children}
-          </ClientProviders>
+          </RootLayoutClient>
         </ThemeProvider>
       </body>
     </html>
   )
-}
+} 

@@ -81,7 +81,7 @@ export function BorrowLoanCreation() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-white shadow-lg rounded-xl overflow-hidden">
+    <Card className="w-full max-w-2xl mx-auto bg-white dark:bg-blue-950 shadow-lg rounded-xl overflow-hidden">
       <CardHeader className="bg-agio rounded-t-xl text-center py-1 relative">
         <CardTitle className="text-lg font-bold text-white text-center">
           CREATE BORROW OFFER
@@ -101,10 +101,10 @@ export function BorrowLoanCreation() {
                   TOKEN
                 </Label>
                 <Select value={token} onValueChange={setToken}>
-                  <SelectTrigger className="w-full h-8">
+                  <SelectTrigger className="w-full h-8 bg-white text-black">
                     <SelectValue placeholder="Select token" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
+                  <SelectContent className="bg-white text-black">
                     <SelectItem value="SOL">SOL</SelectItem>
                     <SelectItem value="USDC">USDC</SelectItem>
                     <SelectItem value="USDT">USDT</SelectItem>
@@ -122,7 +122,7 @@ export function BorrowLoanCreation() {
                   type="number"
                   value={loanAmount}
                   onChange={(e) => setLoanAmount(Number(e.target.value))}
-                  className="border-agio focus:ring-agio h-8"
+                  className="bg-white h-8 text-black"
                 />
               </div>
             </div>
@@ -133,10 +133,10 @@ export function BorrowLoanCreation() {
                   TOKEN COLLATERAL
                 </Label>
                 <Select value={tokenCollateral} onValueChange={setTokenCollateral}>
-                  <SelectTrigger className="w-full h-8">
+                  <SelectTrigger className="w-full h-8 bg-white text-black">
                     <SelectValue placeholder="Select collateral token" />
                   </SelectTrigger>
-                  <SelectContent className="bg-white">
+                  <SelectContent className="bg-white text-black">
                     <SelectItem value="SOL">SOL</SelectItem>
                     <SelectItem value="USDC">USDC</SelectItem>
                     <SelectItem value="USDT">USDT</SelectItem>
@@ -154,30 +154,15 @@ export function BorrowLoanCreation() {
                   type="number"
                   value={collateralAmount}
                   onChange={(e) => setCollateralAmount(Number(e.target.value))}
-                  className="border-agio focus:ring-agio h-8"
+                  className="bg-white h-8 text-black"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <Label htmlFor="agio" className="text-sm font-medium text-foreground">
-                  AGIO (APY %): {apy}
-                </Label>
-                <Slider
-                  id="agio"
-                  min={0}
-                  max={100}
-                  step={0.1}
-                  value={[apy]}
-                  onValueChange={(value) => setApy(value[0])}
-                  className="bg-agio-light"
-                />
-              </div>
-
-              <div className="space-y-1">
                 <Label htmlFor="loan-term" className="text-sm font-medium text-foreground">
-                  LOAN TERM (DAYS): {loanTerm}
+                  LOAN TERM: {loanTerm} days
                 </Label>
                 <Slider
                   id="loan-term"
@@ -185,8 +170,23 @@ export function BorrowLoanCreation() {
                   max={365}
                   step={1}
                   value={[loanTerm]}
-                  onValueChange={(value) => setLoanTerm(value[0])}
-                  className="bg-agio-light"
+                  onValueChange={([value]) => setLoanTerm(value)}
+                  className="[&>[role=slider]]:bg-blue-600 [&>.data-[orientation=horizontal]]:bg-blue-600 [&>span]:bg-blue-600"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <Label htmlFor="agio" className="text-sm font-medium text-foreground">
+                  AGIO: {apy}%
+                </Label>
+                <Slider
+                  id="agio"
+                  min={0}
+                  max={100}
+                  step={0.1}
+                  value={[apy]}
+                  onValueChange={([value]) => setApy(value)}
+                  className="[&>[role=slider]]:bg-blue-600 [&>.data-[orientation=horizontal]]:bg-blue-600 [&>span]:bg-blue-600"
                 />
               </div>
             </div>
@@ -202,11 +202,11 @@ export function BorrowLoanCreation() {
                   value={receiverAddress}
                   readOnly
                   placeholder="CLICK IN WALLET TO SET ADDRESS"
-                  className="flex-grow border-agio focus:ring-agio h-8"
+                  className="flex-grow bg-white h-8"
                 />
                 <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button variant="outline" className="flex-shrink-0 h-8 px-3">
+                    <Button variant="outline" className="flex-shrink-0 h-8 px-3 bg-blue-600 text-white hover:bg-blue-700">
                       WALLET
                     </Button>
                   </DialogTrigger>
@@ -229,8 +229,8 @@ export function BorrowLoanCreation() {
             </div>
 
             <div className="p-2 bg-gray-50 rounded-lg">
-              <h3 className="text-sm font-medium mb-1 dark:text-white">Loan Summary</h3>
-              <div className="grid grid-cols-3 gap-2 text-xs dark:text-white">
+              <h3 className="text-sm font-medium mb-1 text-black">Loan Summary</h3>
+              <div className="grid grid-cols-3 gap-2 text-xs text-black">
                 <p>Total: {(loanAmount * (1 + (apy / 100) * (loanTerm / 365))).toFixed(2)} {token}</p>
                 <p>Interest: {(loanAmount * (apy / 100) * (loanTerm / 365)).toFixed(2)} {token}</p>
                 <p>Daily: {((apy / 100) * loanAmount / 365).toFixed(2)} {token}</p>
@@ -239,18 +239,18 @@ export function BorrowLoanCreation() {
           </div>
         </div>
       </CardContent>
-      <CardFooter className="py-2 flex justify-center items-center gap-4 bg-white">
+      <CardFooter className="py-2 flex justify-center items-center gap-4 bg-white dark:bg-blue-950">
         <Button
           variant="outline"
           onClick={resetForm}
-          className="px-6 hover:bg-gray-100 h-8"
+          className="px-6 bg-white text-black hover:bg-gray-100 h-8"
           disabled={isLoading}
         >
           Reset
         </Button>
         <Button 
           onClick={handleCreateLoan}
-          className="bg-agio hover:bg-agio-dark text-white h-8 text-base px-12"
+          className="bg-blue-600 text-white h-8 text-base px-12 hover:bg-blue-700"
           disabled={isLoading || Object.keys(errors).length > 0}
         >
           {isLoading ? (

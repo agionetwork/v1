@@ -1,133 +1,81 @@
+"use client"
+
 import { useState } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Settings2 } from "lucide-react"
-import { GB, BR } from 'country-flag-icons/react/3x2'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Cog } from "lucide-react"
 
 export function SettingsDialog() {
-  const [customRPC, setCustomRPC] = useState("")
-  const [selectedRPC, setSelectedRPC] = useState("triton1")
-
-  const handleSaveCustomRPC = () => {
-    if (customRPC) {
-      // Salvar o RPC customizado
-      console.log("Custom RPC saved:", customRPC)
-    }
-  }
+  const [open, setOpen] = useState(false)
+  const [customRpc, setCustomRpc] = useState("")
+  const [rpcType, setRpcType] = useState("default")
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="text-white">
-          <Settings2 className="h-5 w-5" />
+        <Button variant="ghost" size="icon" className="relative">
+          <Cog className="h-5 w-5" />
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-blue-600 text-white">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">Settings</DialogTitle>
+          <DialogTitle>Settings</DialogTitle>
         </DialogHeader>
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div className="space-y-2">
             <Label>Language</Label>
-            <Select defaultValue="en">
-              <SelectTrigger className="bg-blue-700 border-blue-500 text-white">
+            <Select>
+              <SelectTrigger className="bg-white text-blue-600">
                 <SelectValue placeholder="Select language" />
               </SelectTrigger>
-              <SelectContent className="bg-blue-700 border-blue-500">
-                <SelectItem value="en" className="text-white">
-                  <div className="flex items-center gap-2">
-                    <GB className="h-4 w-6" />
-                    English
-                  </div>
-                </SelectItem>
-                <SelectItem value="pt" className="text-white">
-                  <div className="flex items-center gap-2">
-                    <BR className="h-4 w-6" />
-                    Português
-                  </div>
-                </SelectItem>
+              <SelectContent>
+                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="pt">Português</SelectItem>
+                <SelectItem value="es">Español</SelectItem>
               </SelectContent>
             </Select>
           </div>
+
+          <div className="h-px bg-white/20" />
 
           <div className="space-y-2">
-            <Label>Preferred Explorer</Label>
-            <Select defaultValue="solscan">
-              <SelectTrigger className="bg-blue-700 border-blue-500 text-white">
-                <SelectValue placeholder="Select explorer" />
-              </SelectTrigger>
-              <SelectContent className="bg-blue-700 border-blue-500">
-                <SelectItem value="solscan" className="text-white">Solscan</SelectItem>
-                <SelectItem value="solanabeach" className="text-white">Solana Beach</SelectItem>
-                <SelectItem value="explorer" className="text-white">Solana Explorer</SelectItem>
-                <SelectItem value="solanafm" className="text-white">SolanaFM</SelectItem>
-                <SelectItem value="xray" className="text-white">XRAY</SelectItem>
-                <SelectItem value="oklink" className="text-white">OKLINK</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <Separator className="bg-white/20" />
-
-          <div className="space-y-4">
             <Label>RPC Endpoint</Label>
-            <RadioGroup
-              value={selectedRPC}
-              onValueChange={setSelectedRPC}
-              className="space-y-2"
+            <RadioGroup 
+              defaultValue="default" 
+              className="flex gap-4"
+              onValueChange={setRpcType}
             >
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="triton1" id="triton1" className="border-white text-white" />
-                <Label htmlFor="triton1">Triton RPC Pool 1</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="helius1" id="helius1" className="border-white text-white" />
-                <Label htmlFor="helius1">Helius RPC 1</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="triton2" id="triton2" className="border-white text-white" />
-                <Label htmlFor="triton2">Triton RPC Pool 2</Label>
+                <RadioGroupItem value="default" id="default" className="border-white text-white" />
+                <Label htmlFor="default" className="text-white">Default</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="custom" id="custom" className="border-white text-white" />
-                <Label htmlFor="custom">Custom</Label>
+                <Label htmlFor="custom" className="text-white">Custom</Label>
               </div>
             </RadioGroup>
+          </div>
 
-            {selectedRPC === "custom" && (
-              <div className="space-y-2">
+          {rpcType === "custom" && (
+            <div className="space-y-2">
+              <Label>Custom RPC</Label>
+              <div className="flex gap-2">
                 <Input
-                  placeholder="Custom RPC URL"
-                  value={customRPC}
-                  onChange={(e) => setCustomRPC(e.target.value)}
-                  className="bg-blue-700 border-blue-500 text-white placeholder:text-white/70"
+                  value={customRpc}
+                  onChange={(e) => setCustomRpc(e.target.value)}
+                  placeholder="Enter custom RPC URL"
+                  className="bg-white text-blue-600"
                 />
-                <Button
-                  onClick={handleSaveCustomRPC}
-                  className="w-full bg-white text-blue-600 hover:bg-white/90"
-                >
+                <Button className="bg-white text-blue-600 hover:bg-gray-100">
                   Save
                 </Button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>

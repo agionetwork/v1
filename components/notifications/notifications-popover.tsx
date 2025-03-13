@@ -10,7 +10,6 @@ import {
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import { Icons } from "@/components/ui/icons"
 
 interface Notification {
   id: string
@@ -21,7 +20,11 @@ interface Notification {
   read: boolean
 }
 
-export function NotificationsPopover() {
+interface NotificationsPopoverProps {
+  className?: string
+}
+
+export function NotificationsPopover({ className }: NotificationsPopoverProps) {
   const [notifications, setNotifications] = React.useState<Notification[]>([
     {
       id: "1",
@@ -66,20 +69,20 @@ export function NotificationsPopover() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5 text-white" />
+        <Button variant="ghost" size="icon" className={cn("relative hover:bg-transparent", className)}>
+          <Bell className="h-5 w-5" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-[10px] font-medium text-white flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-600 text-[10px] font-medium text-white flex items-center justify-center">
               {unreadCount}
             </span>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 bg-white p-4" align="end">
+      <PopoverContent className="w-80 bg-white dark:bg-gray-900 p-4" align="end">
         <div className="flex items-center justify-between mb-4">
-          <h4 className="text-sm font-semibold">Notifications</h4>
+          <h4 className="text-sm font-semibold dark:text-white">Notifications</h4>
           {unreadCount > 0 && (
-            <span className="text-xs text-gray-500">{unreadCount} unread</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">{unreadCount} unread</span>
           )}
         </div>
         <ScrollArea className="h-[300px] -mr-4 pr-4">
@@ -91,16 +94,16 @@ export function NotificationsPopover() {
                   "flex gap-3 p-2 rounded-lg transition-colors cursor-pointer",
                   notification.read
                     ? "opacity-75"
-                    : "bg-gray-50"
+                    : "bg-gray-50 dark:bg-gray-800"
                 )}
                 onClick={() => markAsRead(notification.id)}
               >
                 {getIcon(notification.type)}
                 <div className="flex-1 space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-sm font-medium leading-none dark:text-white">
                     {notification.title}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
                     {notification.message}
                   </p>
                 </div>
