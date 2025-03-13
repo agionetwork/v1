@@ -21,7 +21,9 @@ export function useLoanForm(collateralPrice: number) {
     loanTerm: false,
     apy: false,
     token: false,
-    receiverAddress: false
+    tokenCollateral: false,
+    receiverAddress: false,
+    operationType: false
   })
   
   const { isRateLimited, checkRateLimit, validateForm, sanitizeFormData } = useSecurity()
@@ -111,7 +113,9 @@ export function useLoanForm(collateralPrice: number) {
       loanTerm: false,
       apy: false,
       token: false,
-      receiverAddress: false
+      tokenCollateral: false,
+      receiverAddress: false,
+      operationType: false
     })
   }
 
