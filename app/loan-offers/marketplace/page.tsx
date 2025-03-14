@@ -110,7 +110,7 @@ export default function LoanOffersPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Image
-                          src={`/${offer.token.toLowerCase()}-logo.png`}
+                          src={`/images/${offer.token.toLowerCase()}-logo.png`}
                           alt={offer.token}
                           width={32}
                           height={32}
@@ -129,7 +129,7 @@ export default function LoanOffersPage() {
                         <span className="text-sm text-muted-foreground">Collateral</span>
                         <div className="flex items-center gap-2">
                           <Image
-                            src={`/${offer.collateral.toLowerCase()}-logo.png`}
+                            src={`/images/${offer.collateral.toLowerCase()}-logo.png`}
                             alt={offer.collateral}
                             width={20}
                             height={20}
@@ -169,7 +169,7 @@ export default function LoanOffersPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Image
-                          src={`/${offer.token.toLowerCase()}-logo.png`}
+                          src={`/images/${offer.token.toLowerCase()}-logo.png`}
                           alt={offer.token}
                           width={32}
                           height={32}
@@ -188,7 +188,7 @@ export default function LoanOffersPage() {
                         <span className="text-sm text-muted-foreground">Collateral</span>
                         <div className="flex items-center gap-2">
                           <Image
-                            src={`/${offer.collateral.toLowerCase()}-logo.png`}
+                            src={`/images/${offer.collateral.toLowerCase()}-logo.png`}
                             alt={offer.collateral}
                             width={20}
                             height={20}

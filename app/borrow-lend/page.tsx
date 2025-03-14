@@ -11,7 +11,7 @@ export default function BorrowLendPage() {
   return (
     <div className="container mx-auto p-6">
       <div className="flex flex-col space-y-6">
-        <div className="flex flex-col space-y-2">
+        <div className="flex flex-col space-y-2 text-center">
           <h1 className="text-3xl font-bold tracking-tight">Borrow / Lend</h1>
           <p className="text-muted-foreground">
             Create a new loan offer or request to borrow funds.

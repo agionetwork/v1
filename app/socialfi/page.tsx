@@ -10,9 +10,8 @@ import { ImageIcon, VideoIcon, TrendingUp, Calendar } from "lucide-react"
 export default function SocialFiPage() {
   return (
     <div className="flex-1 p-4 md:p-8 pt-6">
-      <div className="flex items-center justify-between mb-8">
+      <div className="text-center mb-8">
         <h2 className="text-3xl font-bold tracking-tight">SocialFi</h2>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white">Register Now</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -146,18 +145,21 @@ export default function SocialFiPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div>
+              <div className="space-y-6">
+                <div className="space-y-2">
                   <p className="font-medium">DeFi Lending Workshop</p>
                   <p className="text-sm text-muted-foreground">Apr 15, 2024 • Virtual</p>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full mt-2">Register Now</Button>
                 </div>
-                <div>
+                <div className="space-y-2">
                   <p className="font-medium">AGIO Community Call</p>
                   <p className="text-sm text-muted-foreground">Apr 20, 2024 • Online</p>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full mt-2">Register Now</Button>
                 </div>
-                <div>
+                <div className="space-y-2">
                   <p className="font-medium">Crypto Lending Summit</p>
                   <p className="text-sm text-muted-foreground">May 5, 2024 • Miami</p>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full mt-2">Register Now</Button>
                 </div>
               </div>
             </CardContent>

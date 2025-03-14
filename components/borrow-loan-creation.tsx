@@ -83,7 +83,7 @@ export function BorrowLoanCreation() {
   return (
     <Card className="w-full max-w-2xl mx-auto bg-white dark:bg-blue-950 shadow-lg rounded-xl overflow-hidden">
       <CardHeader className="bg-agio rounded-t-xl text-center py-1 relative">
-        <CardTitle className="text-lg font-bold text-white text-center">
+        <CardTitle className="text-lg font-bold text-black dark:text-white text-center">
           CREATE BORROW OFFER
         </CardTitle>
         {isSuccess && (
@@ -96,6 +96,19 @@ export function BorrowLoanCreation() {
         <div className="space-y-2">
           <div className="grid grid-cols-1 gap-2">
             <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label htmlFor="loan-amount" className="text-sm font-medium text-foreground">
+                  LOAN AMOUNT ({token})
+                </Label>
+                <Input
+                  id="loan-amount"
+                  type="number"
+                  value={loanAmount}
+                  onChange={(e) => setLoanAmount(Number(e.target.value))}
+                  className="bg-white h-8 text-black"
+                />
+              </div>
+              
               <div className="space-y-1">
                 <Label htmlFor="token" className="text-sm font-medium text-foreground">
                   TOKEN
@@ -112,22 +125,22 @@ export function BorrowLoanCreation() {
                   </SelectContent>
                 </Select>
               </div>
-
-              <div className="space-y-1">
-                <Label htmlFor="loan-amount" className="text-sm font-medium text-foreground">
-                  LOAN AMOUNT ({token})
-                </Label>
-                <Input
-                  id="loan-amount"
-                  type="number"
-                  value={loanAmount}
-                  onChange={(e) => setLoanAmount(Number(e.target.value))}
-                  className="bg-white h-8 text-black"
-                />
-              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label htmlFor="collateral-amount" className="text-sm font-medium text-foreground">
+                  COLLATERAL AMOUNT ({tokenCollateral})
+                </Label>
+                <Input
+                  id="collateral-amount"
+                  type="number"
+                  value={collateralAmount}
+                  onChange={(e) => setCollateralAmount(Number(e.target.value))}
+                  className="bg-white h-8 text-black"
+                />
+              </div>
+              
               <div className="space-y-1">
                 <Label htmlFor="token-collateral" className="text-sm font-medium text-foreground">
                   TOKEN COLLATERAL
@@ -144,37 +157,9 @@ export function BorrowLoanCreation() {
                   </SelectContent>
                 </Select>
               </div>
-
-              <div className="space-y-1">
-                <Label htmlFor="collateral-amount" className="text-sm font-medium text-foreground">
-                  COLLATERAL AMOUNT ({tokenCollateral})
-                </Label>
-                <Input
-                  id="collateral-amount"
-                  type="number"
-                  value={collateralAmount}
-                  onChange={(e) => setCollateralAmount(Number(e.target.value))}
-                  className="bg-white h-8 text-black"
-                />
-              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <Label htmlFor="loan-term" className="text-sm font-medium text-foreground">
-                  LOAN TERM: {loanTerm} days
-                </Label>
-                <Slider
-                  id="loan-term"
-                  min={1}
-                  max={365}
-                  step={1}
-                  value={[loanTerm]}
-                  onValueChange={([value]) => setLoanTerm(value)}
-                  className="[&>[role=slider]]:bg-blue-600 [&>.data-[orientation=horizontal]]:bg-blue-600 [&>span]:bg-blue-600"
-                />
-              </div>
-
               <div className="space-y-1">
                 <Label htmlFor="agio" className="text-sm font-medium text-foreground">
                   AGIO: {apy}%
@@ -186,7 +171,22 @@ export function BorrowLoanCreation() {
                   step={0.1}
                   value={[apy]}
                   onValueChange={([value]) => setApy(value)}
-                  className="[&>[role=slider]]:bg-blue-600 [&>.data-[orientation=horizontal]]:bg-blue-600 [&>span]:bg-blue-600"
+                  className="w-full"
+                />
+              </div>
+              
+              <div className="space-y-1">
+                <Label htmlFor="loan-term" className="text-sm font-medium text-foreground">
+                  LOAN TERM: {loanTerm} days
+                </Label>
+                <Slider
+                  id="loan-term"
+                  min={1}
+                  max={365}
+                  step={1}
+                  value={[loanTerm]}
+                  onValueChange={([value]) => setLoanTerm(value)}
+                  className="w-full"
                 />
               </div>
             </div>
@@ -195,37 +195,37 @@ export function BorrowLoanCreation() {
               <Label htmlFor="wallet" className="text-sm font-medium text-foreground">
                 SEND OFFER:
               </Label>
-              <div className="flex items-center space-x-2">
-                <Input
-                  id="wallet"
-                  type="text"
-                  value={receiverAddress}
-                  readOnly
-                  placeholder="CLICK IN WALLET TO SET ADDRESS"
-                  className="flex-grow bg-white h-8"
-                />
-                <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" className="flex-shrink-0 h-8 px-3 bg-blue-600 text-white hover:bg-blue-700">
+              <Input
+                id="wallet"
+                type="text"
+                value={receiverAddress}
+                readOnly
+                placeholder="CLICK IN WALLET TO SET ADDRESS"
+                className="w-full bg-white h-8"
+              />
+              <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
+                <DialogTrigger asChild>
+                  <div className="flex justify-center">
+                    <Button variant="outline" className="w-auto mt-2 h-8 px-6 bg-blue-600 text-white hover:bg-blue-700">
                       WALLET
                     </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Enter the Wallet Address</DialogTitle>
-                      <DialogDescription>Please enter the public address of the receiver for this loan.</DialogDescription>
-                    </DialogHeader>
-                    <Input
-                      placeholder="Enter wallet address"
-                      value={receiverAddress}
-                      onChange={(e) => setReceiverAddress(e.target.value)}
-                    />
-                    <DialogFooter>
-                      <Button onClick={() => handleSetWalletAddress(receiverAddress)}>Set Address</Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </div>
+                  </div>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Enter the Wallet Address</DialogTitle>
+                    <DialogDescription>Please enter the public address of the receiver for this loan.</DialogDescription>
+                  </DialogHeader>
+                  <Input
+                    placeholder="Enter wallet address"
+                    value={receiverAddress}
+                    onChange={(e) => setReceiverAddress(e.target.value)}
+                  />
+                  <DialogFooter>
+                    <Button onClick={() => handleSetWalletAddress(receiverAddress)} className="bg-blue-600 text-white hover:bg-blue-700">Set Address</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
 
             <div className="p-2 bg-gray-50 rounded-lg">
