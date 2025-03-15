@@ -35,6 +35,7 @@ interface Loan {
   term?: string
   verified?: boolean
   reputation?: number
+  apr?: string
 }
 
 interface Opportunity {
@@ -50,6 +51,7 @@ interface Opportunity {
   trend?: {
     value: number
     direction: "up" | "down"
+    change?: string
   }
   reputation?: number
 }
@@ -276,145 +278,96 @@ export default function BorrowDashboard() {
 
   return (
     <TooltipProvider>
-      <div className="space-y-6">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="bg-blue-600">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
-                Total Borrowed
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Total value of assets you have borrowed</p>
-                  </TooltipContent>
-                </Tooltip>
-              </CardTitle>
+      <div className="flex flex-col gap-8">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <Card className="border-2">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base font-medium">Total Borrowed</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white flex items-center gap-2">
-                ${totalBorrowed.toLocaleString()}
-                <span className="text-sm text-green-300 flex items-center">
+              <div className="text-2xl font-bold">$8,450.00</div>
+              <p className="text-xs text-muted-foreground">
+                <span className="text-green-500 flex items-center gap-1">
                   <ArrowUpIcon className="h-4 w-4" />
-                  +8.3%
+                  +1 <span className="text-white dark:text-white">from last month</span>
                 </span>
-              </div>
-              <p className="text-xs text-white/70 flex items-center gap-1">
-                <BiWallet className="h-3 w-3" />
-                Across {activeLoans.length} assets
               </p>
             </CardContent>
           </Card>
-
-          <Card className="bg-blue-600">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
-                Interest Due
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Total interest due on your active loans</p>
-                  </TooltipContent>
-                </Tooltip>
-              </CardTitle>
+          <Card className="border-2">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base font-medium">Active Loans</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white flex items-center gap-2">
-                ${totalInterest.toLocaleString()}
-                <span className="text-sm text-red-500 flex items-center">
+              <div className="text-2xl font-bold">3</div>
+              <p className="text-xs text-muted-foreground">
+                <span className="text-green-500 flex items-center gap-1">
+                  <ArrowUpIcon className="h-4 w-4" />
+                  +1 <span className="text-white dark:text-white">from last month</span>
+                </span>
+              </p>
+            </CardContent>
+          </Card>
+          <Card className="border-2">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base font-medium">Interest Paid</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">$345.67</div>
+              <p className="text-xs text-muted-foreground">
+                <span className="text-red-500 flex items-center gap-1">
                   <ArrowDownIcon className="h-4 w-4" />
-                  -2.1%
+                  -5.2% <span className="text-white dark:text-white">from last month</span>
                 </span>
-              </div>
-              <p className="text-xs text-white/70">Next payment: {activeLoans[0]?.dueDate}</p>
+              </p>
             </CardContent>
           </Card>
-
-          <Card className="bg-blue-600">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
-                Average APR
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Average annual percentage rate across your loans</p>
-                  </TooltipContent>
-                </Tooltip>
-              </CardTitle>
+          <Card className="border-2">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base font-medium">Collateral Locked</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-white flex items-center gap-2">
-                5.2%
-                <span className="text-sm text-red-500 flex items-center">
-                  -0.3%
+              <div className="text-2xl font-bold">$12,675.00</div>
+              <p className="text-xs text-muted-foreground">
+                <span className="text-green-500 flex items-center gap-1">
+                  <ArrowUpIcon className="h-4 w-4" />
+                  +15.3% <span className="text-white dark:text-white">from last month</span>
                 </span>
-              </div>
-              <p className="text-xs text-white/70">Market avg: 4.8%</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-blue-600">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
-                Active Loans
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Number of currently active loans</p>
-                  </TooltipContent>
-                </Tooltip>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-white">{activeLoans.length}</div>
-              <p className="text-xs text-white/70 flex items-center gap-1">
-                <BiTimer className="h-3 w-3" />
-                {activeLoans.length} due this month
               </p>
             </CardContent>
           </Card>
         </div>
 
-      <Card>
+        <Tabs defaultValue="myloans" className="space-y-6">
+          <TabsList className="inline-flex h-10 w-full max-w-md mx-auto mb-4 bg-muted/50 border dark:border-white/10">
+            <TabsTrigger 
+              value="myloans" 
+              className="inline-flex items-center justify-center text-base px-6 py-2 flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              My Loans
+            </TabsTrigger>
+            <TabsTrigger 
+              value="myoffers" 
+              className="inline-flex items-center justify-center text-base px-6 py-2 flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              My Offers
+            </TabsTrigger>
+            <TabsTrigger 
+              value="overview" 
+              className="inline-flex items-center justify-center text-base px-6 py-2 flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              Opportunities
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="myloans" className="space-y-6">
+            <Card className="border-2">
         <CardHeader>
-            <CardTitle className="dark:text-white flex items-center gap-2">
-              Borrowing Overview
-              <Button variant="outline" size="icon" className="h-6 w-6">
-                <ReloadIcon className="h-4 w-4" />
-              </Button>
-            </CardTitle>
-            <CardDescription className="dark:text-gray-400">Manage your active loans and explore new borrowing opportunities.</CardDescription>
+                <CardTitle className="text-base font-medium">My Loans</CardTitle>
+                <CardDescription>
+                  Manage your active loans and explore new borrowing opportunities.
+                </CardDescription>
         </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="active-loans">
-              <TabsList className="bg-transparent border dark:border-white/10">
-                <TabsTrigger 
-                  value="active-loans"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  My Loans
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="opportunities"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  My Offers
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="marketplace"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  Opportunities
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="active-loans" className="mt-4">
+              <CardContent>
                 <div className="rounded-lg border bg-card p-2 mb-4">
                   <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
@@ -428,79 +381,76 @@ export default function BorrowDashboard() {
             </div>
           </div>
                 <Table>
-                  <TableHeader>
+                  <TableHeader className="bg-muted/50">
                     <TableRow>
-                      <TableHead className="dark:text-white text-center">Lender</TableHead>
-                      <TableHead className="dark:text-white text-center">Asset</TableHead>
-                      <TableHead className="dark:text-white text-center">Amount</TableHead>
-                      <TableHead className="dark:text-white text-center">Interest</TableHead>
-                      <TableHead className="dark:text-white text-center">APR</TableHead>
-                      <TableHead className="dark:text-white text-center">Collateral</TableHead>
-                      <TableHead className="dark:text-white text-center">Due Date</TableHead>
-                      <TableHead className="dark:text-white text-center">Status</TableHead>
-                      <TableHead className="dark:text-white text-center">Reputation</TableHead>
-                      <TableHead className="dark:text-white text-center">Action</TableHead>
+                      <TableHead className="font-medium text-center">Lender</TableHead>
+                      <TableHead className="font-medium text-center">Asset</TableHead>
+                      <TableHead className="font-medium text-center">Amount</TableHead>
+                      <TableHead className="font-medium text-center">Interest</TableHead>
+                      <TableHead className="font-medium text-center">APR</TableHead>
+                      <TableHead className="font-medium text-center">Collateral</TableHead>
+                      <TableHead className="font-medium text-center">Due Date</TableHead>
+                      <TableHead className="font-medium text-center">Status</TableHead>
+                      <TableHead className="font-medium text-center">Reputation</TableHead>
+                      <TableHead className="font-medium text-center">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {activeLoans.map((loan) => (
-                      <TableRow key={loan.id}>
-                        <TableCell className="dark:text-white text-center">
-                          <div className="flex items-center gap-2 justify-center">
+                      <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
+                        <TableCell className="font-medium text-center">
+                          <div className="flex items-center justify-center gap-2">
                             {loan.lender}
                             {loan.verified && (
-                              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                                Verified
-                              </Badge>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                                      Verified
+                                    </Badge>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Verified lender with KYC.</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                             )}
                           </div>
                         </TableCell>
-                        <TableCell className="dark:text-white text-center">
-                          <div className="flex items-center gap-2 justify-center">
-                            <img src={`/images/${loan.asset.toLowerCase()}-logo.png`} alt={loan.asset} className="w-4 h-4" />
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <img 
+                              src={`/images/${loan.asset === "USDT" ? "tether-usdt-logo.png" : loan.asset.toLowerCase() + "-logo.png"}`} 
+                              alt={loan.asset} 
+                              className="w-5 h-5" 
+                            />
                             {loan.asset}
-                          </div>
+            </div>
                         </TableCell>
-                        <TableCell className="dark:text-white text-center">{loan.amount}</TableCell>
-                        <TableCell className="dark:text-white text-center">
-                          <span className="text-red-500">-{loan.interest}</span>
-                        </TableCell>
-                        <TableCell className="dark:text-white text-center">
-                          <span className="text-red-500">5.2%</span>
-                        </TableCell>
-                        <TableCell className="dark:text-white text-center">{loan.collateral}</TableCell>
-                        <TableCell className="dark:text-white text-center">
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <div className="flex items-center gap-1 justify-center">
-                                <BiTime className="h-4 w-4 text-blue-500" />
-                                {loan.dueDate}
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Due in: {formatDistanceToNow(new Date(2025, 3, 15))}</p>
-                            </TooltipContent>
-                          </Tooltip>
+                        <TableCell className="text-center font-medium">{loan.amount.toLocaleString()} {loan.asset}</TableCell>
+                        <TableCell className="text-center font-medium text-red-500">-{loan.interest}</TableCell>
+                        <TableCell className="text-center font-medium text-red-500">-{loan.apr}</TableCell>
+                        <TableCell className="text-center font-medium">{loan.collateral}</TableCell>
+                        <TableCell className="text-center font-medium">
+                          <div className="flex items-center justify-center gap-1">
+                            <BiTime className="h-4 w-4 text-blue-500" />
+                            {loan.dueDate}
+          </div>
                         </TableCell>
                         <TableCell className="text-center">
-                          <Badge className={loan.status === "Active" ? "bg-green-500 text-white hover:bg-green-500" : "bg-blue-500 text-white hover:bg-blue-500"}>
+                          <Badge className={loan.status === "Active" ? "bg-green-500" : "bg-yellow-500"}>
                             {loan.status}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-center">
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Badge className={getScoreColor(loan.reputation || 0)}>{loan.reputation}/100</Badge>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Reputation score<br />Based on loan history and collateral</p>
-                            </TooltipContent>
-                          </Tooltip>
+                          <Badge className={`${getScoreColor(loan.reputation || 0)} text-white`}>
+                            {loan.reputation}
+                          </Badge>
                         </TableCell>
                         <TableCell className="text-center">
                           <Button
                             size="sm"
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-medium"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
                           >
                             Pay Loan
                           </Button>
@@ -509,8 +459,19 @@ export default function BorrowDashboard() {
                     ))}
                   </TableBody>
                 </Table>
-              </TabsContent>
-              <TabsContent value="opportunities" className="mt-4">
+        </CardContent>
+      </Card>
+          </TabsContent>
+          
+          <TabsContent value="myoffers" className="space-y-6">
+            <Card className="border-2">
+        <CardHeader>
+                <CardTitle className="text-base font-medium">My Offers</CardTitle>
+                <CardDescription>
+                  Manage your pending offers and explore new borrowing opportunities.
+                </CardDescription>
+        </CardHeader>
+              <CardContent>
                 <div className="rounded-lg border bg-card p-2 mb-4">
                   <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <div className="flex items-center gap-2">
@@ -520,88 +481,74 @@ export default function BorrowDashboard() {
                     <div className="flex items-center gap-2">
                       <LockClosedIcon className="h-4 w-4" />
                       <span>Total Value: ${myOffers.reduce((total, offer) => total + offer.available, 0).toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
+          </div>
+            </div>
+          </div>
                 <Table>
-                  <TableHeader>
+                  <TableHeader className="bg-muted/50">
                     <TableRow>
-                      <TableHead className="text-foreground dark:text-white text-center">Lender</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Asset</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Amount</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Interest</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">APR</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Collateral</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Term</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Reputation</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Action</TableHead>
+                      <TableHead className="font-medium text-center">Lender</TableHead>
+                      <TableHead className="font-medium text-center">Asset</TableHead>
+                      <TableHead className="font-medium text-center">Amount</TableHead>
+                      <TableHead className="font-medium text-center">Interest</TableHead>
+                      <TableHead className="font-medium text-center">APR</TableHead>
+                      <TableHead className="font-medium text-center">Collateral</TableHead>
+                      <TableHead className="font-medium text-center">Term</TableHead>
+                      <TableHead className="font-medium text-center">Reputation</TableHead>
+                      <TableHead className="font-medium text-center">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {myOffers.map((offer) => (
-                      <TableRow key={offer.id}>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <div className="flex items-center gap-2 justify-center">
-                                {offer.lender}
-                                {offer.verified && (
-                                  <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                                    Verified
-                                  </Badge>
-                                )}
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Verified lender with KYC.</p>
-                            </TooltipContent>
-                          </Tooltip>
+                      <TableRow key={offer.id} className="hover:bg-muted/50 transition-colors">
+                        <TableCell className="font-medium text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            {offer.lender}
+                            {offer.verified && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                                      Verified
+                                    </Badge>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Verified lender with KYC.</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
                         </TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <div className="flex items-center gap-2 justify-center">
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-2">
                             <img 
                               src={`/images/${offer.asset === "USDT" ? "tether-usdt-logo.png" : offer.asset.toLowerCase() + "-logo.png"}`} 
                               alt={offer.asset} 
-                              className="w-4 h-4" 
+                              className="w-5 h-5" 
                             />
                             {offer.asset}
                           </div>
                         </TableCell>
-                        <TableCell className="text-foreground dark:text-white font-medium text-center">{offer.available}</TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <span className="text-red-500">-{offer.interest}</span>
+                        <TableCell className="text-center font-medium">{offer.available.toLocaleString()} {offer.asset}</TableCell>
+                        <TableCell className="text-center font-medium text-red-500">-{offer.interest}</TableCell>
+                        <TableCell className="text-center font-medium text-red-500">-{offer.apr}</TableCell>
+                        <TableCell className="text-center font-medium">{offer.collateral}</TableCell>
+                        <TableCell className="text-center font-medium">
+                          <div className="flex items-center justify-center gap-1">
+                            <BiTime className="h-4 w-4 text-blue-500" />
+                            {offer.term}
+                          </div>
                         </TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <span className="text-red-500">{offer.apr}</span>
-                        </TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">{offer.collateral}</TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <div className="flex items-center gap-1 justify-center">
-                                <BiTime className="h-4 w-4 text-blue-500" />
-                                {offer.term}
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Loan duration: {offer.term}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Badge className={getScoreColor(offer.reputation || 0)}>{offer.reputation}/100</Badge>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Reputation score<br />Based on loan history and collateral</p>
-                            </TooltipContent>
-                          </Tooltip>
+                        <TableCell className="text-center">
+                          <Badge className={`${getScoreColor(offer.reputation || 0)} text-white`}>
+                            {offer.reputation}
+                          </Badge>
                         </TableCell>
                         <TableCell className="text-center">
                           <Button
                             size="sm"
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-medium"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
                             onClick={() => handleBorrow(offer)}
                           >
                             Accept
@@ -611,112 +558,90 @@ export default function BorrowDashboard() {
                     ))}
                   </TableBody>
                 </Table>
-              </TabsContent>
-              <TabsContent value="marketplace" className="mt-4">
-                <div className="rounded-lg border bg-card p-2 mb-4">
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <BiWallet className="h-4 w-4" />
-                      <span>Available Credit: $50,000</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <LockClosedIcon className="h-4 w-4" />
-                      <span>Required Collateral: $15,000</span>
-                    </div>
-                  </div>
-                </div>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-foreground dark:text-white text-center">Lender</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Asset</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Available</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Interest</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">APR</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Collateral</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Term</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Reputation</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {opportunities.map((opportunity) => (
-                      <TableRow key={opportunity.id}>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <div className="flex items-center gap-2 justify-center">
-                                {opportunity.lender}
-                                {opportunity.verified && (
-                                  <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                                    Verified
-                                  </Badge>
-                                )}
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Verified lender with KYC.</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <div className="flex items-center gap-2 justify-center">
-                            <img 
-                              src={`/images/${opportunity.asset === "USDT" ? "tether-usdt-logo.png" : opportunity.asset.toLowerCase() + "-logo.png"}`} 
-                              alt={opportunity.asset} 
-                              className="w-4 h-4" 
-                            />
-                            {opportunity.asset}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">{opportunity.available}</TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <span className="text-green-500">{opportunity.interest}</span>
-                        </TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <span className="text-green-500 font-medium">{opportunity.apr}</span>
-                        </TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">{opportunity.collateral}</TableCell>
-                        <TableCell className="text-foreground dark:text-white text-center">
-                          <div className="flex items-center gap-1 justify-center">
-                            <BiTime className="h-4 w-4 text-blue-500" />
-                            <span>{opportunity.term}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Badge className={getScoreColor(opportunity.reputation || 0)}>{opportunity.reputation}/100</Badge>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Reputation score<br />Based on loan history and collateral</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Button
-                            size="sm"
-                            className="bg-blue-500 hover:bg-blue-600 text-white font-medium"
-                            onClick={() => handleBorrow(opportunity)}
-                          >
-                            Borrow Now
-                          </Button>
-                        </TableCell>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="overview" className="space-y-6">
+            <Card className="border-2">
+              <CardHeader>
+                <CardTitle className="text-base font-medium">Opportunities</CardTitle>
+                <CardDescription>
+                  Browse available lending offers from verified users.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="rounded-md border">
+                  <Table>
+                    <TableHeader className="bg-muted/50">
+                      <TableRow>
+                        <TableHead className="font-medium text-center">Lender</TableHead>
+                        <TableHead className="font-medium text-center">Asset</TableHead>
+                        <TableHead className="font-medium text-center">Available</TableHead>
+                        <TableHead className="font-medium text-center">Interest</TableHead>
+                        <TableHead className="font-medium text-center">APR</TableHead>
+                        <TableHead className="font-medium text-center">Collateral</TableHead>
+                        <TableHead className="font-medium text-center">Term</TableHead>
+                        <TableHead className="font-medium text-center">Reputation</TableHead>
+                        <TableHead className="font-medium text-center">Action</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TabsContent>
-            </Tabs>
-            <div className="flex justify-center mt-4">
-              <Link href="/loan-offers/marketplace?tab=borrow">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white h-8 px-4 text-sm">
-                  View All Opportunities
-                </Button>
-              </Link>
+                    </TableHeader>
+                    <TableBody>
+                      {opportunities.map((opportunity) => (
+                        <TableRow key={opportunity.id} className="hover:bg-muted/50 transition-colors">
+                          <TableCell className="font-medium text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              {opportunity.lender}
+                              {opportunity.verified && (
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                                        Verified
+                                      </Badge>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>This lender has completed KYC verification</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
+                              )}
+            </div>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2">
+                              <img 
+                                src={`/images/${opportunity.asset === "USDT" ? "tether-usdt-logo.png" : opportunity.asset.toLowerCase() + "-logo.png"}`} 
+                                alt={opportunity.asset} 
+                                className="w-5 h-5" 
+                              />
+                              {opportunity.asset}
+          </div>
+                          </TableCell>
+                          <TableCell className="text-center font-medium">{opportunity.available.toLocaleString()} {opportunity.asset}</TableCell>
+                          <TableCell className="text-center font-medium text-red-500">-{opportunity.interest}</TableCell>
+                          <TableCell className="text-center font-medium text-red-500">-{opportunity.apr}</TableCell>
+                          <TableCell className="text-center font-medium">{opportunity.collateral}</TableCell>
+                          <TableCell className="text-center font-medium">{opportunity.term}</TableCell>
+                          <TableCell className="text-center">
+                            <Badge className={`${getScoreColor(opportunity.reputation || 0)} text-white`}>
+                              {opportunity.reputation}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-center">
+                            <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                              Accept
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
           </div>
         </CardContent>
       </Card>
+          </TabsContent>
+        </Tabs>
     </div>
     </TooltipProvider>
   )

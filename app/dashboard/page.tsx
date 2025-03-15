@@ -123,11 +123,31 @@ export default function DashboardPage() {
         </div>
 
         <Tabs defaultValue="profile" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4 mb-8">
-            <TabsTrigger value="profile" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Profile</TabsTrigger>
-            <TabsTrigger value="overview" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Overview</TabsTrigger>
-            <TabsTrigger value="borrow" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Borrow</TabsTrigger>
-            <TabsTrigger value="lend" className="data-[state=active]:bg-blue-600 data-[state=active]:text-white">Lend</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 mb-8 bg-muted/50 border dark:border-white/10 h-12">
+            <TabsTrigger 
+              value="profile" 
+              className="text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              Profile
+            </TabsTrigger>
+            <TabsTrigger 
+              value="overview" 
+              className="text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              Overview
+            </TabsTrigger>
+            <TabsTrigger 
+              value="borrow" 
+              className="text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              Borrow
+            </TabsTrigger>
+            <TabsTrigger 
+              value="lend" 
+              className="text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            >
+              Lend
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile">
@@ -138,10 +158,10 @@ export default function DashboardPage() {
             <div className="grid gap-4 lg:grid-cols-3">
               <div className="lg:col-span-1 grid gap-4">
                 <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardHeader className="flex flex-row items-center justify-center space-y-0 pb-2">
                     <CardTitle>Total Lent</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="text-center">
                     <div className="text-2xl font-bold">
                       ${mockSummary.totalLent.toLocaleString()}
                     </div>
@@ -151,10 +171,10 @@ export default function DashboardPage() {
                   </CardContent>
                 </Card>
                 <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardHeader className="flex flex-row items-center justify-center space-y-0 pb-2">
                     <CardTitle>Total Borrowed</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="text-center">
                     <div className="text-2xl font-bold">
                       ${mockSummary.totalBorrowed.toLocaleString()}
                     </div>
@@ -206,7 +226,7 @@ export default function DashboardPage() {
                         />
                       </div>
                     </div>
-                    <Button className="w-full h-8 text-sm bg-blue-600 hover:bg-blue-700 text-white">Calculate Risk</Button>
+                    <Button className="w-3/4 mx-auto h-8 text-sm bg-blue-600 hover:bg-blue-700 text-white">Calculate Risk</Button>
                   </div>
                 </CardContent>
               </Card>
@@ -217,13 +237,13 @@ export default function DashboardPage() {
                   <CardDescription>Start lending or borrowing</CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                  <Link href="/loan-offers/marketplace">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  <Link href="/loan-offers/marketplace" className="flex justify-center">
+                    <Button className="w-3/4 bg-blue-600 hover:bg-blue-700 text-white">
                       Loan Offers <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
-                  <Link href="/borrow-lend">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  <Link href="/borrow-lend" className="flex justify-center">
+                    <Button className="w-3/4 bg-blue-600 hover:bg-blue-700 text-white">
                       Create Loan Request <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -323,21 +343,21 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
+            </TabsContent>
 
           <TabsContent value="borrow">
             <BorrowDashboard />
-          </TabsContent>
+            </TabsContent>
 
           <TabsContent value="lend">
-            <LendDashboard />
-          </TabsContent>
+              <LendDashboard />
+            </TabsContent>
 
           <TabsContent value="risk">
-            <RiskAssessment />
-          </TabsContent>
-        </Tabs>
+              <RiskAssessment />
+            </TabsContent>
+          </Tabs>
       </div>
     </div>
   )
-} 
+}

@@ -48,7 +48,7 @@ export function useValidation() {
         break
 
       case "receiverAddress":
-        const chainType = formData.token === "SOL" || formData.token === "mSOL" ? "SOL" : "ETH"
+        const chainType = formData.token === "SOL" || formData.token === "mSOL" ? "SOL" : "JUP"
         if (!validateWalletAddress(value, chainType)) {
           return "Invalid wallet address format"
         }

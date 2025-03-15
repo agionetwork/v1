@@ -29,7 +29,7 @@ export default function ProfileDashboard() {
             <CardHeader>
               <div className="flex items-center gap-4">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src="/images/surfer-png.png" alt="Web 3 Surfer Profile" />
+                  <AvatarImage src="/images/surfer-pfp.png" alt="Web 3 Surfer Profile" />
                   <AvatarFallback>WS</AvatarFallback>
                 </Avatar>
                 <div>
@@ -85,13 +85,13 @@ export default function ProfileDashboard() {
           </Card>
         </div>
         <div className="lg:col-span-2">
-          <Tabs defaultValue="achievements">
+          <Tabs defaultValue="badges">
             <TabsList className="grid w-full grid-cols-4 bg-muted">
               <TabsTrigger 
-                value="achievements" 
+                value="badges" 
                 className="flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white dark:text-white"
               >
-                Achievements
+                Badges
               </TabsTrigger>
               <TabsTrigger 
                 value="reputation" 
@@ -112,11 +112,11 @@ export default function ProfileDashboard() {
                 Referral
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="achievements" className="mt-4 space-y-4">
+            <TabsContent value="badges" className="mt-4 space-y-4">
               <Card>
                 <CardHeader>
-                  <CardTitle className="dark:text-white">Achievements</CardTitle>
-                  <CardDescription className="dark:text-gray-400">Badges and achievements you've earned on the platform</CardDescription>
+                  <CardTitle className="dark:text-white">Badges</CardTitle>
+                  <CardDescription className="dark:text-gray-400">Badges and conquistas you've earned on the platform</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -136,17 +136,6 @@ export default function ProfileDashboard() {
                       <Shield className="h-8 w-8 text-blue-600" />
                       <span className="text-sm font-medium dark:text-white">Trusted Borrower</span>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="dark:text-white">Lending History</CardTitle>
-                  <CardDescription className="dark:text-gray-400">Your lending activity over time</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[200px] w-full bg-muted rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground dark:text-gray-400">Lending activity chart would appear here</p>
                   </div>
                 </CardContent>
               </Card>
@@ -196,120 +185,115 @@ export default function ProfileDashboard() {
                   </div>
                 </CardContent>
               </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Reputation Growth</CardTitle>
-                  <CardDescription>How your reputation has grown over time</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-[200px] w-full bg-muted rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Reputation growth chart would appear here</p>
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
-            <TabsContent value="social" className="mt-4 space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="dark:text-white">Social Connections</CardTitle>
-                  <CardDescription className="dark:text-gray-400">Your network on the platform</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <Avatar>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                        <AvatarFallback>AB</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium dark:text-white">Alice Brown</p>
-                        <p className="text-xs text-muted-foreground dark:text-gray-400">5 mutual transactions</p>
+            <TabsContent value="social" className="mt-4">
+              <div className="grid grid-cols-2 gap-4">
+                <Card className="h-[300px] overflow-auto">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="dark:text-white">Social Connections</CardTitle>
+                    <CardDescription className="dark:text-gray-400 text-xs">Your network on the platform</CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
+                          <AvatarFallback>AB</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium dark:text-white">Alice Brown</p>
+                          <p className="text-xs text-muted-foreground dark:text-gray-400">5 mutual transactions</p>
+                        </div>
+                        <Badge className="bg-blue-600 text-white text-xs ml-auto">Connected</Badge>
                       </div>
-                      <Badge className="bg-blue-600 text-white">Connected</Badge>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <Avatar>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                        <AvatarFallback>MS</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium dark:text-white">Mike Smith</p>
-                        <p className="text-xs text-muted-foreground dark:text-gray-400">3 mutual transactions</p>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
+                          <AvatarFallback>MS</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium dark:text-white">Mike Smith</p>
+                          <p className="text-xs text-muted-foreground dark:text-gray-400">3 mutual transactions</p>
+                        </div>
+                        <Badge className="bg-blue-600 text-white text-xs ml-auto">Connected</Badge>
                       </div>
-                      <Badge className="bg-blue-600 text-white">Connected</Badge>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <Avatar>
-                        <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                        <AvatarFallback>JW</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-sm font-medium dark:text-white">Jane Wilson</p>
-                        <p className="text-xs text-muted-foreground dark:text-gray-400">2 mutual transactions</p>
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
+                          <AvatarFallback>JW</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-medium dark:text-white">Jane Wilson</p>
+                          <p className="text-xs text-muted-foreground dark:text-gray-400">2 mutual transactions</p>
+                        </div>
+                        <Button size="sm" variant="outline" className="ml-auto h-7 text-xs bg-blue-600 text-white hover:bg-blue-700">
+                          Connect
+                        </Button>
                       </div>
-                      <Button size="sm" variant="outline" className="ml-auto bg-blue-600 text-white hover:bg-blue-700">
-                        Connect
-                      </Button>
                     </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant="outline"
-                    className="w-full bg-blue-600 text-white hover:bg-blue-700"
-                  >
-                    <Users className="mr-2 h-4 w-4 text-white" />
-                    Find More Connections
-                  </Button>
-                </CardFooter>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="dark:text-white">Community Activity</CardTitle>
-                  <CardDescription className="dark:text-gray-400">Your participation in the platform community</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="rounded-lg border p-4">
-                      <p className="text-sm font-medium dark:text-white">Forum Posts</p>
-                      <p className="text-2xl font-bold dark:text-white">12</p>
+                  </CardContent>
+                  <CardFooter className="pt-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full h-7 text-xs bg-blue-600 text-white hover:bg-blue-700"
+                    >
+                      <Users className="mr-1 h-3 w-3 text-white" />
+                      Find More Connections
+                    </Button>
+                  </CardFooter>
+                </Card>
+                
+                <Card className="h-[300px]">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="dark:text-white">Community Activity</CardTitle>
+                    <CardDescription className="dark:text-gray-400 text-xs">Your participation in the platform</CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <div className="space-y-4">
+                      <div className="rounded-lg border p-3">
+                        <p className="text-sm font-medium dark:text-white">Forum Posts</p>
+                        <p className="text-xl font-bold dark:text-white">12</p>
+                      </div>
+                      <div className="rounded-lg border p-3">
+                        <p className="text-sm font-medium dark:text-white">Governance Votes</p>
+                        <p className="text-xl font-bold dark:text-white">8</p>
+                      </div>
                     </div>
-                    <div className="rounded-lg border p-4">
-                      <p className="text-sm font-medium dark:text-white">Governance Votes</p>
-                      <p className="text-2xl font-bold dark:text-white">8</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
             <TabsContent value="referral" className="mt-4 space-y-4">
-              <Card>
-                <CardHeader>
+              <Card className="w-full">
+                <CardHeader className="py-3 text-center">
                   <CardTitle className="dark:text-white">Referral Program</CardTitle>
-                  <CardDescription className="dark:text-gray-400">Invite friends and earn rewards when they join AGIO NETWORK</CardDescription>
+                  <CardDescription className="dark:text-gray-400 text-xs">Invite friends and earn rewards when they join AGIO NETWORK</CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label className="text-sm">Your Referral Code</Label>
-                      <div className="flex items-center gap-2">
-                        <Input value={"AGIO-" + Math.random().toString(36).substring(7).toUpperCase()} readOnly className="h-8 text-sm" />
-                        <Button className="h-8 text-sm px-3 bg-blue-600 hover:bg-blue-700 text-white">Copy</Button>
+                <CardContent className="py-2 flex justify-center">
+                  <div className="space-y-3 max-w-md w-full">
+                    <div className="space-y-1 flex flex-col items-center">
+                      <Label className="text-xs">Your Referral Code</Label>
+                      <div className="flex items-center gap-1 w-3/5">
+                        <Input value={"AGIO-" + Math.random().toString(36).substring(7).toUpperCase()} readOnly className="h-7 text-xs" />
+                        <Button className="h-7 text-xs px-2 bg-blue-600 hover:bg-blue-700 text-white">Copy</Button>
                       </div>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <span className="text-sm text-muted-foreground dark:text-gray-400">Invited Users</span>
-                        <p className="text-lg font-semibold dark:text-white">10</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-0 text-center">
+                        <span className="text-xs text-muted-foreground dark:text-gray-400">Invited Users</span>
+                        <p className="text-base font-semibold dark:text-white">10</p>
                       </div>
-                      <div className="space-y-1">
-                        <span className="text-sm text-muted-foreground dark:text-gray-400">Rewards Earned</span>
-                        <p className="text-lg font-semibold dark:text-white">50 SOL</p>
+                      <div className="space-y-0 text-center">
+                        <span className="text-xs text-muted-foreground dark:text-gray-400">Rewards Earned</span>
+                        <p className="text-base font-semibold dark:text-white">50 SOL</p>
                       </div>
                     </div>
                     
-                    <Button className="w-full h-8 text-sm bg-blue-600 hover:bg-blue-700 text-white">Share Referral Link</Button>
+                    <div className="flex justify-center">
+                      <Button className="w-3/5 h-7 text-xs bg-blue-600 hover:bg-blue-700 text-white">Share Referral Link</Button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

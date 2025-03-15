@@ -80,18 +80,18 @@ export default function LoanOffersPage() {
           </p>
         </div>
 
-        <Tabs defaultValue="lend" className="space-y-4">
+        <Tabs defaultValue="lend" className="space-y-6">
           <div className="flex items-center justify-between">
-            <TabsList className="bg-transparent border dark:border-white/10">
+            <TabsList className="w-full sm:w-auto p-1 bg-muted/50 border dark:border-white/10">
               <TabsTrigger 
                 value="lend" 
-                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                className="text-base px-6 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
               >
                 Lend Offers
               </TabsTrigger>
               <TabsTrigger 
                 value="borrow"
-                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+                className="text-base px-6 py-2 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
               >
                 Borrow Offers
               </TabsTrigger>

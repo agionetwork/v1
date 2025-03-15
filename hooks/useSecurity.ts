@@ -81,7 +81,7 @@ export function useSecurity() {
     }
 
     // Validate wallet address
-    const chainType = data.token === "SOL" || data.token === "mSOL" ? "SOL" : "ETH"
+    const chainType = data.token === "SOL" || data.token === "mSOL" ? "SOL" : "JUP"
     if (!validateWalletAddress(data.receiverAddress, chainType)) {
       errors.receiverAddress = ERROR_MESSAGES.INVALID_WALLET
     }

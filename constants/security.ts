@@ -12,7 +12,7 @@ export const SECURITY_CONSTANTS = {
 }
 
 export const WALLET_REGEX = {
-  ETH: /^0x[a-fA-F0-9]{40}$/,
+  JUP: /^0x[a-fA-F0-9]{40}$/,
   SOL: /^[1-9A-HJ-NP-Za-km-z]{32,44}$/
 }
 
@@ -33,7 +33,7 @@ export const sanitizeInput = (input: string): string => {
   return input.replace(/[<>]/g, "")
 }
 
-export const validateWalletAddress = (address: string, chainType: "ETH" | "SOL"): boolean => {
+export const validateWalletAddress = (address: string, chainType: "JUP" | "SOL"): boolean => {
   const regex = WALLET_REGEX[chainType]
   return regex.test(address)
 }

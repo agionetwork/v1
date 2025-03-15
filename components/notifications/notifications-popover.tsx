@@ -69,8 +69,16 @@ export function NotificationsPopover({ className }: NotificationsPopoverProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className={cn("relative hover:bg-transparent", className)}>
-          <Bell className="h-5 w-5" />
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className={cn(
+            "relative group hover:bg-transparent focus:bg-transparent focus:ring-0 active:bg-transparent", 
+            className
+          )}
+          style={{ backgroundColor: 'transparent' }}
+        >
+          <Bell className="h-5 w-5 group-hover:text-blue-600" />
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-600 text-[10px] font-medium text-white flex items-center justify-center">
               {unreadCount}

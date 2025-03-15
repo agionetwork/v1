@@ -12,7 +12,7 @@ export default function LoansDashboard() {
           </CardHeader>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold text-foreground dark:text-white">4,550 SOL</div>
-            <p className="text-xs text-muted-foreground dark:text-gray-400">+20.1% from last month</p>
+            <p className="text-xs text-muted-foreground dark:text-gray-400">+20.1% <span className="text-white dark:text-white">from last month</span></p>
           </CardContent>
         </Card>
         <Card className="bg-white shadow-md rounded-xl overflow-hidden">
@@ -21,7 +21,7 @@ export default function LoansDashboard() {
           </CardHeader>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold text-foreground dark:text-white">12,234 SOL</div>
-            <p className="text-xs text-muted-foreground dark:text-gray-400">+10.5% from last month</p>
+            <p className="text-xs text-muted-foreground dark:text-gray-400">+10.5% <span className="text-white dark:text-white">from last month</span></p>
           </CardContent>
         </Card>
         <Card className="bg-white shadow-md rounded-xl overflow-hidden">
@@ -30,7 +30,7 @@ export default function LoansDashboard() {
           </CardHeader>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold text-foreground dark:text-white">7</div>
-            <p className="text-xs text-muted-foreground dark:text-gray-400">+2 from last month</p>
+            <p className="text-xs text-muted-foreground dark:text-gray-400">+2 <span className="text-white dark:text-white">from last month</span></p>
           </CardContent>
         </Card>
         <Card className="bg-white shadow-md rounded-xl overflow-hidden">
@@ -39,7 +39,7 @@ export default function LoansDashboard() {
           </CardHeader>
           <CardContent className="pt-4">
             <div className="text-2xl font-bold text-foreground dark:text-white">92/100</div>
-            <p className="text-xs text-muted-foreground dark:text-gray-400">+5 from last month</p>
+            <p className="text-xs text-muted-foreground dark:text-gray-400">+5 <span className="text-white dark:text-white">from last month</span></p>
           </CardContent>
         </Card>
       </div>

@@ -33,8 +33,16 @@ export function SettingsPopover({ className }: SettingsPopoverProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className={cn("hover:bg-transparent", className)}>
-          <Settings className="h-5 w-5" />
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className={cn(
+            "group hover:bg-transparent focus:bg-transparent focus:ring-0 active:bg-transparent", 
+            className
+          )}
+          style={{ backgroundColor: 'transparent' }}
+        >
+          <Settings className="h-5 w-5 group-hover:text-blue-600" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 bg-white dark:bg-gray-900">

@@ -8,6 +8,8 @@ import { InfoCircledIcon, ArrowUpIcon, ArrowDownIcon, ReloadIcon, LockClosedIcon
 import { BiWallet, BiTime } from "react-icons/bi"
 import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
+import { useState } from "react"
+import { toast } from "sonner"
 
 const getScoreColor = (score: number) => {
   if (score >= 80) return "!bg-green-500"
@@ -16,6 +18,62 @@ const getScoreColor = (score: number) => {
 }
 
 export default function LendDashboard() {
+  const [activeTab, setActiveTab] = useState("overview")
+  
+  const handleAcceptOffer = (offer: any) => {
+    toast.success(`Offer from ${offer.borrower} accepted successfully!`, {
+      description: `You will lend ${offer.amount} ${offer.asset} with ${offer.interest} interest.`,
+    })
+  }
+  
+  const handleLoanAction = (loan: any) => {
+    toast.success(`Action taken on loan for ${loan.borrower}`, {
+      description: `You are managing your loan of ${loan.amount} ${loan.asset}.`,
+    })
+  }
+  
+  const activeLoans = [
+    {
+      id: 1,
+      borrower: "Rt7PqLm...kN3Zx",
+      asset: "BONK",
+      amount: 250000,
+      interest: "+9375 BONK",
+      apy: "7.5%",
+      collateral: "175%",
+      dueDate: "Jun 15, 2024",
+      status: "Active",
+      verified: true,
+      reputation: 91
+    },
+    {
+      id: 2,
+      borrower: "Jk4FgHt...pL2Mn",
+      asset: "USDT",
+      amount: 3500,
+      interest: "+85.75 USDT",
+      apy: "4.9%",
+      collateral: "160%",
+      dueDate: "Jul 30, 2024",
+      status: "Active",
+      verified: false,
+      reputation: 89
+    },
+    {
+      id: 3,
+      borrower: "Vb9NmKl...zR5Qw",
+      asset: "JUP",
+      amount: 1.5,
+      interest: "+0.024 JUP",
+      apy: "3.2%",
+      collateral: "140%",
+      dueDate: "Aug 15, 2024",
+      status: "Pending",
+      verified: true,
+      reputation: 94
+    }
+  ];
+  
   const myOffers = [
     {
       id: 1,
@@ -54,579 +112,413 @@ export default function LendDashboard() {
     }
   ];
 
+  const opportunities = [
+    {
+      id: 1,
+      borrower: "HN7cABqLq...vGRE1",
+      asset: "USDC",
+      amount: 5000,
+      interest: "+260 USDC",
+      apy: "5.2%",
+      collateral: "150%",
+      term: "90 days",
+      reputation: 95,
+      verified: true,
+      trend: {
+        direction: "up",
+        change: "+0.3%"
+      }
+    },
+    {
+      id: 2,
+      borrower: "5CZoJzV...Uh8Bw",
+      asset: "SOL",
+      amount: 25,
+      interest: "+0.95 SOL",
+      apy: "3.8%",
+      collateral: "150%",
+      term: "60 days",
+      reputation: 92,
+      trend: {
+        direction: "down",
+        change: "-0.1%"
+      }
+    },
+    {
+      id: 3,
+      borrower: "Bv3iF2T...qP5Ks",
+      asset: "JUP",
+      amount: 1000,
+      interest: "+65 JUP",
+      apy: "6.5%",
+      collateral: "150%",
+      term: "120 days",
+      reputation: 88,
+      verified: true
+    }
+  ];
+
   return (
-    <TooltipProvider>
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card className="bg-blue-600">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
-                Total Supplied
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Total value of assets you have supplied to the lending pool</p>
-                  </TooltipContent>
-                </Tooltip>
-              </CardTitle>
+    <div className="flex flex-col gap-8">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-2">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium">Total Value Locked</CardTitle>
           </CardHeader>
           <CardContent>
-              <div className="text-2xl font-bold text-white flex items-center gap-2">
-                $12,234.00
-                <span className="text-sm text-green-300 flex items-center">
-                  <ArrowUpIcon className="h-4 w-4" />
-                  +5.2%
-                </span>
-              </div>
-              <p className="text-xs text-white/70 flex items-center gap-1">
-                <BiWallet className="h-3 w-3" />
-                Across 5 assets
-              </p>
+            <div className="text-2xl font-bold">$1,245,789.32</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-500 flex items-center gap-1">
+                <ArrowUpIcon className="h-4 w-4" />
+                +12.5% <span className="text-white dark:text-white">from last month</span>
+              </span>
+            </p>
           </CardContent>
         </Card>
-
-          <Card className="bg-blue-600">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
-                Interest Earned
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Total interest earned from your lending activities</p>
-                  </TooltipContent>
-                </Tooltip>
-              </CardTitle>
+        <Card className="border-2">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium">Active Loans</CardTitle>
           </CardHeader>
           <CardContent>
-              <div className="text-2xl font-bold text-white flex items-center gap-2">
-                $345.67
-                <span className="text-sm text-green-300 flex items-center">
-                  <ArrowUpIcon className="h-4 w-4" />
-                  +12.3%
-                </span>
-              </div>
-              <p className="text-xs text-white/70">+$42.55 this month</p>
+            <div className="text-2xl font-bold">24</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-500 flex items-center gap-1">
+                <ArrowUpIcon className="h-4 w-4" />
+                +3 <span className="text-white dark:text-white">from last month</span>
+              </span>
+            </p>
           </CardContent>
         </Card>
-
-          <Card className="bg-blue-600">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
-                Average APY
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Average annual percentage yield across all your loans</p>
-                  </TooltipContent>
-                </Tooltip>
-              </CardTitle>
+        <Card className="border-2">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium">Total Interest Earned</CardTitle>
           </CardHeader>
           <CardContent>
-              <div className="text-2xl font-bold text-white flex items-center gap-2">
-                4.8%
-                <span className="text-sm text-green-300 flex items-center">
-                  <ArrowUpIcon className="h-4 w-4" />
-                  +0.3%
-                </span>
-              </div>
-              <p className="text-xs text-white/70">Market avg: 4.2%</p>
+            <div className="text-2xl font-bold">$34,567.89</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-500 flex items-center gap-1">
+                <ArrowUpIcon className="h-4 w-4" />
+                +8.2% <span className="text-white dark:text-white">from last month</span>
+              </span>
+            </p>
           </CardContent>
         </Card>
-
-          <Card className="bg-blue-600">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-white flex items-center gap-2">
-                Active Loans
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoCircledIcon className="h-4 w-4 text-white/70" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Number of currently active loans you have issued</p>
-                  </TooltipContent>
-                </Tooltip>
-              </CardTitle>
+        <Card className="border-2">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base font-medium">Average APY</CardTitle>
           </CardHeader>
           <CardContent>
-              <div className="text-2xl font-bold text-white">12</div>
-              <p className="text-xs text-white/70 flex items-center gap-1">
-                <BiWallet className="h-3 w-3" />
-                3 due this week
-              </p>
+            <div className="text-2xl font-bold">5.8%</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-red-500 flex items-center gap-1">
+                <ArrowDownIcon className="h-4 w-4" />
+                -0.3% <span className="text-white dark:text-white">from last month</span>
+              </span>
+            </p>
           </CardContent>
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-            <CardTitle className="dark:text-white flex items-center gap-2">
-              Lending Overview
-              <Button variant="outline" size="icon" className="h-6 w-6">
-                <ReloadIcon className="h-4 w-4" />
-              </Button>
-            </CardTitle>
-            <CardDescription className="dark:text-gray-400">Browse available lending opportunities and earn interest on your assets.</CardDescription>
-        </CardHeader>
-        <CardContent>
-            <Tabs defaultValue="my-loans">
-              <TabsList className="bg-transparent border dark:border-white/10">
-                <TabsTrigger 
-                  value="my-loans"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  My Loans
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="marketplace"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  My Offers
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="opportunities"
-                  className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-                >
-                  Opportunities
-                </TabsTrigger>
-            </TabsList>
-              <TabsContent value="my-loans" className="mt-4">
-                <div className="rounded-lg border bg-card p-2 mb-4">
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <BiWallet className="h-4 w-4" />
-                      <span>Total Active Loans: $32,450</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <BiWallet className="h-4 w-4" />
-                      <span>Next Payment Due: 3 days</span>
-                    </div>
-                  </div>
-                </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                      <TableHead className="text-foreground dark:text-white text-center">Borrower</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Asset</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Amount</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Interest</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">APY</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Collateral</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Due Date</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Status</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Reputation</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <div className="flex items-center gap-2 justify-center">
-                              HN7cABqLq...vGRE1
-                              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">Verified</Badge>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Verified borrower with KYC.</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-2 justify-center">
-                          <img src="/images/usdc-logo.png" alt="USDC" className="w-4 h-4" />
-                          USDC
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">5,000</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500">+260 USDC</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500 font-medium">5.2%</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">150%</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <div className="flex items-center gap-1 justify-center">
-                              <BiTime className="h-4 w-4 text-blue-500" />
-                              <span>90 days</span>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Due in: {formatDistanceToNow(new Date(2025, 5, 10))}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Badge className="bg-green-500 text-white hover:bg-green-500">Active</Badge>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Badge className={getScoreColor(92)}>92/100</Badge>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Excellent reputation score<br />Based on loan history and collateral</p>
-                          </TooltipContent>
-                        </Tooltip>
-                    </TableCell>
-                      <TableCell className="text-center">
-                        <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
-                          Claim Collateral
-                        </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell className="text-foreground dark:text-white text-center">5CZoJzV...Uh8Bw</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-2 justify-center">
-                          <img src="/images/sol-logo.png" alt="SOL" className="w-4 h-4" />
-                          SOL
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">25</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500">+0.95 SOL</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500 font-medium">3.8%</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">150%</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-1 justify-center">
-                          <BiTime className="h-4 w-4 text-blue-500" />
-                          <span>60 days</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Badge className="bg-blue-500 text-white hover:bg-blue-500">Completed</Badge>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Badge className={getScoreColor(92)}>92/100</Badge>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Good reputation score<br />Based on loan history and collateral</p>
-                          </TooltipContent>
-                        </Tooltip>
-                    </TableCell>
-                      <TableCell className="text-center">
-                        <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
-                          Claim Collateral
-                        </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell className="text-foreground dark:text-white text-center">9dRKEp7...mFGQs</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-2 justify-center">
-                          <img src="/images/msol-logo.png" alt="mSOL" className="w-4 h-4" />
-                          mSOL
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">15</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500">+0.43 mSOL</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500 font-medium">2.9%</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">150%</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-1 justify-center">
-                          <BiTime className="h-4 w-4 text-blue-500" />
-                          <span>120 days</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Badge className="bg-blue-500 text-white hover:bg-blue-500">Completed</Badge>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Badge className={getScoreColor(92)}>92/100</Badge>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Good reputation score<br />Based on loan history and collateral</p>
-                          </TooltipContent>
-                        </Tooltip>
-                    </TableCell>
-                      <TableCell className="text-center">
-                        <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
-                          Claim Collateral
-                        </Button>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TabsContent>
-              <TabsContent value="marketplace" className="mt-4">
-                <div className="rounded-lg border bg-card p-2 mb-4">
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <BiWallet className="h-4 w-4" />
-                      <span>My Pending Offers: {myOffers.length}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <LockClosedIcon className="h-4 w-4" />
-                      <span>Total Value: ${myOffers.reduce((total, offer) => total + offer.amount, 0).toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                      <TableHead className="text-foreground dark:text-white text-center">Borrower</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Asset</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Amount</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Interest</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">APY</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Collateral</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Term</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Reputation</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {myOffers.map(offer => (
-                    <TableRow key={offer.id}>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <div className="flex items-center gap-2 justify-center">
-                              {offer.borrower}
-                              {offer.verified && (
-                                <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">Verified</Badge>
-                              )}
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Verified borrower with KYC.</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-2 justify-center">
-                          <img 
-                            src={`/images/${offer.asset === "USDT" ? "tether-usdt-logo.png" : offer.asset.toLowerCase() + "-logo.png"}`} 
-                            alt={offer.asset} 
-                            className="w-4 h-4" 
-                          />
-                          {offer.asset}
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">{offer.amount}</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500">{offer.interest}</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500 font-medium">{offer.apy}</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">{offer.collateral}</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-1 justify-center">
-                          <BiTime className="h-4 w-4 text-blue-500" />
-                          <span>{offer.term}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Badge className={getScoreColor(offer.reputation)}>{offer.reputation}/100</Badge>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{offer.reputation >= 90 ? 'Excellent' : 'Good'} reputation score<br />Based on loan history and collateral</p>
-                          </TooltipContent>
-                        </Tooltip>
-                    </TableCell>
-                      <TableCell className="text-center">
-                        <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
-                          Accept
-                        </Button>
-                    </TableCell>
+      <Tabs defaultValue="myloans" className="space-y-6">
+        <TabsList className="inline-flex h-10 w-full max-w-md mx-auto mb-4 bg-muted/50 border dark:border-white/10">
+          <TabsTrigger 
+            value="myloans" 
+            className="inline-flex items-center justify-center text-base px-6 py-2 flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            My Loans
+          </TabsTrigger>
+          <TabsTrigger 
+            value="myoffers" 
+            className="inline-flex items-center justify-center text-base px-6 py-2 flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            My Offers
+          </TabsTrigger>
+          <TabsTrigger 
+            value="overview" 
+            className="inline-flex items-center justify-center text-base px-6 py-2 flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+          >
+            Opportunities
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="overview" className="space-y-6">
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle className="text-base font-medium">Opportunities</CardTitle>
+              <CardDescription>
+                Browse available borrowing requests from verified users.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader className="bg-muted/50">
+                    <TableRow>
+                      <TableHead className="font-medium text-center">Borrower</TableHead>
+                      <TableHead className="font-medium text-center">Asset</TableHead>
+                      <TableHead className="font-medium text-center">Amount</TableHead>
+                      <TableHead className="font-medium text-center">Interest</TableHead>
+                      <TableHead className="font-medium text-center">APY</TableHead>
+                      <TableHead className="font-medium text-center">Collateral</TableHead>
+                      <TableHead className="font-medium text-center">Term</TableHead>
+                      <TableHead className="font-medium text-center">Reputation</TableHead>
+                      <TableHead className="font-medium text-center">Action</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TabsContent>
-              <TabsContent value="opportunities" className="mt-4">
-                <div className="rounded-lg border bg-card p-2 mb-4">
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <BiWallet className="h-4 w-4" />
-                      <span>Total Available to Lend: $45,890</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <LockClosedIcon className="h-4 w-4" />
-                      <span>Collateral Locked: $12,450</span>
-                    </div>
-                  </div>
-                </div>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                      <TableHead className="text-foreground dark:text-white text-center">Borrower</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Asset</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Amount</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Interest</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">APY</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Collateral</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Term</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Reputation</TableHead>
-                      <TableHead className="text-foreground dark:text-white text-center">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <div className="flex items-center gap-2 justify-center">
-                              HN7cABqLq...vGRE1
-                              <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">Verified</Badge>
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Verified borrower with KYC.</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-2 justify-center">
-                          <img src="/images/usdc-logo.png" alt="USDC" className="w-4 h-4" />
-                          USDC
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">5,000</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500">+260 USDC</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500 font-medium">5.2%</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">150%</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-1 justify-center">
-                          <BiTime className="h-4 w-4 text-blue-500" />
-                          <span>90 days</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Badge className={getScoreColor(95)}>95/100</Badge>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Excellent reputation score<br />Based on loan history and collateral</p>
-                          </TooltipContent>
-                        </Tooltip>
-                    </TableCell>
-                      <TableCell className="text-center">
-                        <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
-                          Lend Now
-                        </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell className="text-foreground dark:text-white text-center">5CZoJzV...Uh8Bw</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-2 justify-center">
-                          <img src="/images/sol-logo.png" alt="SOL" className="w-4 h-4" />
-                          SOL
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">25</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500">+0.95 SOL</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500 font-medium">3.8%</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">150%</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-1 justify-center">
-                          <BiTime className="h-4 w-4 text-blue-500" />
-                          <span>60 days</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Badge className={getScoreColor(92)}>92/100</Badge>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Good reputation score<br />Based on loan history and collateral</p>
-                          </TooltipContent>
-                        </Tooltip>
-                    </TableCell>
-                      <TableCell className="text-center">
-                        <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
-                          Lend Now
-                        </Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                      <TableCell className="text-foreground dark:text-white text-center">Bv3iF2T...qP5Ks</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-2 justify-center">
-                          <img src="/images/jup-logo.png" alt="JUP" className="w-4 h-4" />
-                          JUP
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">1,000</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500">+65 JUP</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <span className="text-green-500 font-medium">6.5%</span>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">150%</TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <div className="flex items-center gap-1 justify-center">
-                          <BiTime className="h-4 w-4 text-blue-500" />
-                          <span>120 days</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-foreground dark:text-white text-center">
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <Badge className={getScoreColor(92)}>92/100</Badge>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Good reputation score<br />Based on loan history and collateral</p>
-                          </TooltipContent>
-                        </Tooltip>
-                    </TableCell>
-                      <TableCell className="text-center">
-                        <Button size="sm" className="bg-blue-500 hover:bg-blue-600 text-white font-medium">
-                          Lend Now
-                        </Button>
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-          <CardFooter className="flex justify-center mt-4">
-            <Link href="/loan-offers/marketplace?tab=lend">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white h-8 px-4 text-sm">
-                View All Opportunities
-              </Button>
-            </Link>
-        </CardFooter>
-      </Card>
+                  </TableHeader>
+                  <TableBody>
+                    {opportunities.map((opportunity) => (
+                      <TableRow key={opportunity.id} className="hover:bg-muted/50 transition-colors">
+                        <TableCell className="font-medium text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            {opportunity.borrower}
+                            {opportunity.verified && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                                      Verified
+                                    </Badge>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>This borrower has completed KYC verification</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <img 
+                              src={`/images/${opportunity.asset === "USDT" ? "tether-usdt-logo.png" : opportunity.asset.toLowerCase() + "-logo.png"}`} 
+                              alt={opportunity.asset} 
+                              className="w-5 h-5" 
+                            />
+                            {opportunity.asset}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center font-medium">{opportunity.amount.toLocaleString()} {opportunity.asset}</TableCell>
+                        <TableCell className="text-center font-medium text-green-500">{opportunity.interest}</TableCell>
+                        <TableCell className="text-center font-medium">
+                          <div className="flex items-center justify-center gap-1">
+                            {opportunity.apy}
+                            {opportunity.trend && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    {opportunity.trend.direction === "up" ? (
+                                      <ArrowUpIcon className="h-4 w-4 text-green-500" />
+                                    ) : (
+                                      <ArrowDownIcon className="h-4 w-4 text-red-500" />
+                                    )}
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>{opportunity.trend.change} from last week</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center font-medium">{opportunity.collateral}</TableCell>
+                        <TableCell className="text-center font-medium">{opportunity.term}</TableCell>
+                        <TableCell className="text-center">
+                          <Badge className={`${getScoreColor(opportunity.reputation)} text-white`}>
+                            {opportunity.reputation}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                            Lend Now
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="myloans" className="space-y-6">
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle className="text-base font-medium">My Loans</CardTitle>
+              <CardDescription>
+                Track your active loans and payment schedules.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader className="bg-muted/50">
+                    <TableRow>
+                      <TableHead className="font-medium text-center">Borrower</TableHead>
+                      <TableHead className="font-medium text-center">Asset</TableHead>
+                      <TableHead className="font-medium text-center">Amount</TableHead>
+                      <TableHead className="font-medium text-center">Interest</TableHead>
+                      <TableHead className="font-medium text-center">APY</TableHead>
+                      <TableHead className="font-medium text-center">Collateral</TableHead>
+                      <TableHead className="font-medium text-center">Due Date</TableHead>
+                      <TableHead className="font-medium text-center">Status</TableHead>
+                      <TableHead className="font-medium text-center">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {activeLoans.map((loan) => (
+                      <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
+                        <TableCell className="font-medium text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            {loan.borrower}
+                            {loan.verified && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                                      Verified
+                                    </Badge>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Verified borrower with KYC.</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <img 
+                              src={`/images/${loan.asset === "USDT" ? "tether-usdt-logo.png" : loan.asset.toLowerCase() + "-logo.png"}`} 
+                              alt={loan.asset} 
+                              className="w-5 h-5" 
+                            />
+                            {loan.asset}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center font-medium">{loan.amount.toLocaleString()} {loan.asset}</TableCell>
+                        <TableCell className="text-center font-medium text-green-500">{loan.interest}</TableCell>
+                        <TableCell className="text-center font-medium text-green-500">{loan.apy}</TableCell>
+                        <TableCell className="text-center font-medium">{loan.collateral}</TableCell>
+                        <TableCell className="text-center font-medium">
+                          <div className="flex items-center justify-center gap-1">
+                            <BiTime className="h-4 w-4 text-blue-500" />
+                            {loan.dueDate}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Badge className={loan.status === "Active" ? "bg-green-500" : "bg-yellow-500"}>
+                            {loan.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Button
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                            onClick={() => handleLoanAction(loan)}
+                          >
+                            Manage
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="myoffers" className="space-y-6">
+          <Card className="border-2">
+            <CardHeader>
+              <CardTitle className="text-base font-medium">My Offers</CardTitle>
+              <CardDescription>
+                Manage your pending offers and track your lending opportunities.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader className="bg-muted/50">
+                    <TableRow>
+                      <TableHead className="font-medium text-center">Borrower</TableHead>
+                      <TableHead className="font-medium text-center">Asset</TableHead>
+                      <TableHead className="font-medium text-center">Amount</TableHead>
+                      <TableHead className="font-medium text-center">Interest</TableHead>
+                      <TableHead className="font-medium text-center">APY</TableHead>
+                      <TableHead className="font-medium text-center">Collateral</TableHead>
+                      <TableHead className="font-medium text-center">Term</TableHead>
+                      <TableHead className="font-medium text-center">Reputation</TableHead>
+                      <TableHead className="font-medium text-center">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {myOffers.map((offer) => (
+                      <TableRow key={offer.id} className="hover:bg-muted/50 transition-colors">
+                        <TableCell className="font-medium text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            {offer.borrower}
+                            {offer.verified && (
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+                                      Verified
+                                    </Badge>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Verified borrower with KYC.</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <img 
+                              src={`/images/${offer.asset === "USDT" ? "tether-usdt-logo.png" : offer.asset.toLowerCase() + "-logo.png"}`} 
+                              alt={offer.asset} 
+                              className="w-5 h-5" 
+                            />
+                            {offer.asset}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center font-medium">{offer.amount.toLocaleString()} {offer.asset}</TableCell>
+                        <TableCell className="text-center font-medium text-green-500">{offer.interest}</TableCell>
+                        <TableCell className="text-center font-medium text-green-500">{offer.apy}</TableCell>
+                        <TableCell className="text-center font-medium">{offer.collateral}</TableCell>
+                        <TableCell className="text-center font-medium">
+                          <div className="flex items-center justify-center gap-1">
+                            <BiTime className="h-4 w-4 text-blue-500" />
+                            {offer.term}
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Badge className={`${getScoreColor(offer.reputation || 0)} text-white`}>
+                            {offer.reputation}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <Button
+                            size="sm"
+                            className="bg-blue-600 hover:bg-blue-700 text-white"
+                            onClick={() => handleAcceptOffer(offer)}
+                          >
+                            Accept
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
-    </TooltipProvider>
   )
 }
 

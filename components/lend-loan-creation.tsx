@@ -81,7 +81,7 @@ export function LendLoanCreation() {
   }
 
   return (
-    <Card className="w-full max-w-2xl mx-auto bg-white dark:bg-blue-950 shadow-lg rounded-xl overflow-hidden">
+    <Card className="w-full max-w-md mx-auto bg-white dark:bg-blue-950 shadow-lg rounded-xl overflow-hidden">
       <CardHeader className="bg-agio rounded-t-xl text-center py-1 relative">
         <CardTitle className="text-lg font-bold text-black dark:text-white text-center">
           CREATE LEND OFFER
