@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { InfoCircledIcon, ArrowUpIcon, ArrowDownIcon, ReloadIcon, LockClosedIcon } from "@radix-ui/react-icons"
-import { BiWallet, BiTime } from "react-icons/bi"
+import { BiWallet, BiTime, BiTrendingUp, BiPieChart, BiWater, BiTrophy } from "react-icons/bi"
 import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
 import { useState } from "react"
@@ -163,56 +163,56 @@ export default function LendDashboard() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <Card className="border-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-medium">Total Value Locked</CardTitle>
+            <CardTitle className="text-base font-medium text-center">Total Value Locked</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-2xl font-bold">$1,245,789.32</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-500 flex items-center gap-1">
+            <p className="text-xs text-muted-foreground text-center">
+              <span className="text-green-500 flex items-center justify-center gap-1">
                 <ArrowUpIcon className="h-4 w-4" />
-                +12.5% <span className="text-white dark:text-white">from last month</span>
+                +12.5% <span className="text-black dark:text-white">from last month</span>
               </span>
             </p>
           </CardContent>
         </Card>
         <Card className="border-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-medium">Active Loans</CardTitle>
+            <CardTitle className="text-base font-medium text-center">Active Loans</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-2xl font-bold">24</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-500 flex items-center gap-1">
+            <p className="text-xs text-muted-foreground text-center">
+              <span className="text-green-500 flex items-center justify-center gap-1">
                 <ArrowUpIcon className="h-4 w-4" />
-                +3 <span className="text-white dark:text-white">from last month</span>
+                +3 <span className="text-black dark:text-white">from last month</span>
               </span>
             </p>
           </CardContent>
         </Card>
         <Card className="border-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-medium">Total Interest Earned</CardTitle>
+            <CardTitle className="text-base font-medium text-center">Total Interest Earned</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-2xl font-bold">$34,567.89</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-500 flex items-center gap-1">
+            <p className="text-xs text-muted-foreground text-center">
+              <span className="text-green-500 flex items-center justify-center gap-1">
                 <ArrowUpIcon className="h-4 w-4" />
-                +8.2% <span className="text-white dark:text-white">from last month</span>
+                +8.2% <span className="text-black dark:text-white">from last month</span>
               </span>
             </p>
           </CardContent>
         </Card>
         <Card className="border-2">
           <CardHeader className="pb-2">
-            <CardTitle className="text-base font-medium">Average APY</CardTitle>
+            <CardTitle className="text-base font-medium text-center">Average APY</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="text-center">
             <div className="text-2xl font-bold">5.8%</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-red-500 flex items-center gap-1">
+            <p className="text-xs text-muted-foreground text-center">
+              <span className="text-red-500 flex items-center justify-center gap-1">
                 <ArrowDownIcon className="h-4 w-4" />
-                -0.3% <span className="text-white dark:text-white">from last month</span>
+                -0.3% <span className="text-black dark:text-white">from last month</span>
               </span>
             </p>
           </CardContent>
@@ -237,13 +237,13 @@ export default function LendDashboard() {
             value="overview" 
             className="inline-flex items-center justify-center text-base px-6 py-2 flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
           >
-            Opportunities
+            Offers
           </TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="space-y-6">
           <Card className="border-2">
             <CardHeader>
-              <CardTitle className="text-base font-medium">Opportunities</CardTitle>
+              <CardTitle className="text-base font-medium">Offers</CardTitle>
               <CardDescription>
                 Browse available borrowing requests from verified users.
               </CardDescription>
@@ -323,7 +323,7 @@ export default function LendDashboard() {
                         <TableCell className="text-center font-medium">{opportunity.term}</TableCell>
                         <TableCell className="text-center">
                           <Badge className={`${getScoreColor(opportunity.reputation)} text-white`}>
-                            {opportunity.reputation}
+                            <span className="text-white">{opportunity.reputation}/100</span>
                           </Badge>
                         </TableCell>
                         <TableCell className="text-center">
@@ -335,6 +335,13 @@ export default function LendDashboard() {
                     ))}
                   </TableBody>
                 </Table>
+              </div>
+              <div className="flex justify-center mt-4">
+                <Link href="/loan-offers/marketplace">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                    View All Opportunities
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>
@@ -360,7 +367,7 @@ export default function LendDashboard() {
                       <TableHead className="font-medium text-center">APY</TableHead>
                       <TableHead className="font-medium text-center">Collateral</TableHead>
                       <TableHead className="font-medium text-center">Due Date</TableHead>
-                      <TableHead className="font-medium text-center">Status</TableHead>
+                      <TableHead className="font-medium text-center">Reputation</TableHead>
                       <TableHead className="font-medium text-center">Action</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -407,8 +414,8 @@ export default function LendDashboard() {
                           </div>
                         </TableCell>
                         <TableCell className="text-center">
-                          <Badge className={loan.status === "Active" ? "bg-green-500" : "bg-yellow-500"}>
-                            {loan.status}
+                          <Badge className={`${getScoreColor(loan.reputation || 0)} text-white`}>
+                            <span className="text-white">{loan.reputation}/100</span>
                           </Badge>
                         </TableCell>
                         <TableCell className="text-center">
@@ -425,6 +432,11 @@ export default function LendDashboard() {
                   </TableBody>
                 </Table>
               </div>
+              <CardFooter className="flex justify-center pt-4">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
+                  View All
+                </Button>
+              </CardFooter>
             </CardContent>
           </Card>
         </TabsContent>
@@ -497,7 +509,7 @@ export default function LendDashboard() {
                         </TableCell>
                         <TableCell className="text-center">
                           <Badge className={`${getScoreColor(offer.reputation || 0)} text-white`}>
-                            {offer.reputation}
+                            <span className="text-white">{offer.reputation}/100</span>
                           </Badge>
                         </TableCell>
                         <TableCell className="text-center">
@@ -514,6 +526,11 @@ export default function LendDashboard() {
                   </TableBody>
                 </Table>
               </div>
+              <CardFooter className="flex justify-center pt-4">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
+                  View All
+                </Button>
+              </CardFooter>
             </CardContent>
           </Card>
         </TabsContent>

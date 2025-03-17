@@ -1,11 +1,39 @@
 "use client"
 
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Image from "next/image"
-import { SlidersHorizontal } from "lucide-react"
+import { SlidersHorizontal, ChevronDown } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import Link from "next/link"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Slider } from "@/components/ui/slider"
 
 interface LoanOffer {
   id: string
@@ -17,6 +45,14 @@ interface LoanOffer {
   term: number
   borrower: string
   status: "active" | "funded" | "completed"
+  score: number
+}
+
+interface FilterOptions {
+  token: string
+  collateral: string
+  collateralPercentage: [number, number]
+  term: [number, number]
 }
 
 const mockLendOffers: LoanOffer[] = [
@@ -29,7 +65,8 @@ const mockLendOffers: LoanOffer[] = [
     apr: 12.5,
     term: 30,
     borrower: "8xzt...3yxz",
-    status: "active"
+    status: "active",
+    score: 85
   },
   {
     id: "2",
@@ -40,7 +77,8 @@ const mockLendOffers: LoanOffer[] = [
     apr: 15,
     term: 60,
     borrower: "9abc...4def",
-    status: "active"
+    status: "active",
+    score: 92
   }
 ]
 
@@ -54,7 +92,8 @@ const mockBorrowOffers: LoanOffer[] = [
     apr: 10,
     term: 15,
     borrower: "7ghi...5jkl",
-    status: "active"
+    status: "active",
+    score: 78
   },
   {
     id: "4",
@@ -65,16 +104,62 @@ const mockBorrowOffers: LoanOffer[] = [
     apr: 11,
     term: 45,
     borrower: "6mno...2pqr",
-    status: "active"
+    status: "active",
+    score: 88
   }
 ]
 
 export default function LoanOffersPage() {
+  const [filters, setFilters] = useState<FilterOptions>({
+    token: "any",
+    collateral: "any",
+    collateralPercentage: [150, 300],
+    term: [0, 365]
+  });
+  
+  const [tempFilters, setTempFilters] = useState<FilterOptions>({
+    token: "any",
+    collateral: "any",
+    collateralPercentage: [150, 300],
+    term: [0, 365]
+  });
+  
+  const handleSaveFilters = () => {
+    setFilters(tempFilters);
+  };
+  
+  const handleOpenDialog = () => {
+    setTempFilters({...filters});
+  };
+
   return (
     <div className="container mx-auto p-6">
       <div className="flex flex-col space-y-6">
         <div className="flex flex-col space-y-2 items-center text-center">
-          <h1 className="text-3xl font-bold tracking-tight dark:text-white">Loan Offers</h1>
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="text-3xl font-bold tracking-tight dark:text-white">Loan Offers</h1>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
+                  <ChevronDown className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-56">
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="w-full cursor-pointer">Dashboard</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/borrow-lend" className="w-full cursor-pointer">Borrow / Lend</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/loan-offers/marketplace" className="w-full cursor-pointer">Loan Offers</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/socialfi" className="w-full cursor-pointer">SocialFi</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
           <p className="text-muted-foreground">
             Browse and fund available loan requests from borrowers
           </p>
@@ -96,10 +181,173 @@ export default function LoanOffersPage() {
                 Borrow Offers
               </TabsTrigger>
             </TabsList>
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
-              <SlidersHorizontal className="h-4 w-4" />
-              Filters
-            </Button>
+            
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button 
+                  className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+                  onClick={handleOpenDialog}
+                >
+                  <SlidersHorizontal className="h-4 w-4" />
+                  Filters
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Filter Loan Offers</DialogTitle>
+                  <DialogDescription>
+                    Set filters to find the loan offers that match your criteria.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="token" className="text-right">
+                      Token
+                    </Label>
+                    <Select 
+                      value={tempFilters.token} 
+                      onValueChange={(value) => setTempFilters({...tempFilters, token: value})}
+                    >
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Select token" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="any">Any</SelectItem>
+                        <SelectItem value="USDC">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/usdc-logo.png" alt="USDC" width={16} height={16} />
+                            <span>USDC</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="SOL">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/sol-logo.png" alt="SOL" width={16} height={16} />
+                            <span>SOL</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="BONK">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/bonk-logo.png" alt="BONK" width={16} height={16} />
+                            <span>BONK</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="JUP">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/jup-logo.png" alt="JUP" width={16} height={16} />
+                            <span>JUP</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="mSOL">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/msol-logo.png" alt="mSOL" width={16} height={16} />
+                            <span>mSOL</span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="collateral" className="text-right">
+                      Collateral
+                    </Label>
+                    <Select 
+                      value={tempFilters.collateral} 
+                      onValueChange={(value) => setTempFilters({...tempFilters, collateral: value})}
+                    >
+                      <SelectTrigger className="col-span-3">
+                        <SelectValue placeholder="Select collateral" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="any">Any</SelectItem>
+                        <SelectItem value="SOL">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/sol-logo.png" alt="SOL" width={16} height={16} />
+                            <span>SOL</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="USDC">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/usdc-logo.png" alt="USDC" width={16} height={16} />
+                            <span>USDC</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="BONK">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/bonk-logo.png" alt="BONK" width={16} height={16} />
+                            <span>BONK</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="JUP">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/jup-logo.png" alt="JUP" width={16} height={16} />
+                            <span>JUP</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="mSOL">
+                          <div className="flex items-center gap-2">
+                            <Image src="/images/msol-logo.png" alt="mSOL" width={16} height={16} />
+                            <span>mSOL</span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">
+                      Collateral %
+                    </Label>
+                    <div className="col-span-3 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm">{tempFilters.collateralPercentage[0]}%</span>
+                        <span className="text-sm">{tempFilters.collateralPercentage[1]}%</span>
+                      </div>
+                      <Slider
+                        defaultValue={tempFilters.collateralPercentage}
+                        min={150}
+                        max={300}
+                        step={10}
+                        onValueChange={(value) => setTempFilters({...tempFilters, collateralPercentage: value as [number, number]})}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label className="text-right">
+                      Term (days)
+                    </Label>
+                    <div className="col-span-3 space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm">{tempFilters.term[0]} days</span>
+                        <span className="text-sm">{tempFilters.term[1]} days</span>
+                      </div>
+                      <Slider
+                        defaultValue={tempFilters.term}
+                        min={0}
+                        max={365}
+                        step={1}
+                        onValueChange={(value) => setTempFilters({...tempFilters, term: value as [number, number]})}
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter className="flex justify-center gap-2">
+                  <div className="flex justify-center gap-2 w-full">
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                      <Button 
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={handleSaveFilters}
+                      >
+                        Save Filters
+                      </Button>
+                    </DialogClose>
+                  </div>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
 
           <TabsContent value="lend" className="space-y-4">
@@ -120,7 +368,7 @@ export default function LoanOffersPage() {
                           <CardDescription>${offer.amount.toLocaleString()}</CardDescription>
                         </div>
                       </div>
-                      <Badge className="bg-green-100 text-green-700">{offer.status}</Badge>
+                      <Badge className="bg-blue-100 text-blue-700">Score: {offer.score}/100</Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="flex-1">
@@ -159,6 +407,11 @@ export default function LoanOffersPage() {
                 </Card>
               ))}
             </div>
+            <div className="flex justify-center mt-6">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
+                View All Opportunities
+              </Button>
+            </div>
           </TabsContent>
 
           <TabsContent value="borrow" className="space-y-4">
@@ -179,7 +432,7 @@ export default function LoanOffersPage() {
                           <CardDescription>${offer.amount.toLocaleString()}</CardDescription>
                         </div>
                       </div>
-                      <Badge className="bg-green-100 text-green-700">{offer.status}</Badge>
+                      <Badge className="bg-blue-100 text-blue-700">Score: {offer.score}/100</Badge>
                     </div>
                   </CardHeader>
                   <CardContent className="flex-1">
@@ -217,6 +470,11 @@ export default function LoanOffersPage() {
                   </CardFooter>
                 </Card>
               ))}
+            </div>
+            <div className="flex justify-center mt-6">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
+                View All Opportunities
+              </Button>
             </div>
           </TabsContent>
         </Tabs>

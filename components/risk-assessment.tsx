@@ -61,7 +61,7 @@ export function RiskAssessment() {
           />
         </div>
       </div>
-      <Button onClick={calculateRisk} className="w-full h-8 text-sm bg-blue-600 hover:bg-blue-700 text-white">Calculate Risk</Button>
+      <Button onClick={calculateRisk} className="w-3/4 mx-auto h-8 text-sm bg-blue-600 hover:bg-blue-700 text-white">Calculate Risk</Button>
       {riskScore > 0 && (
         <div className="space-y-1">
           <Label className="text-sm dark:text-white">Risk Score</Label>

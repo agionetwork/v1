@@ -7,13 +7,17 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { CheckCircle, Shield, Star, Trophy, Users } from "lucide-react"
+import { CheckCircle, Shield, Star, Trophy, Users, X } from "lucide-react"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog"
+import { useState } from "react"
 
 export default function ProfileDashboard() {
   const { publicKey } = useWallet()
+  const [profileName, setProfileName] = useState("Web 3 Surfer")
+  const [profileImage, setProfileImage] = useState("/images/surfer-pfp.png")
   
   // Função para formatar o endereço da carteira (mostrar início e fim)
   const formatAddress = (address: string) => {
@@ -29,12 +33,12 @@ export default function ProfileDashboard() {
             <CardHeader>
               <div className="flex items-center gap-4">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src="/images/surfer-pfp.png" alt="Web 3 Surfer Profile" />
+                  <AvatarImage src={profileImage} alt="Web 3 Surfer Profile" />
                   <AvatarFallback>WS</AvatarFallback>
                 </Avatar>
                 <div>
                   <CardTitle className="dark:text-white flex items-center gap-2">
-                    Web 3 Surfer
+                    {profileName}
                     <Tooltip>
                       <TooltipTrigger>
                         <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">Verified</Badge>
@@ -78,9 +82,51 @@ export default function ProfileDashboard() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button variant="outline" className="w-full bg-blue-600 text-white hover:bg-blue-700 border-blue-600">
-                Edit Profile
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" className="w-full bg-blue-600 text-white hover:bg-blue-700 border-blue-600">
+                    Edit Profile
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Edit Profile</DialogTitle>
+                    <DialogDescription>
+                      Make changes to your profile here. Click save when you're done.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="flex flex-col items-center gap-4">
+                      <Avatar className="h-24 w-24">
+                        <AvatarImage src={profileImage} alt="Profile" />
+                        <AvatarFallback>PFP</AvatarFallback>
+                      </Avatar>
+                      <Button variant="outline" size="sm">
+                        Upload Image
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">
+                        Name
+                      </Label>
+                      <Input
+                        id="name"
+                        value={profileName}
+                        onChange={(e) => setProfileName(e.target.value)}
+                        className="col-span-3"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter className="flex justify-center gap-2">
+                    <DialogClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">Save</Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardFooter>
           </Card>
         </div>
@@ -185,77 +231,62 @@ export default function ProfileDashboard() {
                   </div>
                 </CardContent>
               </Card>
+
+              <Card className="border-2">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base font-medium dark:text-white">
+                    <div className="flex items-center gap-2">
+                      <Trophy className="h-5 w-5 text-blue-500" />
+                      Leaderboard
+                    </div>
+                  </CardTitle>
+                  <CardDescription className="dark:text-gray-400">
+                    Your position in the platform's reputation ranking
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center p-3 bg-muted/20 rounded-md">
+                      <div className="flex items-center gap-3">
+                        <Badge className="bg-yellow-500">1</Badge>
+                        <span className="dark:text-white">Xp9TrQm...bF7Vy</span>
+                      </div>
+                      <Badge className="bg-green-500 text-white">99/100</Badge>
+                    </div>
+                    
+                    <div className="flex justify-between items-center p-3 bg-muted/20 rounded-md">
+                      <div className="flex items-center gap-3">
+                        <Badge className="bg-yellow-500">2</Badge>
+                        <span className="dark:text-white">Rt7PqLm...kN3Zx</span>
+                      </div>
+                      <Badge className="bg-green-500 text-white">98/100</Badge>
+                    </div>
+                    
+                    <div className="flex justify-between items-center p-3 bg-blue-500/10 border-2 border-blue-500 rounded-md">
+                      <div className="flex items-center gap-3">
+                        <Badge className="bg-green-500">3</Badge>
+                        <span className="font-bold dark:text-white">You</span>
+                      </div>
+                      <Badge className="bg-green-500 text-white">95/100</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
             <TabsContent value="social" className="mt-4">
-              <div className="grid grid-cols-2 gap-4">
-                <Card className="h-[300px] overflow-auto">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="dark:text-white">Social Connections</CardTitle>
-                    <CardDescription className="dark:text-gray-400 text-xs">Your network on the platform</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-2">
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                          <AvatarFallback>AB</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium dark:text-white">Alice Brown</p>
-                          <p className="text-xs text-muted-foreground dark:text-gray-400">5 mutual transactions</p>
-                        </div>
-                        <Badge className="bg-blue-600 text-white text-xs ml-auto">Connected</Badge>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                          <AvatarFallback>MS</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium dark:text-white">Mike Smith</p>
-                          <p className="text-xs text-muted-foreground dark:text-gray-400">3 mutual transactions</p>
-                        </div>
-                        <Badge className="bg-blue-600 text-white text-xs ml-auto">Connected</Badge>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                          <AvatarFallback>JW</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium dark:text-white">Jane Wilson</p>
-                          <p className="text-xs text-muted-foreground dark:text-gray-400">2 mutual transactions</p>
-                        </div>
-                        <Button size="sm" variant="outline" className="ml-auto h-7 text-xs bg-blue-600 text-white hover:bg-blue-700">
-                          Connect
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="pt-0">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full h-7 text-xs bg-blue-600 text-white hover:bg-blue-700"
-                    >
-                      <Users className="mr-1 h-3 w-3 text-white" />
-                      Find More Connections
-                    </Button>
-                  </CardFooter>
-                </Card>
-                
+              <div className="grid grid-cols-1 gap-4">
                 <Card className="h-[300px]">
                   <CardHeader className="pb-2">
                     <CardTitle className="dark:text-white">Community Activity</CardTitle>
                     <CardDescription className="dark:text-gray-400 text-xs">Your participation in the platform</CardDescription>
                   </CardHeader>
                   <CardContent className="pt-2">
-                    <div className="space-y-4">
-                      <div className="rounded-lg border p-3">
+                    <div className="space-y-4 flex flex-col items-center">
+                      <div className="rounded-lg border p-3 w-3/5 text-center">
                         <p className="text-sm font-medium dark:text-white">Forum Posts</p>
                         <p className="text-xl font-bold dark:text-white">12</p>
                       </div>
-                      <div className="rounded-lg border p-3">
+                      <div className="rounded-lg border p-3 w-3/5 text-center">
                         <p className="text-sm font-medium dark:text-white">Governance Votes</p>
                         <p className="text-xl font-bold dark:text-white">8</p>
                       </div>

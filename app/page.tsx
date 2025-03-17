@@ -37,12 +37,12 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-              <div className="relative w-[300px] h-[300px] hidden lg:block mx-auto">
+              <div className="relative w-[350px] h-[350px] hidden lg:block mx-auto">
                 <Image
                   src="/images/blue-hat.png"
                   alt="Blue Hat"
-                  width={300}
-                  height={300}
+                  width={350}
+                  height={350}
                   priority
                   className="object-contain"
                 />
