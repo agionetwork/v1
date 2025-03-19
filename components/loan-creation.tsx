@@ -69,12 +69,13 @@ export function LoanCreation() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
     
-    if (loanAmount <= 0) newErrors.loanAmount = "Valor deve ser maior que 0"
-    if (loanTerm < 1) newErrors.loanTerm = "Prazo mínimo é 1 dia"
-    if (apy < 0) newErrors.apy = "APY não pode ser negativo"
-    if (!receiverAddress) newErrors.receiverAddress = "Endereço da carteira é obrigatório"
+    if (loanAmount <= 0) newErrors.loanAmount = "Value must be greater than 0"
+    if (loanTerm < 1) newErrors.loanTerm = "Minimum term is 1 day"
+    if (apy < 0) newErrors.apy = "APY cannot be negative"
+    if (collateralAmount <= 0) newErrors.collateralAmount = "Collateral must be greater than 0"
+    if (!receiverAddress) newErrors.receiverAddress = "Wallet address is required"
     if (receiverAddress && !receiverAddress.startsWith("0x")) {
-      newErrors.receiverAddress = "Endereço da carteira inválido"
+      newErrors.receiverAddress = "Invalid wallet address format"
     }
     
     setErrors(newErrors)

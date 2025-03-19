@@ -351,12 +351,12 @@ export default function BorrowDashboard() {
         
         <TabsContent value="myloans" className="space-y-6">
           <Card className="border-2">
-            <CardHeader>
+        <CardHeader>
               <CardTitle className="text-base font-medium">My Active Loans</CardTitle>
               <CardDescription>
                 Your current outstanding loans
               </CardDescription>
-            </CardHeader>
+        </CardHeader>
             <CardContent>
               <div className="rounded-md border">
                 <Table>
@@ -393,7 +393,7 @@ export default function BorrowDashboard() {
                                 </Tooltip>
                               </TooltipProvider>
                             )}
-                          </div>
+          </div>
                         </TableCell>
                         <TableCell className="text-center">
                           <div className="flex items-center justify-center gap-2">
@@ -403,7 +403,7 @@ export default function BorrowDashboard() {
                               className="w-5 h-5" 
                             />
                             {loan.asset}
-                          </div>
+          </div>
                         </TableCell>
                         <TableCell className="text-center">${loan.amount.toLocaleString()}</TableCell>
                         <TableCell className="text-center">{loan.interest}</TableCell>
@@ -428,7 +428,7 @@ export default function BorrowDashboard() {
                     ))}
                   </TableBody>
                 </Table>
-              </div>
+            </div>
               <CardFooter className="flex justify-center pt-4">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
                   View All
@@ -474,7 +474,7 @@ export default function BorrowDashboard() {
                               className="w-5 h-5" 
                             />
                             {offer.asset}
-                          </div>
+            </div>
                         </TableCell>
                         <TableCell className="text-center">${offer.available.toLocaleString()}</TableCell>
                         <TableCell className="text-center">{offer.interest}</TableCell>
@@ -499,24 +499,24 @@ export default function BorrowDashboard() {
                     ))}
                   </TableBody>
                 </Table>
-              </div>
+          </div>
               <CardFooter className="flex justify-center gap-4 pt-4">
                 <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
                   View All
                 </Button>
               </CardFooter>
-            </CardContent>
-          </Card>
+        </CardContent>
+      </Card>
         </TabsContent>
         
         <TabsContent value="offers" className="space-y-6">
           <Card className="border-2">
-            <CardHeader>
+        <CardHeader>
               <CardTitle className="text-base font-medium">Available Loan Offers</CardTitle>
               <CardDescription>
                 Browse available loan offers from lenders
               </CardDescription>
-            </CardHeader>
+        </CardHeader>
             <CardContent>
               <div className="rounded-md border">
                 <Table>
@@ -553,7 +553,7 @@ export default function BorrowDashboard() {
                                 </Tooltip>
                               </TooltipProvider>
                             )}
-                          </div>
+          </div>
                         </TableCell>
                         <TableCell className="text-center">
                           <div className="flex items-center justify-center gap-2">
@@ -563,7 +563,7 @@ export default function BorrowDashboard() {
                               className="w-5 h-5" 
                             />
                             {opportunity.asset}
-                          </div>
+            </div>
                         </TableCell>
                         <TableCell className="text-center">${opportunity.available.toLocaleString()}</TableCell>
                         <TableCell className="text-center">{opportunity.interest}</TableCell>
@@ -589,7 +589,7 @@ export default function BorrowDashboard() {
                     ))}
                   </TableBody>
                 </Table>
-              </div>
+          </div>
               <CardFooter className="flex justify-center pt-4">
                 <Link href="/loan-offers/marketplace">
                   <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
@@ -597,8 +597,8 @@ export default function BorrowDashboard() {
                   </Button>
                 </Link>
               </CardFooter>
-            </CardContent>
-          </Card>
+        </CardContent>
+      </Card>
         </TabsContent>
       </Tabs>
     </div>
