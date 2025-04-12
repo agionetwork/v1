@@ -11,15 +11,20 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, ChevronDown, Sparkles } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
+import SocialIcons from "@/components/social-icons"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
+  const router = useRouter()
 
   useEffect(() => {
     setMounted(true);
     console.log("Homepage mounted, ParticlesBackground should appear");
-  }, []);
+    router.push('/waitlist')
+  }, [router]);
 
   const scrollToStats = () => {
     statsRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -28,13 +33,9 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-gray-950">
+    <div className="flex min-h-screen flex-col bg-white dark:bg-gray-900">
       <main className="flex-1">
         <section className="w-full min-h-screen flex flex-col items-center justify-center py-8 md:py-12 lg:py-16 xl:py-24 relative overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <ParticlesBackground />
-          </div>
-          
           <div className="container px-4 md:px-6 mx-auto max-w-7xl relative z-10">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -48,7 +49,7 @@ export default function Home() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.6 }}
-                    className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-gradient-to-r from-blue-600 via-blue-500 to-blue-600 bg-clip-text text-transparent"
+                    className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none text-blue-600 dark:text-blue-400"
                   >
                     Decentralized
                     <span className="block mt-1">Social Finance for</span>
@@ -71,7 +72,7 @@ export default function Home() {
                   className="flex flex-col gap-4 min-[400px]:flex-row"
                 >
                   <Link href="/dashboard?tab=overview">
-                    <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-lg shadow-blue-600/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-600/30 hover:translate-y-[-2px] px-8">
+                    <Button size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-blue-600/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-600/30 hover:translate-y-[-2px] px-8">
                       LAUNCH APP <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -81,6 +82,14 @@ export default function Home() {
                     </Button>
                   </Link>
                 </motion.div>
+                <Button 
+                  size="lg" 
+                  className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-2"
+                  onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSdbOWUOW4gG-zQp4Ht69NacWAii7lsYQOV3mrv_6UfFsfPN0g/viewform', '_blank')}
+                >
+                  <ArrowRight className="w-5 h-5" />
+                  FILL THE FORM
+                </Button>
               </div>
               <motion.div 
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -106,23 +115,16 @@ export default function Home() {
             transition={{ delay: 1.5, duration: 1 }}
             className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block"
           >
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="rounded-full h-10 w-10 border border-gray-200 dark:border-gray-700"
-              onClick={scrollToStats}
-            >
+            <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 border border-gray-200 dark:border-gray-700">
               <ChevronDown className="h-5 w-5" />
             </Button>
           </motion.div>
         </section>
         
-        <div ref={statsRef}>
-          <StatsSection />
-        </div>
+        <StatsSection />
         <FeaturesSection />
 
-        <div className="container px-4 md:px-6 mx-auto py-6 text-center -mt-16">
+        <div className="container px-4 md:px-6 mx-auto py-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -138,6 +140,12 @@ export default function Home() {
         </div>
       </main>
       <Footer />
+      <SocialIcons 
+        linkedin="https://linkedin.com/company/agio-network"
+        discord="https://discord.com/invite/EmwdzjC2DM"
+        x="https://x.com/agio_network"
+        telegram="https://t.me/agio_network"
+      />
     </div>
   )
 } 

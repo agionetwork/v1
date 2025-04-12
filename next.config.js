@@ -5,10 +5,14 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-    ],
+        hostname: 'images.unsplash.com'
+      }
+    ]
   },
+  publicRuntimeConfig: {
+    NEXT_PUBLIC_CIVIC_CLIENT_ID: "65004c36-3e4f-41a1-b0eb-8a9fc72dbf04",
+    CIVIC_OAUTH_SERVER: "https://auth.civic.com"
+  }
 }
 
-module.exports = nextConfig 
+export default nextConfig; 

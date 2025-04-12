@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'AGIO Network',
-  description: 'Decentralized Lending Protocol',
+  title: 'Agio Network',
+  description: 'Decentralized Social Finance for Borrowers & Lenders',
 } 

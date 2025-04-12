@@ -18,6 +18,14 @@ module.exports = {
     },
     extend: {
       colors: {
+        agio: {
+          100: "#1358EC",
+          200: "#104BCA",
+          300: "#145BF5",
+          400: "#0D3EA8",
+          500: "#1D428F",
+          600: "#082666",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -50,11 +58,6 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        agio: {
-          DEFAULT: "hsl(var(--agio))",
-          light: "hsl(228, 100%, 85%)",
-          dark: "hsl(228, 100%, 45%)",
         },
       },
       borderRadius: {

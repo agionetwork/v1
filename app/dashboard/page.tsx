@@ -33,6 +33,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { useSearchParams } from "next/navigation"
 
 type LoanSummary = {
   totalBorrowed: number
@@ -126,6 +127,8 @@ const loanActivity: LoanActivity[] = [
 ]
 
 export default function DashboardPage() {
+  const searchParams = useSearchParams()
+  const tab = searchParams.get("tab") || "overview"
   const [activeTab, setActiveTab] = useState("profile")
   const { theme } = useTheme()
   const { tokens, isLoading, error } = useWalletTokens()
@@ -190,71 +193,20 @@ export default function DashboardPage() {
   }, [theme, activeTab]);
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col space-y-2 text-center">
-          <div className="flex items-center justify-center gap-2">
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-56">
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="w-full cursor-pointer">Dashboard</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/borrow-lend" className="w-full cursor-pointer">Borrow / Lend</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/loan-offers/marketplace" className="w-full cursor-pointer">Loan Offers</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/socialfi" className="w-full cursor-pointer">SocialFi</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <p className="text-muted-foreground">
-            Welcome back! Here's an overview of your lending and borrowing activities.
-          </p>
-        </div>
-
-        <Tabs defaultValue="profile" value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-4 mb-8 bg-muted/50 border dark:border-white/10 h-12">
-            <TabsTrigger 
-              value="profile" 
-              className="text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              Profile
-            </TabsTrigger>
-            <TabsTrigger 
-              value="overview" 
-              className="text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-                Overview
-              </TabsTrigger>
-            <TabsTrigger 
-              value="borrow" 
-              className="text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              Borrow
-              </TabsTrigger>
-            <TabsTrigger 
-              value="lend" 
-              className="text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-                Lend
-              </TabsTrigger>
+    <div className="container mx-auto py-12 px-4">
+      <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
+      
+      <Tabs defaultValue={tab} className="w-full">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="loans">My Loans</TabsTrigger>
+          <TabsTrigger value="offers">My Offers</TabsTrigger>
+          <TabsTrigger value="reputation">Reputation</TabsTrigger>
             </TabsList>
 
-          <TabsContent value="profile">
-            <ProfileDashboard />
-          </TabsContent>
-
-          <TabsContent value="overview">
+        <TabsContent value="overview">
+          <div className="grid gap-6">
+            <h2 className="text-2xl font-semibold">Overview</h2>
             <div className="grid gap-4 lg:grid-cols-3">
               <Card className="lg:col-span-1 border-2">
                 <CardHeader className="pb-2">
@@ -741,21 +693,30 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </div>
+          </div>
             </TabsContent>
 
-          <TabsContent value="borrow">
-            <BorrowDashboard />
+        <TabsContent value="loans">
+          <div className="grid gap-6">
+            <h2 className="text-2xl font-semibold">My Loans</h2>
+            {/* Add loans content */}
+          </div>
             </TabsContent>
 
-          <TabsContent value="lend">
-              <LendDashboard />
+        <TabsContent value="offers">
+          <div className="grid gap-6">
+            <h2 className="text-2xl font-semibold">My Offers</h2>
+            {/* Add offers content */}
+          </div>
             </TabsContent>
 
-          <TabsContent value="risk">
-              <RiskAssessment />
+        <TabsContent value="reputation">
+          <div className="grid gap-6">
+            <h2 className="text-2xl font-semibold">Reputation</h2>
+            {/* Add reputation content */}
+          </div>
             </TabsContent>
           </Tabs>
-      </div>
     </div>
   )
 }

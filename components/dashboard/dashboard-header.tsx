@@ -13,11 +13,37 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 
 export default function DashboardHeader() {
   const { theme, setTheme } = useTheme()
   const [isOpen, setIsOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const isActive = (path: string) => {
+    if (path === '/dashboard') {
+      return pathname === path
+    }
+    return pathname.startsWith(path)
+  }
+
+  if (!mounted) {
+    return (
+      <header className="sticky top-0 z-50 w-full border-b bg-background">
+        <div className="container flex h-16 items-center justify-between">
+          <div className="flex items-center gap-8">
+            <span className="font-bold text-xl">AGIO NETWORK</span>
+          </div>
+        </div>
+      </header>
+    )
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background dark:bg-background">
@@ -28,16 +54,44 @@ export default function DashboardHeader() {
           </Link>
           {/* Menu para desktop */}
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/dashboard" className="text-sm font-medium dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600">
+            <Link 
+              href="/dashboard" 
+              className={`text-sm font-medium ${
+                isActive('/dashboard')
+                  ? 'text-blue-600 dark:text-blue-600'
+                  : 'dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600'
+              }`}
+            >
               Dashboard
             </Link>
-            <Link href="/borrow-lend" className="text-sm font-medium dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600">
+            <Link 
+              href="/borrow-lend" 
+              className={`text-sm font-medium ${
+                isActive('/borrow-lend')
+                  ? 'text-blue-600 dark:text-blue-600'
+                  : 'dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600'
+              }`}
+            >
               Borrow / Lend
             </Link>
-            <Link href="/loan-offers/marketplace" className="text-sm font-medium dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600">
+            <Link 
+              href="/loan-offers/marketplace" 
+              className={`text-sm font-medium ${
+                isActive('/loan-offers')
+                  ? 'text-blue-600 dark:text-blue-600'
+                  : 'dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600'
+              }`}
+            >
               Loan Offers
             </Link>
-            <Link href="/socialfi" className="text-sm font-medium dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600 relative">
+            <Link 
+              href="/socialfi" 
+              className={`text-sm font-medium ${
+                isActive('/socialfi')
+                  ? 'text-blue-600 dark:text-blue-600'
+                  : 'dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600'
+              } relative`}
+            >
               SocialFi
               <TooltipProvider>
                 <Tooltip>
@@ -66,28 +120,44 @@ export default function DashboardHeader() {
                 <div className="flex flex-col gap-4 mt-8">
                   <Link 
                     href="/dashboard" 
-                    className="text-sm font-medium dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600 py-2"
+                    className={`text-sm font-medium ${
+                      isActive('/dashboard')
+                        ? 'text-blue-600 dark:text-blue-600'
+                        : 'dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600'
+                    } py-2`}
                     onClick={() => setIsOpen(false)}
                   >
                     Dashboard
                   </Link>
                   <Link 
                     href="/borrow-lend" 
-                    className="text-sm font-medium dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600 py-2"
+                    className={`text-sm font-medium ${
+                      isActive('/borrow-lend')
+                        ? 'text-blue-600 dark:text-blue-600'
+                        : 'dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600'
+                    } py-2`}
                     onClick={() => setIsOpen(false)}
                   >
                     Borrow / Lend
                   </Link>
                   <Link 
                     href="/loan-offers/marketplace" 
-                    className="text-sm font-medium dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600 py-2"
+                    className={`text-sm font-medium ${
+                      isActive('/loan-offers')
+                        ? 'text-blue-600 dark:text-blue-600'
+                        : 'dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600'
+                    } py-2`}
                     onClick={() => setIsOpen(false)}
                   >
                     Loan Offers
                   </Link>
                   <Link 
                     href="/socialfi" 
-                    className="text-sm font-medium dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600 relative py-2"
+                    className={`text-sm font-medium ${
+                      isActive('/socialfi')
+                        ? 'text-blue-600 dark:text-blue-600'
+                        : 'dark:text-white text-black hover:text-blue-600 dark:hover:text-blue-600'
+                    } relative py-2`}
                     onClick={() => setIsOpen(false)}
                   >
                     SocialFi

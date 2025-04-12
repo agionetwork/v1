@@ -2,6 +2,7 @@
   "name": "my-v0-project",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev -p 3001",
     "build": "next build",
@@ -10,6 +11,7 @@
     "deploy": "vercel"
   },
   "dependencies": {
+    "@civic/auth": "^0.4.5",
     "@hookform/resolvers": "^3.9.1",
     "@nivo/line": "^0.88.0",
     "@radix-ui/react-accordion": "^1.2.2",
@@ -44,8 +46,8 @@
     "@solana/wallet-adapter-phantom": "^0.9.24",
     "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/wallet-adapter-react-ui": "^0.9.35",
-    "@solana/wallet-adapter-wallets": "^0.19.32",
-    "@solana/web3.js": "^1.98.0",
+    "@solana/wallet-adapter-wallets": "^0.19.14",
+    "@solana/web3.js": "^1.87.6",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
     "autoprefixer": "^10.4.20",
@@ -58,7 +60,7 @@
     "framer-motion": "^12.5.0",
     "input-otp": "1.4.1",
     "lucide-react": "^0.454.0",
-    "next": "15.1.0",
+    "next": "^15.2.5",
     "next-intl": "^4.0.1",
     "next-themes": "^0.4.6",
     "pino-pretty": "^13.0.0",
@@ -86,6 +88,6 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "typescript": "^5",
-    "vercel": "^41.4.1"
+    "vercel": "^25.2.0"
   }
 }
