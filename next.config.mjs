@@ -1,5 +1,6 @@
 import { createCivicAuthPlugin } from "@civic/auth-web3/nextjs"
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -9,6 +10,12 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    unoptimized: true,
+  },
+  experimental: {
+    webpackBuildWorker: true,
+    parallelServerBuildTraces: true,
+    parallelServerCompiles: true,
   },
   webpack: (config) => {
     config.externals.push('pino-pretty', 'lokijs', 'encoding')

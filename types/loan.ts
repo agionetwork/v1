@@ -37,6 +37,7 @@ export interface LoanFormState extends LoanFormData {
   errors: Record<string, string>
 }
 
+<<<<<<< HEAD
 export interface TokenBalance {
   symbol: string
   balance: number
@@ -44,6 +45,8 @@ export interface TokenBalance {
   percentOfTotal: number
 }
 
+=======
+>>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
 export const TOKEN_LIST: Record<TokenType, TokenInfo> = {
   SOL: {
     symbol: "SOL",

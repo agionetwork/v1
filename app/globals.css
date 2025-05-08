@@ -5,6 +5,7 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
+<<<<<<< HEAD
     --foreground: 222.2 84% 4.9%;
 
     --muted: 210 40% 96.1%;
@@ -81,6 +82,49 @@
     --agio-dark: 220 85% 45%;
     --agio-darker: 220 67% 43%;
     --agio-darkest: 220 89% 34%;
+=======
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 221 89% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 221 89% 51%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 98%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 221 89% 51%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 221 89% 51%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 221 89% 51%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 221 89% 51%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 0 0% 63%;
+    --accent: 221 89% 51%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 221 89% 51%;
+>>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
   }
 }
 
@@ -124,7 +168,11 @@
 
 /* Sobrescrevendo estilos do WalletMultiButton */
 .wallet-adapter-button {
+<<<<<<< HEAD
   background-color: #1358EC !important;
+=======
+  background-color: #2563eb !important;
+>>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
   color: white !important;
   border: none !important;
   font-weight: 600 !important;
@@ -136,6 +184,7 @@
 }
 
 .wallet-adapter-button:hover {
+<<<<<<< HEAD
   background-color: #104BCA !important;
 }
 
@@ -149,11 +198,30 @@
 
 .wallet-adapter-button-trigger:hover {
   background-color: #104BCA !important;
+=======
+  background-color: #1d4ed8 !important;
+}
+
+.wallet-adapter-button:not([disabled]):hover {
+  background-color: #1d4ed8 !important;
+}
+
+.wallet-adapter-button-trigger {
+  background-color: #2563eb !important;
+}
+
+.wallet-adapter-button-trigger:hover {
+  background-color: #1d4ed8 !important;
+>>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
 }
 
 /* Estilos do modal do Wallet Connect */
 .wallet-adapter-modal-wrapper {
+<<<<<<< HEAD
   background-color: #1358EC !important;
+=======
+  background-color: #2563eb !important;
+>>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
 }
 
 .wallet-adapter-modal-button-close {
@@ -166,7 +234,11 @@
 }
 
 .wallet-adapter-modal-list {
+<<<<<<< HEAD
   background-color: #1358EC !important;
+=======
+  background-color: #2563eb !important;
+>>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
 }
 
 .wallet-adapter-modal-list-more {
@@ -174,18 +246,34 @@
 }
 
 .wallet-adapter-modal-list-more:hover {
+<<<<<<< HEAD
   background-color: #104BCA !important;
 }
 
 .wallet-adapter-modal-list-item {
   background-color: #1358EC !important;
+=======
+  background-color: #1d4ed8 !important;
+}
+
+.wallet-adapter-modal-list-item {
+  background-color: #2563eb !important;
+>>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
   color: white !important;
 }
 
 .wallet-adapter-modal-list-item:hover {
+<<<<<<< HEAD
   background-color: #104BCA !important;
 }
 
 .wallet-adapter-modal-list-item:not([disabled]):hover {
   background-color: #104BCA !important;
+=======
+  background-color: #1d4ed8 !important;
+}
+
+.wallet-adapter-modal-list-item:not([disabled]):hover {
+  background-color: #1d4ed8 !important;
+>>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
 } 
