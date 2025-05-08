@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { WalletConnect } from "@/components/wallet-connect"
 
-export default function HeroSection() {
+export default function HeroSection({ onScrollClick }: { onScrollClick: () => void }) {
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center py-20 md:py-32 text-foreground overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
