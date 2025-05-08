@@ -1,71 +1,55 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { Menu, Moon, Sun, X } from "lucide-react"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { WalletConnect } from "@/components/wallet-connect"
 import { NotificationsPopover } from "@/components/notifications/notifications-popover"
 import { SettingsPopover } from "@/components/settings/settings-popover"
-import { Sun, Moon, Menu } from "lucide-react"
-import { useTheme } from "next-themes"
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
 
-export default function DashboardHeader() {
-  const { theme, setTheme } = useTheme()
+export function DashboardHeader() {
   const [mounted, setMounted] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const { theme, setTheme } = useTheme()
   const pathname = usePathname()
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  if (!mounted) return null
+  const navigation = [
+    { name: "Dashboard", href: "/dashboard?tab=overview" },
+    { name: "Create Loan", href: "/borrow-lend" },
+    { name: "Loan Offers", href: "/loan-offers/marketplace" },
+  ]
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
-          <Link href="/dashboard" className="mr-6 flex items-center space-x-2">
+          <Link href="/" className="mr-6 flex items-center space-x-2">
             <span className="hidden font-bold sm:inline-block">
               Agio Network
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link
-              href="/dashboard"
-              className={`transition-colors hover:text-foreground/80 ${
-                pathname === "/dashboard" ? "text-foreground" : "text-foreground/60"
-              }`}
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/borrow-lend"
-              className={`transition-colors hover:text-foreground/80 ${
-                pathname === "/borrow-lend" ? "text-foreground" : "text-foreground/60"
-              }`}
-            >
-              Emprestar
-            </Link>
-            <Link
-              href="/loan-offers"
-              className={`transition-colors hover:text-foreground/80 ${
-                pathname === "/loan-offers" ? "text-foreground" : "text-foreground/60"
-              }`}
-            >
-              Tomar Empréstimo
-            </Link>
+            {navigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`transition-colors hover:text-foreground/80 ${
+                  pathname === item.href ? "text-foreground" : "text-foreground/60"
+                }`}
+              >
+                {item.name}
+              </Link>
+            ))}
           </nav>
         </div>
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <Sheet>
           <SheetTrigger asChild>
             <Button
               variant="ghost"
@@ -79,34 +63,18 @@ export default function DashboardHeader() {
             <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
             </SheetHeader>
-            <nav className="flex flex-col space-y-4 mt-4">
-              <Link
-                href="/dashboard"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === "/dashboard" ? "text-primary" : "text-muted-foreground"
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/borrow-lend"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === "/borrow-lend" ? "text-primary" : "text-muted-foreground"
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                Emprestar
-              </Link>
-              <Link
-                href="/loan-offers"
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  pathname === "/loan-offers" ? "text-primary" : "text-muted-foreground"
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                Tomar Empréstimo
-              </Link>
+            <nav className="flex flex-col space-y-4">
+              {navigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`text-sm font-medium transition-colors hover:text-foreground/80 ${
+                    pathname === item.href ? "text-foreground" : "text-foreground/60"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
             </nav>
           </SheetContent>
         </Sheet>
