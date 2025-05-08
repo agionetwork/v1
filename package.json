@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@civic/auth-web3": "^0.1.0",
-    "@civic/auth-web3/nextjs": "^0.1.0",
     "@hookform/resolvers": "^3.9.1",
     "@nivo/line": "^0.88.0",
     "@radix-ui/react-accordion": "^1.2.2",
