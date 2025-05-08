@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+
+    /* Cores personalizadas Agio */
+    --agio-default: 220 85% 50%;
+    --agio-light: 220 91% 52%;
+    --agio-medium: 220 82% 42%;
+    --agio-dark: 220 85% 35%;
+    --agio-darker: 220 67% 33%;
+    --agio-darkest: 220 89% 24%;
+  }
+
+  .dark {
+    --background: 220 90% 5%;
+    --foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --popover: 220 90% 5%;
+    --popover-foreground: 210 40% 98%;
+
+    --card: 220 90% 5%;
+    --card-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 212.7 26.8% 83.9%;
+
+    /* Cores personalizadas Agio no tema escuro */
+    --agio-default: 220 85% 60%;
+    --agio-light: 220 91% 62%;
+    --agio-medium: 220 82% 52%;
+    --agio-dark: 220 85% 45%;
+    --agio-darker: 220 67% 43%;
+    --agio-darkest: 220 89% 34%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Animação para partículas flutuantes */
+@keyframes float {
+  0% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-15px) translateX(10px);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(0px) translateX(20px);
+    opacity: 0.5;
+  }
+  75% {
+    transform: translateY(15px) translateX(10px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.3;
+  }
+}
+
+.particle {
+  animation: float 15s infinite ease-in-out;
+  will-change: transform, opacity;
+}
+
+/* Sobrescrevendo estilos do WalletMultiButton */
+.wallet-adapter-button {
+  background-color: #1358EC !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600 !important;
+  border-radius: 0.375rem !important;
+  padding: 0.5rem 1rem !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: background-color 0.2s !important;
+}
+
+.wallet-adapter-button:hover {
+  background-color: #104BCA !important;
+}
+
+.wallet-adapter-button:not([disabled]):hover {
+  background-color: #104BCA !important;
+}
+
+.wallet-adapter-button-trigger {
+  background-color: #1358EC !important;
+}
+
+.wallet-adapter-button-trigger:hover {
+  background-color: #104BCA !important;
+}
+
+/* Estilos do modal do Wallet Connect */
+.wallet-adapter-modal-wrapper {
+  background-color: #1358EC !important;
+}
+
+.wallet-adapter-modal-button-close {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+.wallet-adapter-modal-title {
+  color: white !important;
+}
+
+.wallet-adapter-modal-list {
+  background-color: #1358EC !important;
+}
+
+.wallet-adapter-modal-list-more {
+  color: white !important;
+}
+
+.wallet-adapter-modal-list-more:hover {
+  background-color: #104BCA !important;
+}
+
+.wallet-adapter-modal-list-item {
+  background-color: #1358EC !important;
+  color: white !important;
+}
+
+.wallet-adapter-modal-list-item:hover {
+  background-color: #104BCA !important;
+}
+
+.wallet-adapter-modal-list-item:not([disabled]):hover {
+  background-color: #104BCA !important;
+} 
