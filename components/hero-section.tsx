@@ -5,8 +5,9 @@ import Link from "next/link"
 import { ArrowRight, Sparkles, Shield, Coins } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
+import { WalletConnect } from "@/components/wallet-connect"
 
-export function HeroSection() {
+export default function HeroSection() {
   return (
     <section className="relative w-full min-h-screen flex items-center justify-center py-20 md:py-32 text-foreground overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -68,6 +69,15 @@ export function HeroSection() {
               <Coins className="h-5 w-5 text-blue-500" />
               <span className="text-sm text-gray-500 dark:text-gray-400">Flexible Loan Terms</span>
             </div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            className="mt-8"
+          >
+            <WalletConnect />
           </motion.div>
         </div>
       </div>

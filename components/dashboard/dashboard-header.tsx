@@ -10,8 +10,9 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { WalletConnect } from "@/components/wallet-connect"
 import { NotificationsPopover } from "@/components/notifications/notifications-popover"
 import { SettingsPopover } from "@/components/settings/settings-popover"
+import { ModeToggle } from "@/components/mode-toggle"
 
-export function DashboardHeader() {
+export default function DashboardHeader() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const pathname = usePathname()

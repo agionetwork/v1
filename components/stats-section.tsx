@@ -1,83 +1,64 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { DollarSign, Users, TrendingUp, Activity, ChartBar, Clock } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Activity, BarChart, Clock, DollarSign, TrendingUp, Users } from "lucide-react"
 
-const stats = [
-  {
-    title: "Total Value Locked",
-    value: "$12.5M",
-    description: "Total assets secured in our protocol",
-    icon: DollarSign,
-  },
-  {
-    title: "Active Users",
-    value: "25.3K",
-    description: "Users actively using our platform",
-    icon: Users,
-  },
-  {
-    title: "Average APY",
-    value: "12%",
-    description: "Average annual percentage yield",
-    icon: TrendingUp,
-  },
-  {
-    title: "Transaction Volume",
-    value: "$45.2M",
-    description: "Total transaction volume",
-    icon: Activity,
-  },
-  {
-    title: "Success Rate",
-    value: "99.9%",
-    description: "Successful loan completions",
-    icon: ChartBar,
-  },
-  {
-    title: "Average Time",
-    value: "2.5s",
-    description: "Average transaction time",
-    icon: Clock,
-  },
-]
-
-export function StatsSection() {
+export default function StatsSection() {
   return (
-    <section className="w-full py-20 md:py-32">
-      <div className="container px-4 md:px-6">
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-            Platform Statistics
-          </h2>
-          <p className="mt-4 text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-            Real-time metrics showing our platform's performance
-          </p>
-        </motion.div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {stats.map((stat, index) => (
-            <motion.div
-              key={stat.title}
-              className="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <stat.icon className="w-12 h-12 text-blue-500 mb-4" />
-              <h3 className="text-xl font-bold mb-2">{stat.title}</h3>
-              <p className="text-3xl font-bold text-blue-500 mb-2">{stat.value}</p>
-              <p className="text-gray-500 dark:text-gray-400 text-center">
-                {stat.description}
+    <section className="py-20 bg-muted/50">
+      <div className="container">
+        <h2 className="text-3xl font-bold text-center mb-12">
+          Números que Impulsionam a Comunidade
+        </h2>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Volume Total</CardTitle>
+              <DollarSign className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">$1.2M</div>
+              <p className="text-xs text-muted-foreground">
+                +20.1% em relação ao mês anterior
               </p>
-            </motion.div>
-          ))}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Empréstimos Ativos</CardTitle>
+              <Activity className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">245</div>
+              <p className="text-xs text-muted-foreground">
+                +12% em relação ao mês anterior
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Usuários Ativos</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">1,234</div>
+              <p className="text-xs text-muted-foreground">
+                +8.2% em relação ao mês anterior
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Taxa Média</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12.5%</div>
+              <p className="text-xs text-muted-foreground">
+                -2.1% em relação ao mês anterior
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </section>
