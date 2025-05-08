@@ -5,18 +5,13 @@ import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom"
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react"
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
 import { clusterApiUrl } from "@solana/web3.js"
-<<<<<<< HEAD
 import { useMemo, useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { CivicAuthProvider } from "@civic/auth-web3/react"
-=======
-import { useMemo } from "react"
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
 
 require("@solana/wallet-adapter-react-ui/styles.css")
 
 export function WalletProviderWrapper({ children }: { children: React.ReactNode }) {
-<<<<<<< HEAD
   // All hooks at the top of the component
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
@@ -68,50 +63,23 @@ export function WalletProviderWrapper({ children }: { children: React.ReactNode 
   }, [])
 
   if (!mounted) return null
-=======
-  // Você pode mudar para 'mainnet-beta' quando estiver pronto para produção
-  const network = WalletAdapterNetwork.Devnet
-  
-  // Você também pode usar um RPC personalizado aqui
-  const endpoint = useMemo(() => clusterApiUrl(network), [network])
-  
-  // Configurando o adaptador do Phantom com opções
-  const wallets = useMemo(
-    () => [
-      new PhantomWalletAdapter({
-        network,
-        // O adaptador tentará reconectar se a última conexão foi bem-sucedida
-        autoConnect: true,
-      }),
-    ],
-    [network]
-  )
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
 
   return (
     <ConnectionProvider endpoint={endpoint} config={{ commitment: 'confirmed' }}>
       <WalletProvider 
         wallets={wallets} 
         autoConnect={true}
-<<<<<<< HEAD
         onError={handleWalletError}
       >
-        <CivicAuthProvider
-          clientId="65004c36-3e4f-41a1-b0eb-8a9fc72dbf04"
-          onSignIn={handleSignIn}
-          onSignOut={handleSignOut}
-        >
-          {children}
-        </CivicAuthProvider>
-=======
-        onError={(error) => {
-          console.error("Erro no provedor da carteira:", error)
-        }}
-      >
         <WalletModalProvider>
-          {children}
+          <CivicAuthProvider
+            clientId="65004c36-3e4f-41a1-b0eb-8a9fc72dbf04"
+            onSignIn={handleSignIn}
+            onSignOut={handleSignOut}
+          >
+            {children}
+          </CivicAuthProvider>
         </WalletModalProvider>
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
       </WalletProvider>
     </ConnectionProvider>
   )
