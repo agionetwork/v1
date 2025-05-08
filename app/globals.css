@@ -5,84 +5,6 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-<<<<<<< HEAD
-    --foreground: 222.2 84% 4.9%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    /* Cores personalizadas Agio */
-    --agio-default: 220 85% 50%;
-    --agio-light: 220 91% 52%;
-    --agio-medium: 220 82% 42%;
-    --agio-dark: 220 85% 35%;
-    --agio-darker: 220 67% 33%;
-    --agio-darkest: 220 89% 24%;
-  }
-
-  .dark {
-    --background: 220 90% 5%;
-    --foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --popover: 220 90% 5%;
-    --popover-foreground: 210 40% 98%;
-
-    --card: 220 90% 5%;
-    --card-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --ring: 212.7 26.8% 83.9%;
-
-    /* Cores personalizadas Agio no tema escuro */
-    --agio-default: 220 85% 60%;
-    --agio-light: 220 91% 62%;
-    --agio-medium: 220 82% 52%;
-    --agio-dark: 220 85% 45%;
-    --agio-darker: 220 67% 43%;
-    --agio-darkest: 220 89% 34%;
-=======
     --foreground: 0 0% 0%;
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
@@ -102,6 +24,14 @@
     --input: 0 0% 90%;
     --ring: 221 89% 51%;
     --radius: 0.5rem;
+
+    /* Cores personalizadas Agio */
+    --agio-default: 220 85% 50%;
+    --agio-light: 220 91% 52%;
+    --agio-medium: 220 82% 42%;
+    --agio-dark: 220 85% 35%;
+    --agio-darker: 220 67% 33%;
+    --agio-darkest: 220 89% 24%;
   }
 
   .dark {
@@ -124,7 +54,14 @@
     --border: 0 0% 14%;
     --input: 0 0% 14%;
     --ring: 221 89% 51%;
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
+
+    /* Cores personalizadas Agio no tema escuro */
+    --agio-default: 220 85% 60%;
+    --agio-light: 220 91% 62%;
+    --agio-medium: 220 82% 52%;
+    --agio-dark: 220 85% 45%;
+    --agio-darker: 220 67% 43%;
+    --agio-darkest: 220 89% 34%;
   }
 }
 
@@ -168,11 +105,7 @@
 
 /* Sobrescrevendo estilos do WalletMultiButton */
 .wallet-adapter-button {
-<<<<<<< HEAD
-  background-color: #1358EC !important;
-=======
   background-color: #2563eb !important;
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
   color: white !important;
   border: none !important;
   font-weight: 600 !important;
@@ -184,21 +117,6 @@
 }
 
 .wallet-adapter-button:hover {
-<<<<<<< HEAD
-  background-color: #104BCA !important;
-}
-
-.wallet-adapter-button:not([disabled]):hover {
-  background-color: #104BCA !important;
-}
-
-.wallet-adapter-button-trigger {
-  background-color: #1358EC !important;
-}
-
-.wallet-adapter-button-trigger:hover {
-  background-color: #104BCA !important;
-=======
   background-color: #1d4ed8 !important;
 }
 
@@ -212,68 +130,46 @@
 
 .wallet-adapter-button-trigger:hover {
   background-color: #1d4ed8 !important;
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
 }
 
-/* Estilos do modal do Wallet Connect */
 .wallet-adapter-modal-wrapper {
-<<<<<<< HEAD
-  background-color: #1358EC !important;
-=======
-  background-color: #2563eb !important;
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(4px) !important;
 }
 
 .wallet-adapter-modal-button-close {
   background-color: transparent !important;
-  color: white !important;
+  border: none !important;
 }
 
 .wallet-adapter-modal-title {
-  color: white !important;
+  color: #1f2937 !important;
 }
 
 .wallet-adapter-modal-list {
-<<<<<<< HEAD
-  background-color: #1358EC !important;
-=======
-  background-color: #2563eb !important;
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
+  background-color: white !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
 }
 
 .wallet-adapter-modal-list-more {
-  color: white !important;
+  color: #6b7280 !important;
 }
 
 .wallet-adapter-modal-list-more:hover {
-<<<<<<< HEAD
-  background-color: #104BCA !important;
+  color: #4b5563 !important;
 }
 
 .wallet-adapter-modal-list-item {
-  background-color: #1358EC !important;
-=======
-  background-color: #1d4ed8 !important;
-}
-
-.wallet-adapter-modal-list-item {
-  background-color: #2563eb !important;
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
-  color: white !important;
+  background-color: transparent !important;
+  border: none !important;
+  color: #1f2937 !important;
 }
 
 .wallet-adapter-modal-list-item:hover {
-<<<<<<< HEAD
-  background-color: #104BCA !important;
+  background-color: #f3f4f6 !important;
 }
 
 .wallet-adapter-modal-list-item:not([disabled]):hover {
-  background-color: #104BCA !important;
-=======
-  background-color: #1d4ed8 !important;
-}
-
-.wallet-adapter-modal-list-item:not([disabled]):hover {
-  background-color: #1d4ed8 !important;
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
+  background-color: #f3f4f6 !important;
 } 
