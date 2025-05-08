@@ -1,6 +1,5 @@
 "use client"
 
-import DashboardHeader from "@/components/dashboard/dashboard-header"
 import { WalletProvider } from "@solana/wallet-adapter-react"
 import { ConnectionProvider } from "@solana/wallet-adapter-react"
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-phantom"

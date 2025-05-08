@@ -84,17 +84,26 @@ const recentActivity = [
   },
 ]
 
-const badges = [
+type BadgeVariant = "default" | "destructive" | "outline" | "secondary"
+
+interface Badge {
+  title: string
+  description: string
+  variant: BadgeVariant
+  className: string
+}
+
+const badges: Badge[] = [
   {
     title: "Trusted Lender",
     description: "Você é um credor confiável na plataforma",
-    variant: "default" as const,
+    variant: "default",
     className: "bg-blue-500",
   },
   {
     title: "Security Expert",
     description: "Você é um mutuário confiável na plataforma",
-    variant: "default" as const,
+    variant: "secondary",
     className: "bg-green-500",
   },
 ]

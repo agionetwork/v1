@@ -1,6 +1,7 @@
 export type TokenType = "SOL" | "USDC" | "USDT" | "mSOL"
 export type OperationType = "LEND" | "BORROW"
 export type FeedbackType = "success" | "error" | "info" | null
+export type BadgeVariant = "default" | "secondary" | "destructive" | "outline" | "success" | "warning" | "info"
 
 export interface TokenInfo {
   symbol: TokenType
@@ -37,7 +38,6 @@ export interface LoanFormState extends LoanFormData {
   errors: Record<string, string>
 }
 
-<<<<<<< HEAD
 export interface TokenBalance {
   symbol: string
   balance: number
@@ -45,8 +45,13 @@ export interface TokenBalance {
   percentOfTotal: number
 }
 
-=======
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
+export interface Badge {
+  title: string
+  description: string
+  variant: BadgeVariant
+  className: string
+}
+
 export const TOKEN_LIST: Record<TokenType, TokenInfo> = {
   SOL: {
     symbol: "SOL",
