@@ -12,7 +12,7 @@ export default function HeroSection({ onScrollClick }: { onScrollClick: () => vo
     <section className="relative w-full min-h-screen flex items-center justify-center py-20 md:py-32 text-foreground overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div 
-          className="absolute inset-0 bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800"
+          className="absolute inset-0 bg-gradient-to-b from-agio-100/50 to-white dark:from-agio-600/50 dark:to-gray-800"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
@@ -27,7 +27,7 @@ export default function HeroSection({ onScrollClick }: { onScrollClick: () => vo
             transition={{ duration: 0.5 }}
             className="space-y-2"
           >
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-agio-100 to-agio-300 dark:from-agio-200 dark:to-agio-400">
               The Future of Decentralized Lending
             </h1>
             <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
@@ -42,13 +42,13 @@ export default function HeroSection({ onScrollClick }: { onScrollClick: () => vo
             className="space-x-4"
           >
             <Link href="/dashboard?tab=overview">
-              <Button size="lg" className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white">
+              <Button size="lg" className="bg-gradient-to-r from-agio-100 to-agio-300 hover:from-agio-200 hover:to-agio-400 text-white">
                 Launch App
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
             <Link href="/waitlist">
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" className="border-agio-100 text-agio-100 hover:bg-agio-100/10">
                 Join Waitlist
                 <Sparkles className="ml-2 h-4 w-4" />
               </Button>
@@ -62,11 +62,11 @@ export default function HeroSection({ onScrollClick }: { onScrollClick: () => vo
             className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8"
           >
             <div className="flex items-center space-x-2">
-              <Shield className="h-5 w-5 text-blue-500" />
+              <Shield className="h-5 w-5 text-agio-100" />
               <span className="text-sm text-gray-500 dark:text-gray-400">Secure Smart Contracts</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Coins className="h-5 w-5 text-blue-500" />
+              <Coins className="h-5 w-5 text-agio-100" />
               <span className="text-sm text-gray-500 dark:text-gray-400">Flexible Loan Terms</span>
             </div>
           </motion.div>

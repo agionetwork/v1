@@ -23,7 +23,7 @@ export default function RootLayout({
         inter.variable
       )}>
         <Providers>
-          <div className="relative flex min-h-screen flex-col bg-gradient-to-b from-agio-600 via-agio-500 to-agio-400 dark:from-gray-950 dark:via-agio-600 dark:to-agio-500">
+          <div className="relative flex min-h-screen flex-col bg-gradient-to-b from-agio-100 via-agio-300 to-agio-500 dark:from-agio-600 dark:via-agio-400 dark:to-agio-200">
             {children}
           </div>
         </Providers>

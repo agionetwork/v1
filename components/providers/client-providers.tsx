@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { AnimatePresence } from 'framer-motion'
 
 const SolanaWalletProvider = dynamic(
   () => import('@/components/solana/wallet-provider'),
@@ -8,5 +9,11 @@ const SolanaWalletProvider = dynamic(
 )
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
-  return <SolanaWalletProvider>{children}</SolanaWalletProvider>
+  return (
+    <AnimatePresence mode="wait">
+      <SolanaWalletProvider>
+        {children}
+      </SolanaWalletProvider>
+    </AnimatePresence>
+  )
 } 
