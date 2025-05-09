@@ -23,8 +23,7 @@ export default function Home() {
   useEffect(() => {
     setMounted(true);
     console.log("Homepage mounted, ParticlesBackground should appear");
-    router.push('/waitlist')
-  }, [router]);
+  }, []);
 
   const scrollToStats = () => {
     statsRef.current?.scrollIntoView({ behavior: "smooth" });
