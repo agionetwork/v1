@@ -1,8 +1,8 @@
 "use client"
 
-import HeroSection from "@/components/hero-section"
-import StatsSection from "@/components/stats-section"
-import FeaturesSection from "@/components/features-section"
+import { HeroSection } from "@/components/hero-section"
+import { StatsSection } from "@/components/stats-section"
+import { FeaturesSection } from "@/components/features-section"
 import Footer from "@/components/footer"
 import ParticlesBackground from "@/components/particles-background"
 import Image from "next/image"
@@ -11,14 +11,12 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, ChevronDown, Sparkles } from "lucide-react"
 import { useEffect, useState, useRef } from "react"
 import { motion } from "framer-motion"
-import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import SocialIcons from "@/components/social-icons"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
-  const router = useRouter()
 
   useEffect(() => {
     setMounted(true);
