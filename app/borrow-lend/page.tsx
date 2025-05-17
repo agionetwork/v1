@@ -17,33 +17,36 @@ import { useWalletTokens } from "@/hooks/useWalletTokens"
 
 export default function BorrowLendPage() {
   const [activeTab, setActiveTab] = useState("borrow")
+  const { theme } = useTheme()
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex flex-col space-y-4">
-        <div className="flex flex-col space-y-2 text-center">
-          <div className="flex items-center justify-center gap-2">
-            <h1 className="text-3xl font-bold tracking-tighter">
-              Empréstimos e Investimentos
-            </h1>
+    <div className="min-h-screen">
+      <div className="container mx-auto p-6">
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-2 text-center">
+            <div className="flex items-center justify-center gap-2">
+              <h1 className="text-3xl font-bold tracking-tighter">
+                Borrow  /  Lend
+              </h1>
+            </div>
+            <p className="text-muted-foreground">
+              Set your own loan terms.
+            </p>
           </div>
-          <p className="text-muted-foreground">
-            Crie ou participe de empréstimos na plataforma
-          </p>
-        </div>
 
-        <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="borrow">Pegar Empréstimo</TabsTrigger>
-            <TabsTrigger value="lend">Emprestar</TabsTrigger>
-          </TabsList>
-          <TabsContent value="borrow">
-            <BorrowLoanCreation />
-          </TabsContent>
-          <TabsContent value="lend">
-            <LendLoanCreation />
-          </TabsContent>
-        </Tabs>
+          <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="max-w-xl mx-auto w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="borrow">Borrow</TabsTrigger>
+              <TabsTrigger value="lend">Lend</TabsTrigger>
+            </TabsList>
+            <TabsContent value="borrow">
+              <BorrowLoanCreation />
+            </TabsContent>
+            <TabsContent value="lend">
+              <LendLoanCreation />
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   )

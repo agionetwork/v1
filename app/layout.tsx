@@ -1,14 +1,19 @@
-import { Inter } from 'next/font/google'
-import './globals.css'
-import type { Metadata } from 'next'
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import { Providers } from '@/components/providers'
+import { Toaster } from "@/components/ui/toaster"
+import { Toaster as SonnerToaster } from "sonner"
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: "--font-sans"
+})
 
 export const metadata: Metadata = {
-  title: "Agio Network - DeFi Lending Protocol",
-  description: "Join the waitlist for the future of decentralized finance",
+  title: "Agio Network - Decentralized Social Finance",
+  description: "A decentralized Social Finance for Borrowers and Lenders. Make money by lending to Friends, Family, and well-known Businesses.",
 }
 
 export default function RootLayout({
@@ -22,11 +27,16 @@ export default function RootLayout({
         "min-h-screen bg-background font-sans antialiased",
         inter.variable
       )}>
-        <Providers>
-          <div className="relative flex min-h-screen flex-col bg-gradient-to-b from-agio-100 via-agio-300 to-agio-500 dark:from-agio-600 dark:via-agio-400 dark:to-agio-200">
-            {children}
-          </div>
-        </Providers>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+          <SonnerToaster position="top-center" richColors closeButton />
+        </ThemeProvider>
       </body>
     </html>
   )

@@ -1,43 +1,38 @@
 "use client"
 
+import { Header } from "@/components/header"
 import { HeroSection } from "@/components/hero-section"
-import { StatsSection } from "@/components/stats-section"
 import { FeaturesSection } from "@/components/features-section"
+import { StatsSection } from "@/components/stats-section"
+import { TestimonialsSection } from "@/components/testimonials-section"
+import { CTASection } from "@/components/cta-section"
 import Footer from "@/components/footer"
-import ParticlesBackground from "@/components/particles-background"
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { ArrowRight, ChevronDown, Sparkles } from "lucide-react"
-import { useEffect, useState, useRef } from "react"
-import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
-import SocialIcons from "@/components/social-icons"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
-  const statsRef = useRef<HTMLDivElement>(null);
+  const { theme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
-    console.log("Homepage mounted, ParticlesBackground should appear");
   }, []);
-
-  const scrollToStats = () => {
-    statsRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   if (!mounted) return null;
 
   return (
-    <main className="relative min-h-screen">
-      <ParticlesBackground />
+    <main className={`relative min-h-screen ${
+      theme === 'dark' 
+        ? 'bg-gradient-to-b from-blue-950 via-blue-900 to-blue-950' 
+        : 'bg-white'
+    }`}>
+      <Header />
       <div className="relative z-10">
-        <HeroSection onScrollClick={scrollToStats} />
-        <div ref={statsRef}>
-          <StatsSection />
-        </div>
+        <HeroSection />
+        <StatsSection />
         <FeaturesSection />
+        <TestimonialsSection />
+        <CTASection />
         <Footer />
       </div>
     </main>

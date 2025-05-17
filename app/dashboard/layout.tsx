@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic'
 require("@solana/wallet-adapter-react-ui/styles.css")
 
 // Lazy load components that are not immediately needed
-const DynamicDashboardHeader = dynamic(() => import("@/components/dashboard/dashboard-header"), {
+const DynamicDashboardHeader = dynamic(() => import("../../components/dashboard/dashboard-header"), {
   ssr: false,
   loading: () => <div className="h-16 bg-background" /> // Placeholder while loading
 })

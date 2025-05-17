@@ -8,6 +8,7 @@ import { clusterApiUrl } from "@solana/web3.js"
 import { useMemo, useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { CivicAuthProvider } from "@civic/auth-web3/react"
+import { CIVIC_CONFIG } from "@/config/wallet-config"
 
 require("@solana/wallet-adapter-react-ui/styles.css")
 
@@ -34,22 +35,23 @@ export function WalletProviderWrapper({ children }: { children: React.ReactNode 
     console.error("Wallet provider error:", error)
   }, [])
 
-  const handleSignIn = useCallback(async (user: any) => {
+  const handleSignIn = useCallback(async (error?: Error) => {
+    if (error) {
+      console.error("Login error:", error)
+      return
+    }
+    
     try {
-      console.log("User logged in:", user)
-      if (user && user.id) {
-        localStorage.setItem('civic_user_id', user.id)
-      }
+      console.log("Usuário autenticado com sucesso")
       router.push("/dashboard")
     } catch (error) {
-      console.error("Login error:", error)
+      console.error("Login redirect error:", error)
     }
   }, [router])
 
   const handleSignOut = useCallback(async () => {
     try {
-      console.log("User logged out")
-      localStorage.removeItem('civic_user_id')
+      console.log("Usuário desconectado")
       router.push("/")
     } catch (error) {
       console.error("Logout error:", error)
@@ -73,9 +75,11 @@ export function WalletProviderWrapper({ children }: { children: React.ReactNode 
       >
         <WalletModalProvider>
           <CivicAuthProvider
-            clientId="65004c36-3e4f-41a1-b0eb-8a9fc72dbf04"
+            clientId={CIVIC_CONFIG.clientId}
             onSignIn={handleSignIn}
             onSignOut={handleSignOut}
+            iframeMode="embedded"
+            redirectUrl={CIVIC_CONFIG.redirectUri}
           >
             {children}
           </CivicAuthProvider>

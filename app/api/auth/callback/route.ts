@@ -1,26 +1,14 @@
 import { NextResponse } from 'next/server';
+import { handler } from "@civic/auth-web3/nextjs";
 
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const code = searchParams.get('code');
+// Use hardcoded client ID to avoid any potential issues with ESM/CJS imports
+const CIVIC_CLIENT_ID = "65004c36-3e4f-41a1-b0eb-8a9fc72dbf04";
 
-    if (!code) {
-      return NextResponse.redirect(new URL('/?error=missing_code', request.url));
-    }
+// Handler for Civic Auth callback processing
+export const GET = handler({
+  clientId: CIVIC_CLIENT_ID
+});
 
-    // Criar resposta com cookie
-    const response = NextResponse.redirect(new URL('/', request.url));
-    response.cookies.set('civic-auth-session', code, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7 // 7 dias
-    });
-
-    return response;
-  } catch (error) {
-    console.error('Erro no callback:', error);
-    return NextResponse.redirect(new URL('/?error=auth_failed', request.url));
-  }
-} 
+export const POST = handler({
+  clientId: CIVIC_CLIENT_ID
+}); 

@@ -27,8 +27,8 @@ export const loanFormSchema = z.object({
   ),
 
   collateralAmount: z.number()
-    .positive("O valor da colateral deve ser maior que zero")
-    .min(1, "Valor mínimo é 1"),
+    .positive("Collateral amount must be greater than zero")
+    .min(1, "Minimum value is 1"),
 
   receiverAddress: z.string()
     .min(1, "Endereço da carteira é obrigatório")

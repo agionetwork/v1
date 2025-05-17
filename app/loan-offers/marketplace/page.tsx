@@ -127,20 +127,20 @@ export default function MarketplacePage() {
 
         <Tabs defaultValue="lend" className="w-full" onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger
-              value="lend"
-              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              Lending Opportunities
-            </TabsTrigger>
-            <TabsTrigger
-              value="borrow"
-              className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-            >
-              Borrowing Opportunities
-            </TabsTrigger>
-          </TabsList>
-          
+              <TabsTrigger 
+                value="lend"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                Lending Opportunities
+              </TabsTrigger>
+              <TabsTrigger 
+                value="borrow"
+                className="data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+              >
+                Borrowing Opportunities
+              </TabsTrigger>
+            </TabsList>
+
           <TabsContent value="lend" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {mockLendOffers.map((offer) => (
@@ -169,7 +169,7 @@ export default function MarketplacePage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">Collateral</span>
-                        <span className="font-medium">{offer.collateralAmount} {offer.collateral}</span>
+                          <span className="font-medium">{offer.collateralAmount} {offer.collateral}</span>
                       </div>
                       <Button className="w-full">
                         Accept Offer <ArrowRight className="ml-2 h-4 w-4" />
@@ -209,7 +209,7 @@ export default function MarketplacePage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-muted-foreground">Collateral</span>
-                        <span className="font-medium">{offer.collateralAmount} {offer.collateral}</span>
+                          <span className="font-medium">{offer.collateralAmount} {offer.collateral}</span>
                       </div>
                       <Button className="w-full">
                         Accept Offer <ArrowRight className="ml-2 h-4 w-4" />

@@ -1,52 +1,91 @@
-"use client"
+import { motion } from "framer-motion"
+import { Shield, Coins, Sparkles, Users, Lock, Zap } from "lucide-react"
+import { useTheme } from "next-themes"
+import { useEffect, useState } from "react"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Shield, Zap, Users, Lock } from "lucide-react"
+const features = [
+  {
+    icon: Shield,
+    title: "Secure Lending",
+    description: "Advanced security protocols ensure your assets are always protected"
+  },
+  {
+    icon: Coins,
+    title: "Competitive Rates",
+    description: "Get the best rates for your loans and investments"
+  },
+  {
+    icon: Sparkles,
+    title: "Smart Contracts",
+    description: "Automated and transparent lending process"
+  },
+  {
+    icon: Users,
+    title: "Community Driven",
+    description: "Join Agio DAO, a growing community of borrowers and lenders"
+  },
+  {
+    icon: Lock,
+    title: "Asset Protection",
+    description: "Your assets are protected by industry-leading security measures"
+  },
+  {
+    icon: Zap,
+    title: "Fast Processing",
+    description: "Quick and efficient loan processing and approval"
+  }
+]
 
-export default function FeaturesSection() {
+export function FeaturesSection() {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+  if (!mounted) return null;
+
+  const textMain = theme === 'dark' ? 'text-white' : 'text-black';
+  const textSub = theme === 'dark' ? 'text-gray-300' : 'text-black';
+  const cardBg = theme === 'dark' ? 'bg-white/5' : 'bg-white';
+  const cardBorder = theme === 'dark' ? 'border-gray-200/10' : 'border-gray-200';
+
   return (
-    <section className="py-20">
-      <div className="container">
-        <h2 className="text-3xl font-bold text-center mb-12">
-          Recursos que Fazem a Diferença
-        </h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
-            <CardHeader>
-              <Shield className="h-8 w-8 text-primary mb-4" />
-              <CardTitle>Segurança Avançada</CardTitle>
-              <CardDescription>
-                Smart contracts auditados e verificados para garantir a segurança dos seus ativos.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Zap className="h-8 w-8 text-primary mb-4" />
-              <CardTitle>Transações Rápidas</CardTitle>
-              <CardDescription>
-                Aproveite a velocidade da rede Solana para transações instantâneas.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Users className="h-8 w-8 text-primary mb-4" />
-              <CardTitle>Comunidade Ativa</CardTitle>
-              <CardDescription>
-                Conecte-se com outros usuários e participe de uma comunidade vibrante.
-              </CardDescription>
-            </CardHeader>
-          </Card>
-          <Card>
-            <CardHeader>
-              <Lock className="h-8 w-8 text-primary mb-4" />
-              <CardTitle>Controle Total</CardTitle>
-              <CardDescription>
-                Mantenha o controle total dos seus ativos com nossa plataforma descentralizada.
-              </CardDescription>
-            </CardHeader>
-          </Card>
+    <section className="w-full py-20 md:py-32">
+      <div className="container px-4 md:px-6">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <h2 className={`text-3xl md:text-4xl font-bold tracking-tighter mb-4 ${textMain}`}>
+            Why Choose Agio Network?
+          </h2>
+          <p className={`${textSub} max-w-2xl mx-auto`}>
+            Experience the next generation of DeFi with our innovative features
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <motion.div
+              key={feature.title}
+              className={`${cardBg} backdrop-blur-sm border ${cardBorder} p-6 rounded-lg shadow-lg`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-blue-500/20 rounded-full">
+                  <feature.icon className="h-6 w-6 text-blue-400" />
+                </div>
+                <div>
+                  <h3 className={`text-xl font-bold ${textMain}`}>{feature.title}</h3>
+                  <p className={textSub}>{feature.description}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

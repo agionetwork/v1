@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { BiWallet, BiTime } from "react-icons/bi"
 import { InfoCircledIcon } from "@radix-ui/react-icons"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { ReputationBadge } from "@/components/ui/badge-reputation"
 
 export function LoanOffers() {
   const lendingOffers = [
@@ -151,12 +152,6 @@ export function LoanOffers() {
     }
   ];
 
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return "bg-green-500"
-    if (score >= 50) return "bg-yellow-500"
-    return "bg-red-500"
-  }
-
   return (
     <TooltipProvider>
       <div className="space-y-6">
@@ -187,7 +182,7 @@ export function LoanOffers() {
                           </Badge>
                         )}
                       </CardTitle>
-                      <Badge className={getScoreColor(offer.reputation)}>{offer.reputation}/100</Badge>
+                      <ReputationBadge score={offer.reputation} />
                     </div>
                     <CardDescription>
                       Borrower: {offer.borrower}
@@ -246,7 +241,7 @@ export function LoanOffers() {
                           </Badge>
                         )}
                       </CardTitle>
-                      <Badge className={getScoreColor(request.reputation)}>{request.reputation}/100</Badge>
+                      <ReputationBadge score={request.reputation} />
                     </div>
                     <CardDescription>
                       Lender: {request.lender}

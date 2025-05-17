@@ -16,12 +16,7 @@ import { BiWallet, BiTimer, BiTime, BiTrendingUp, BiPieChart, BiWater, BiTrophy 
 import { toast } from "sonner"
 import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
-
-const getScoreColor = (score: number) => {
-  if (score >= 80) return "!bg-green-500"
-  if (score >= 50) return "!bg-yellow-500"
-  return "!bg-red-500"
-}
+import { ReputationBadge } from "@/components/ui/badge-reputation"
 
 interface Loan {
   id: number
@@ -103,53 +98,66 @@ export default function BorrowDashboard() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([
     {
       id: 1,
-      lender: "HN7cABqLq...vGRE1",
-      asset: "USDC",
-      available: 10000,
-      term: "30 days",
-      apr: "5.2%",
-      interest: "260 USDC",
-      collateral: "None",
+      lender: "KL9mNpR...tZxY3",
+      asset: "BONK",
+      available: 500000,
+      term: "15 days",
+      apr: "7.5%",
+      interest: "1875 BONK",
+      collateral: "175%",
       verified: true,
-      trend: { value: 0.3, direction: "up" },
-      reputation: 95
+      trend: { value: 0.8, direction: "up" },
+      reputation: 91
     },
     {
       id: 2,
-      lender: "5CZoJzV...Uh8Bw",
-      asset: "SOL",
-      available: 50,
-      term: "60 days",
-      apr: "3.8%",
-      interest: "0.95 SOL",
-      collateral: "150%",
-      trend: { value: 0.1, direction: "down" },
-      reputation: 88
+      lender: "Qw2ErtY...pL7Mn",
+      asset: "USDT",
+      available: 7500,
+      term: "45 days",
+      apr: "4.9%",
+      interest: "183.75 USDT",
+      collateral: "160%",
+      trend: { value: 0.2, direction: "up" },
+      reputation: 89
     },
     {
       id: 3,
-      lender: "9dRKEp7...mFGQs",
-      asset: "mSOL",
-      available: 30,
-      term: "90 days",
-      apr: "2.9%",
-      interest: "0.43 mSOL",
-      collateral: "150%",
+      lender: "Ax8BnMk...zP3Qr",
+      asset: "JUP",
+      available: 3,
+      term: "60 days",
+      apr: "3.2%",
+      interest: "0.048 JUP",
+      collateral: "140%",
       verified: true,
-      trend: { value: 0.2, direction: "down" },
-      reputation: 75
+      trend: { value: 0.1, direction: "down" },
+      reputation: 94
     },
     {
       id: 4,
-      lender: "Bv3iF2T...qP5Ks",
-      asset: "JUP",
-      available: 2000,
-      term: "45 days",
-      apr: "6.5%",
-      interest: "65 JUP",
-      collateral: "200%",
-      trend: { value: 0.5, direction: "up" },
-      reputation: 82
+      lender: "Dz9RtKp...xL4Vb",
+      asset: "SOL",
+      available: 35,
+      term: "30 days",
+      apr: "4.2%",
+      interest: "0.735 SOL",
+      collateral: "165%",
+      verified: true,
+      trend: { value: 0.3, direction: "up" },
+      reputation: 93
+    },
+    {
+      id: 5,
+      lender: "Gf7HjKl...mN2Xz",
+      asset: "USDC",
+      available: 15000,
+      term: "90 days",
+      apr: "5.8%",
+      interest: "870 USDC",
+      collateral: "155%",
+      trend: { value: 0.4, direction: "up" },
+      reputation: 87
     }
   ])
 
@@ -278,6 +286,14 @@ export default function BorrowDashboard() {
     return total + interestAmount
   }, 0)
 
+  console.log('OPPORTUNITIES:', opportunities)
+
+  // Sanitização para garantir que lender nunca contenha token ou quebras de linha
+  const sanitizedOpportunities = opportunities.map(o => ({
+    ...o,
+    lender: typeof o.lender === 'string' ? o.lender.split('\n')[0].split(' ')[0] : o.lender
+  }))
+
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -341,98 +357,74 @@ export default function BorrowDashboard() {
           >
             My Offers
           </TabsTrigger>
-          <TabsTrigger 
-            value="offers" 
-            className="inline-flex items-center justify-center text-base px-6 py-2 flex-1 data-[state=active]:bg-blue-600 data-[state=active]:text-white"
-          >
-            Offers
-          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="myloans" className="space-y-6">
           <Card className="border-2">
-        <CardHeader>
+            <CardHeader>
               <CardTitle className="text-base font-medium">My Active Loans</CardTitle>
-              <CardDescription>
-                Your current outstanding loans
-              </CardDescription>
-        </CardHeader>
+              <CardDescription>Your current outstanding loans</CardDescription>
+            </CardHeader>
             <CardContent>
               <div className="rounded-md border">
                 <Table>
                   <TableHeader className="bg-muted/50">
                     <TableRow>
                       <TableHead className="font-medium text-center">Lender</TableHead>
+                      <TableHead className="font-medium text-center">Reputation</TableHead>
                       <TableHead className="font-medium text-center">Asset</TableHead>
                       <TableHead className="font-medium text-center">Amount</TableHead>
-                      <TableHead className="font-medium text-center">Interest</TableHead>
-                      <TableHead className="font-medium text-center">APR</TableHead>
                       <TableHead className="font-medium text-center">Collateral</TableHead>
+                      <TableHead className="font-medium text-center">APR</TableHead>
+                      <TableHead className="font-medium text-center">Interest</TableHead>
                       <TableHead className="font-medium text-center">Due Date</TableHead>
-                      <TableHead className="font-medium text-center">Reputation</TableHead>
                       <TableHead className="font-medium text-center">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {activeLoans.map((loan) => (
                       <TableRow key={loan.id} className="hover:bg-muted/50 transition-colors">
-                        <TableCell className="text-center">
+                        <TableCell className="text-center align-middle whitespace-nowrap">
+                          <span className="font-mono text-sm">{loan.lender}</span>
+                          {loan.verified && (
+                            <Badge variant="outline" className="ml-2 bg-green-500/10 text-green-500 border-green-500/20">Verified</Badge>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-center align-middle whitespace-nowrap">
+                          <ReputationBadge score={loan.reputation || 0} />
+                        </TableCell>
+                        <TableCell className="text-center align-middle whitespace-nowrap">
                           <div className="flex items-center justify-center gap-2">
-                            {loan.lender}
-                            {loan.verified && (
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                                      Verified
-                                    </Badge>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Verified lender with KYC.</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            )}
-          </div>
+                            <img src={`/images/${loan.asset === "USDT" ? "tether-usdt-logo.png" : loan.asset.toLowerCase() + "-logo.png"}`} alt={loan.asset} className="w-5 h-5" />
+                            <span className="font-medium">{loan.asset}</span>
+                          </div>
                         </TableCell>
-                        <TableCell className="text-center">
-                          <div className="flex items-center justify-center gap-2">
-                            <img 
-                              src={`/images/${loan.asset === "USDT" ? "tether-usdt-logo.png" : loan.asset.toLowerCase() + "-logo.png"}`} 
-                              alt={loan.asset} 
-                              className="w-5 h-5" 
-                            />
-                            {loan.asset}
-          </div>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap">
+                          ${Number(loan.amount).toLocaleString()} {loan.asset}
                         </TableCell>
-                        <TableCell className="text-center">${loan.amount.toLocaleString()}</TableCell>
-                        <TableCell className="text-center">{loan.interest}</TableCell>
-                        <TableCell className="text-center">{loan.apr || "5.2%"}</TableCell>
-                        <TableCell className="text-center">{loan.collateral}</TableCell>
-                        <TableCell className="text-center">{loan.dueDate}</TableCell>
-                        <TableCell className="text-center">
-                          <Badge className={getScoreColor(loan.reputation || 0)}>
-                            <span className="text-white">{loan.reputation}/100</span>
-                          </Badge>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap">
+                          {/* Cálculo aproximado do valor do colateral baseado na porcentagem */}
+                          {Math.round(loan.amount * parseFloat(loan.collateral) / 100).toLocaleString()} {loan.asset}
                         </TableCell>
-                        <TableCell className="text-center">
-                          <Button 
-                            variant="default" 
-                            size="sm"
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
-                          >
-                            Manage
-                          </Button>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap text-red-500">
+                          {loan.apr || "-"}
+                        </TableCell>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap text-red-500">
+                          {loan.interest}
+                        </TableCell>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap">
+                          {loan.dueDate}
+                        </TableCell>
+                        <TableCell className="text-center align-middle whitespace-nowrap">
+                          <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-medium">Manage</Button>
                         </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
                 </Table>
-            </div>
+              </div>
               <CardFooter className="flex justify-center pt-4">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
-                  View All
-                </Button>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">View All</Button>
               </CardFooter>
             </CardContent>
           </Card>
@@ -441,10 +433,8 @@ export default function BorrowDashboard() {
         <TabsContent value="myoffers" className="space-y-6">
           <Card className="border-2">
             <CardHeader>
-              <CardTitle className="text-base font-medium">My Loan Offers</CardTitle>
-              <CardDescription>
-                Loan offers you've created
-              </CardDescription>
+              <CardTitle className="text-base font-medium">Available Loan Offers</CardTitle>
+              <CardDescription>Loan offers available for borrowing</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">
@@ -452,135 +442,65 @@ export default function BorrowDashboard() {
                   <TableHeader className="bg-muted/50">
                     <TableRow>
                       <TableHead className="font-medium text-center">Lender</TableHead>
-                      <TableHead className="font-medium text-center">Asset</TableHead>
-                      <TableHead className="font-medium text-center">Amount</TableHead>
-                      <TableHead className="font-medium text-center">Interest</TableHead>
-                      <TableHead className="font-medium text-center">APR</TableHead>
-                      <TableHead className="font-medium text-center">Collateral</TableHead>
-                      <TableHead className="font-medium text-center">Term</TableHead>
                       <TableHead className="font-medium text-center">Reputation</TableHead>
+                      <TableHead className="font-medium text-center">Asset</TableHead>
+                      <TableHead className="font-medium text-center">Available</TableHead>
+                      <TableHead className="font-medium text-center">Collateral</TableHead>
+                      <TableHead className="font-medium text-center">APR</TableHead>
+                      <TableHead className="font-medium text-center">Interest</TableHead>
+                      <TableHead className="font-medium text-center">Term</TableHead>
                       <TableHead className="font-medium text-center">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {myOffers.slice(0, 3).map((offer) => (
+                    {sanitizedOpportunities.map((offer) => (
                       <TableRow key={offer.id} className="hover:bg-muted/50 transition-colors">
-                        <TableCell className="text-center">You</TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center align-middle whitespace-nowrap">
+                          <span className="font-mono text-sm">{offer.lender}</span>
+                          {offer.verified && (
+                            <Badge variant="outline" className="ml-2 bg-green-500/10 text-green-500 border-green-500/20">Verified</Badge>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-center align-middle whitespace-nowrap">
+                          <ReputationBadge score={offer.reputation || 0} />
+                        </TableCell>
+                        <TableCell className="text-center align-middle whitespace-nowrap">
                           <div className="flex items-center justify-center gap-2">
-                            <img 
-                              src={`/images/${offer.asset === "USDT" ? "tether-usdt-logo.png" : offer.asset.toLowerCase() + "-logo.png"}`} 
-                              alt={offer.asset} 
-                              className="w-5 h-5" 
-                            />
-                            {offer.asset}
-            </div>
+                            <img src={`/images/${offer.asset === "USDT" ? "tether-usdt-logo.png" : offer.asset.toLowerCase() + "-logo.png"}`} alt={offer.asset} className="w-5 h-5" />
+                            <span className="font-medium">{offer.asset}</span>
+                          </div>
                         </TableCell>
-                        <TableCell className="text-center">${offer.available.toLocaleString()}</TableCell>
-                        <TableCell className="text-center">{offer.interest}</TableCell>
-                        <TableCell className="text-center">{offer.apr}</TableCell>
-                        <TableCell className="text-center">{offer.collateral}</TableCell>
-                        <TableCell className="text-center">{offer.term}</TableCell>
-                        <TableCell className="text-center">
-                          <Badge className={getScoreColor(offer.reputation || 0)}>
-                            <span className="text-white">{offer.reputation}/100</span>
-                          </Badge>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap">
+                          ${Number(offer.available).toLocaleString()}
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap">
+                          {/* Cálculo aproximado do valor do colateral baseado na porcentagem */}
+                          {Math.round(offer.available * parseFloat(offer.collateral) / 100).toLocaleString()} {offer.asset}
+                        </TableCell>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap text-red-500">
+                          {offer.apr}
+                          {offer.trend && (
+                            <span className="ml-1">
+                              {offer.trend.direction === "up" ? (
+                                <ArrowUpIcon className="inline h-4 w-4 text-green-500" />
+                              ) : (
+                                <ArrowDownIcon className="inline h-4 w-4 text-red-500" />
+                              )}
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap text-red-500">
+                          {offer.interest}
+                        </TableCell>
+                        <TableCell className="text-center align-middle font-medium whitespace-nowrap">
+                          {offer.term}
+                        </TableCell>
+                        <TableCell className="text-center align-middle whitespace-nowrap">
                           <Button 
                             variant="default" 
                             size="sm"
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
-                          >
-                            Cancel
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-          </div>
-              <CardFooter className="flex justify-center gap-4 pt-4">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
-                  View All
-                </Button>
-              </CardFooter>
-        </CardContent>
-      </Card>
-        </TabsContent>
-        
-        <TabsContent value="offers" className="space-y-6">
-          <Card className="border-2">
-        <CardHeader>
-              <CardTitle className="text-base font-medium">Available Loan Offers</CardTitle>
-              <CardDescription>
-                Browse available loan offers from lenders
-              </CardDescription>
-        </CardHeader>
-            <CardContent>
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader className="bg-muted/50">
-                    <TableRow>
-                      <TableHead className="font-medium text-center">Lender</TableHead>
-                      <TableHead className="font-medium text-center">Asset</TableHead>
-                      <TableHead className="font-medium text-center">Amount</TableHead>
-                      <TableHead className="font-medium text-center">Interest</TableHead>
-                      <TableHead className="font-medium text-center">APR</TableHead>
-                      <TableHead className="font-medium text-center">Collateral</TableHead>
-                      <TableHead className="font-medium text-center">Term</TableHead>
-                      <TableHead className="font-medium text-center">Reputation</TableHead>
-                      <TableHead className="font-medium text-center">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {opportunities.map((opportunity) => (
-                      <TableRow key={opportunity.id} className="hover:bg-muted/50 transition-colors">
-                        <TableCell className="text-center">
-                          <div className="flex items-center justify-center gap-2">
-                            {opportunity.lender}
-                            {opportunity.verified && (
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
-                                      Verified
-                                    </Badge>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Verified Lender</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            )}
-          </div>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <div className="flex items-center justify-center gap-2">
-                            <img 
-                              src={`/images/${opportunity.asset === "USDT" ? "tether-usdt-logo.png" : opportunity.asset.toLowerCase() + "-logo.png"}`} 
-                              alt={opportunity.asset} 
-                              className="w-5 h-5" 
-                            />
-                            {opportunity.asset}
-            </div>
-                        </TableCell>
-                        <TableCell className="text-center">${opportunity.available.toLocaleString()}</TableCell>
-                        <TableCell className="text-center">{opportunity.interest}</TableCell>
-                        <TableCell className="text-center">{opportunity.apr}</TableCell>
-                        <TableCell className="text-center">{opportunity.collateral}</TableCell>
-                        <TableCell className="text-center">{opportunity.term}</TableCell>
-                        <TableCell className="text-center">
-                          <Badge className={getScoreColor(opportunity.reputation || 0)}>
-                            <span className="text-white">{opportunity.reputation}/100</span>
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <Button 
-                            variant="default" 
-                            size="sm"
-                            className="bg-blue-600 hover:bg-blue-700 text-white"
-                            onClick={() => handleBorrow(opportunity)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                            onClick={() => handleBorrow(offer)}
                           >
                             Borrow
                           </Button>
@@ -589,16 +509,12 @@ export default function BorrowDashboard() {
                     ))}
                   </TableBody>
                 </Table>
-          </div>
+              </div>
               <CardFooter className="flex justify-center pt-4">
-                <Link href="/loan-offers/marketplace">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">
-                    View All Opportunities
-                  </Button>
-                </Link>
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8">View All</Button>
               </CardFooter>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
