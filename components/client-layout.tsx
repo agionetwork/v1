@@ -1,7 +1,7 @@
 "use client"
 
 import { ThemeProvider } from "next-themes"
-import Header from "@/components/header"
+import { Header } from "@/components/header"
 import Footer from "@/components/footer"
 import { Toaster } from "@/components/ui/toaster"
 import { usePathname } from 'next/navigation'
