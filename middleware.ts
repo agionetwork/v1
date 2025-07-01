@@ -8,12 +8,32 @@ export default authMiddleware({
   clientId: CIVIC_CLIENT_ID,
   // Routes that require authentication
   include: ["/dashboard/*", "/borrow-lend/*", "/loan-offers/*"],
-  // Public routes that don't require authentication
-  exclude: ["/_next/*", "/", "/api/*", "/images/*", "/favicon.ico", "/fonts/*"]
+  // Public routes that don't require authentication - expanded to include all static assets
+  exclude: [
+    "/_next/*", 
+    "/", 
+    "/api/*", 
+    "/images/*", 
+    "/favicon.ico", 
+    "/fonts/*",
+    "/_next/static/*",
+    "/_next/webpack-hmr",
+    "/manifest.json",
+    "/robots.txt",
+    "/sitemap.xml"
+  ]
 })
 
 export const config = {
   matcher: [
-    '/((?!_next|favicon.ico|sitemap.xml|robots.txt|.*\\.jpg|.*\\.png|.*\\.svg|.*\\.gif|api).*)',
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder files
+     */
+    '/((?!api|_next/static|_next/image|_next/webpack-hmr|favicon.ico|images|fonts|manifest.json|robots.txt|sitemap.xml|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg|.*\\.ico|.*\\.woff|.*\\.woff2|.*\\.ttf|.*\\.eot|.*\\.css|.*\\.js|.*\\.map).*)',
   ],
 } 

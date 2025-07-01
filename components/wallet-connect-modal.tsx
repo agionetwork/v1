@@ -39,18 +39,40 @@ export function WalletConnectModal({ isOpen, setIsOpen }: WalletConnectModalProp
     setLoading('phantom')
     try {
       // Check if Phantom is installed
-      const solana = window.solana as any
+      if (typeof window === 'undefined') {
+        toast.error("Please use a browser to connect your wallet")
+        setLoading(null)
+        return
+      }
+
+      const solana = (window as any).solana
+      console.log("Phantom/Solana object:", solana)
+      console.log("Window.solana properties:", solana ? Object.keys(solana) : "not found")
+      
       const isPhantomInstalled = solana && solana.isPhantom
+      console.log("Phantom installation check:", { 
+        isPhantom: solana?.isPhantom, 
+        isPhantomInstalled 
+      })
       
       if (!isPhantomInstalled) {
+        console.log("Phantom wallet not detected")
         window.open('https://phantom.app/', '_blank')
         toast.error("Phantom wallet not detected. Please install it to continue.")
         setLoading(null)
         return
       }
       
+      console.log("Attempting to connect to Phantom...")
+      
       // Request connection to Phantom
       const resp = await solana.connect()
+      console.log("Phantom connection response:", resp)
+      
+      if (!resp || !resp.publicKey) {
+        throw new Error("Invalid response from Phantom wallet")
+      }
+      
       const publicKey = resp.publicKey.toString()
       
       toast.success(`Connected to Phantom successfully!`)
@@ -62,9 +84,17 @@ export function WalletConnectModal({ isOpen, setIsOpen }: WalletConnectModalProp
       
       setIsOpen(false)
       router.push('/dashboard')
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error connecting to Phantom:", error)
-      toast.error("Failed to connect to Phantom")
+      
+      // Handle specific Phantom errors
+      if (error.message && error.message.includes("User rejected")) {
+        toast.error("Connection to Phantom was rejected by user")
+      } else if (error.message && error.message.includes("already pending")) {
+        toast.error("Connection request already pending. Please check your Phantom wallet.")
+      } else {
+        toast.error("Failed to connect to Phantom. Error: " + (error.message || String(error)))
+      }
     } finally {
       setLoading(null)
     }
@@ -75,22 +105,96 @@ export function WalletConnectModal({ isOpen, setIsOpen }: WalletConnectModalProp
     setLoading('solflare')
     try {
       // Check if Solflare is installed
-      const solflare = window.solflare as any
-      const isSolflareInstalled = solflare && solflare.isSolflare
+      if (typeof window === 'undefined') {
+        toast.error("Please use a browser to connect your wallet")
+        setLoading(null)
+        return
+      }
+
+      // Check for Solflare in multiple ways
+      const solflare = (window as any).solflare
+      const solana = (window as any).solana
       
-      if (!isSolflareInstalled) {
+      console.log("Solflare detection:")
+      console.log("- window.solflare:", solflare ? "found" : "not found")
+      console.log("- window.solana:", solana ? "found" : "not found")
+      console.log("- window.solflare properties:", solflare ? Object.keys(solflare) : "none")
+      console.log("- window.solana properties:", solana ? Object.keys(solana) : "none")
+      console.log("- window.solana.isSolflare:", solana?.isSolflare)
+      console.log("- window.solflare.isSolflare:", solflare?.isSolflare)
+      
+      // Try to find Solflare wallet with improved detection
+      let walletProvider = null
+      let providerSource = ""
+      
+      // Priority 1: Direct Solflare object
+      if (solflare && typeof solflare.connect === 'function') {
+        walletProvider = solflare
+        providerSource = "window.solflare"
+        console.log("✅ Found Solflare via window.solflare")
+      }
+      // Priority 2: Solana object with Solflare flag
+      else if (solana && solana.isSolflare && typeof solana.connect === 'function') {
+        walletProvider = solana
+        providerSource = "window.solana (Solflare)"
+        console.log("✅ Found Solflare via window.solana")
+      }
+      // Priority 3: Check if any provider has Solflare methods
+      else if (solana && typeof solana.connect === 'function' && !solana.isPhantom) {
+        // Sometimes Solflare doesn't set the isSolflare flag properly
+        walletProvider = solana
+        providerSource = "window.solana (assumed Solflare)"
+        console.log("⚠️ Assuming Solflare via window.solana (no explicit flag)")
+      }
+      
+      if (!walletProvider) {
+        console.log("❌ Solflare wallet not found")
+        toast.error("Solflare wallet extension not detected. Please install it to continue.")
         window.open('https://solflare.com/', '_blank')
-        toast.error("Solflare wallet not detected. Please install it to continue.")
         setLoading(null)
         return
       }
       
-      // Request connection to Solflare
-      const resp = await solflare.connect()
-      const publicKey = resp.publicKey.toString()
+      console.log(`🔄 Attempting to connect via ${providerSource}...`)
+      
+      // Add timeout to prevent hanging
+      const connectPromise = walletProvider.connect()
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Connection timeout")), 30000)
+      )
+      
+      const resp = await Promise.race([connectPromise, timeoutPromise])
+      console.log("Solflare connection response:", resp)
+      
+      // Validate response more thoroughly
+      if (!resp) {
+        throw new Error("No response from Solflare wallet")
+      }
+      
+      if (!resp.publicKey) {
+        console.log("Response object:", resp)
+        throw new Error("Invalid response from Solflare wallet - no publicKey")
+      }
+      
+      // Handle different publicKey formats
+      let publicKey: string
+      if (typeof resp.publicKey === 'string') {
+        publicKey = resp.publicKey
+      } else if (resp.publicKey.toString) {
+        publicKey = resp.publicKey.toString()
+      } else if (resp.publicKey.toBase58) {
+        publicKey = resp.publicKey.toBase58()
+      } else {
+        console.log("Unknown publicKey format:", resp.publicKey)
+        throw new Error("Invalid publicKey format from Solflare wallet")
+      }
+      
+      if (!publicKey || publicKey.length < 32) {
+        throw new Error("Invalid publicKey received from Solflare wallet")
+      }
       
       toast.success(`Connected to Solflare successfully!`)
-      console.log("Connected account:", publicKey)
+      console.log("✅ Connected account:", publicKey)
       
       // Store connected wallet info in localStorage
       localStorage.setItem('walletProvider', 'solflare')
@@ -98,9 +202,21 @@ export function WalletConnectModal({ isOpen, setIsOpen }: WalletConnectModalProp
       
       setIsOpen(false)
       router.push('/dashboard')
-    } catch (error) {
-      console.error("Error connecting to Solflare:", error)
-      toast.error("Failed to connect to Solflare")
+    } catch (error: any) {
+      console.error("❌ Error connecting to Solflare:", error)
+      
+      // Handle specific Solflare errors
+      if (error.message && error.message.includes("User rejected")) {
+        toast.error("Connection to Solflare was rejected by user")
+      } else if (error.message && error.message.includes("already pending")) {
+        toast.error("Connection request already pending. Please check your Solflare wallet.")
+      } else if (error.message && error.message.includes("timeout")) {
+        toast.error("Connection to Solflare timed out. Please try again.")
+      } else if (error.message && error.message.includes("Invalid response")) {
+        toast.error("Invalid response from Solflare. Please refresh the page and try again.")
+      } else {
+        toast.error("Failed to connect to Solflare. Error: " + (error.message || String(error)))
+      }
     } finally {
       setLoading(null)
     }
@@ -110,6 +226,13 @@ export function WalletConnectModal({ isOpen, setIsOpen }: WalletConnectModalProp
   const connectBackpack = async () => {
     setLoading('backpack')
     try {
+      // Check if we're in a browser environment
+      if (typeof window === 'undefined') {
+        toast.error("Please use a browser to connect your wallet")
+        setLoading(null)
+        return
+      }
+
       // Safe check for Backpack window object
       if (!(window as any).backpack) {
         console.log("Backpack wallet not found in window object")
@@ -177,14 +300,13 @@ export function WalletConnectModal({ isOpen, setIsOpen }: WalletConnectModalProp
 
   // Function to connect with Civic Auth embedded wallet
   const connectWithCivicEmbedded = async () => {
+    console.log("connectWithCivicEmbedded called")
     setLoading('google')
     try {
       console.log("Starting Google authentication with Civic Auth...")
       
-      // Start Civic Auth authentication flow with explicit configuration
-      await userContext.signIn({
-        displayMode: 'iframe'
-      })
+      // Start Civic Auth authentication flow
+      await userContext.signIn()
       
       // Log success in attempts to diagnose issues
       console.log("Auth initialization successful, waiting for authentication to complete...")
@@ -243,17 +365,23 @@ export function WalletConnectModal({ isOpen, setIsOpen }: WalletConnectModalProp
 
   // Function to choose which connect method to use based on wallet type
   const connectWallet = (walletType: string) => {
+    console.log("connectWallet called with type:", walletType)
+    
     switch(walletType) {
       case 'phantom':
+        console.log("Calling connectPhantom...")
         connectPhantom()
         break
       case 'solflare':
+        console.log("Calling connectSolflare...")
         connectSolflare()
         break
       case 'backpack':
+        console.log("Calling connectBackpack...")
         connectBackpack()
         break
       default:
+        console.log("Unsupported wallet type:", walletType)
         toast.error("Unsupported wallet type")
     }
   }

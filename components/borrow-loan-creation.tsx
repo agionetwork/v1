@@ -20,8 +20,13 @@ import { Icons } from "@/components/ui/icons"
 import { ChevronDown } from "lucide-react"
 import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { useLoanContract } from '@/hooks/useLoanContract'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { toast } from 'sonner'
 
 export function BorrowLoanCreation() {
+  const { publicKey } = useWallet()
+  const { createLoan } = useLoanContract()
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [loanAmount, setLoanAmount] = useState(1000)
@@ -41,18 +46,28 @@ export function BorrowLoanCreation() {
   }
 
   const handleConfirmLoan = async () => {
-    setIsLoading(true)
+    if (!publicKey) {
+      toast.error('Please connect your wallet first')
+      return
+    }
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      const collateralAmount = loanAmount * (collateralPercentage / 100)
-      console.log({ operationType: "BORROW", loanAmount, loanTerm, apy, token, tokenCollateral, collateralPercentage, collateralAmount, receiverAddress })
+      setIsLoading(true)
+      const tx = await createLoan(
+        Number(loanAmount),
+        Number(apy),
+        Number(loanTerm)
+      )
+      toast.success('Loan created successfully!')
+      console.log('Transaction:', tx)
       setIsSuccess(true)
       setTimeout(() => setIsSuccess(false), 3000)
       setIsSummaryDialogOpen(false)
       resetForm()
     } catch (error) {
-      console.error("Erro ao criar empréstimo:", error)
-      setErrors({ submit: "Erro ao criar empréstimo. Tente novamente." })
+      toast.error('Error creating loan')
+      console.error(error)
+      setErrors({ submit: 'Erro ao criar empréstimo. Tente novamente.' })
     } finally {
       setIsLoading(false)
     }

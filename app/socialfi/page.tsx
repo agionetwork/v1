@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -199,108 +198,37 @@ export default function SocialFiPage() {
               <Button variant="outline" className="w-full">View All Events</Button>
             </CardFooter>
           </Card>
-          
-          {/* Social Connections */}
-          <Card className="overflow-auto">
-            <CardHeader className="pb-2">
+
+          {/* Community Stats */}
+          <Card>
+            <CardHeader>
               <CardTitle className="flex items-center">
                 <Users className="w-5 h-5 mr-2" />
-                Social Connections
+                Community Stats
               </CardTitle>
-              <CardDescription className="text-xs">Your network on the platform</CardDescription>
             </CardHeader>
-            <CardContent className="pt-2">
-              <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                    <AvatarFallback>AB</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">Alice Brown</p>
-                    <p className="text-xs text-muted-foreground">5 mutual transactions</p>
-                  </div>
-                  <Badge className="bg-blue-600 text-white text-xs ml-auto">Connected</Badge>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex justify-between">
+                  <span className="text-sm">Active Users</span>
+                  <span className="font-medium">12.5k</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                    <AvatarFallback>MS</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">Mike Smith</p>
-                    <p className="text-xs text-muted-foreground">3 mutual transactions</p>
-                  </div>
-                  <Badge className="bg-blue-600 text-white text-xs ml-auto">Connected</Badge>
+                <div className="flex justify-between">
+                  <span className="text-sm">Total Posts</span>
+                  <span className="font-medium">45.2k</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src="/placeholder.svg?height=40&width=40" alt="User" />
-                    <AvatarFallback>JW</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">Jane Wilson</p>
-                    <p className="text-xs text-muted-foreground">2 mutual transactions</p>
-                  </div>
-                  <Button size="sm" variant="outline" className="ml-auto h-7 text-xs bg-blue-600 text-white hover:bg-blue-700">
-                    Connect
-                  </Button>
+                <div className="flex justify-between">
+                  <span className="text-sm">Loans Completed</span>
+                  <span className="font-medium">8.9k</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm">Total Volume</span>
+                  <span className="font-medium">$2.1M</span>
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="pt-0">
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full h-7 text-xs bg-blue-600 text-white hover:bg-blue-700"
-              >
-                <Users className="mr-1 h-3 w-3 text-white" />
-                Find More Connections
-              </Button>
-            </CardFooter>
           </Card>
         </div>
-=======
-"use client"
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-
-export default function SocialFiPage() {
-  return (
-    <div className="container mx-auto py-12 px-4">
-      <h1 className="text-4xl font-bold mb-8">Social Finance</h1>
-      
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Reputation Score</CardTitle>
-            <CardDescription>Your on-chain reputation score</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Add reputation score content */}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Social Connections</CardTitle>
-            <CardDescription>Your network of borrowers and lenders</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Add social connections content */}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Activity Feed</CardTitle>
-            <CardDescription>Recent lending and borrowing activities</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* Add activity feed content */}
-          </CardContent>
-        </Card>
->>>>>>> 025e3451d4709ad6790584b8ac4d22891d03b944
       </div>
     </div>
   )

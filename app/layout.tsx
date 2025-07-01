@@ -2,9 +2,8 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@/components/ui/sonner"
 import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
-import { Toaster as SonnerToaster } from "sonner"
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -22,9 +21,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+    <html lang="en" suppressHydrationWarning>
       <body className={cn(
-        "min-h-screen bg-background font-sans antialiased",
+        "min-h-screen bg-gradient-to-b from-background to-background/80 font-sans antialiased",
+        "text-foreground selection:bg-primary/20",
         inter.variable
       )}>
         <ThemeProvider
@@ -33,9 +33,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="relative flex min-h-screen flex-col">
+            <div className="flex-1">{children}</div>
+          </div>
           <Toaster />
-          <SonnerToaster position="top-center" richColors closeButton />
         </ThemeProvider>
       </body>
     </html>

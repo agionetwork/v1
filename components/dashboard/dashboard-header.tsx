@@ -106,12 +106,12 @@ export default function DashboardHeader() {
   // Render skeleton during SSR to avoid hydration errors
   if (!mounted) {
     return (
-      <header className="sticky top-0 z-50 w-full border-b bg-blue-950 backdrop-blur supports-[backdrop-filter]:bg-blue-950/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-gradient-to-r from-blue-900 to-blue-800 dark:from-blue-950 dark:to-blue-900 backdrop-blur supports-[backdrop-filter]:bg-gradient-to-r supports-[backdrop-filter]:from-blue-900/95 supports-[backdrop-filter]:to-blue-800/95 dark:supports-[backdrop-filter]:from-blue-950/60 dark:supports-[backdrop-filter]:to-blue-900/60">
         <div className="container flex h-14 items-center">
           <div className="mr-4 hidden md:flex">
             <Link href="/" className="mr-6 flex items-center space-x-2">
               <img src="/images/blue-hat.png" alt="Blue Hat" className="h-6 w-6" />
-              <span className="hidden font-bold sm:inline-block">
+              <span className="hidden font-bold sm:inline-block text-white">
                 Agio Network
               </span>
             </Link>
@@ -140,20 +140,20 @@ export default function DashboardHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-blue-950 backdrop-blur supports-[backdrop-filter]:bg-blue-950/60">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200/10 bg-gradient-to-r from-blue-900 to-blue-800 dark:from-blue-950 dark:to-blue-900 backdrop-blur supports-[backdrop-filter]:bg-gradient-to-r supports-[backdrop-filter]:from-blue-900/95 supports-[backdrop-filter]:to-blue-800/95 dark:supports-[backdrop-filter]:from-blue-950/60 dark:supports-[backdrop-filter]:to-blue-900/60">
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <img src="/images/blue-hat.png" alt="Blue Hat" className="h-6 w-6" />
-            <span className="hidden font-bold sm:inline-block">
+            <span className="hidden font-bold sm:inline-block text-white">
               Agio Network
             </span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
             <Link
               href="/dashboard"
-              className={`transition-colors hover:text-foreground/80 ${
-                pathname === "/dashboard" ? "text-foreground" : "text-foreground/60"
+              className={`transition-colors hover:text-white/80 ${
+                pathname === "/dashboard" ? "text-white" : "text-white/60"
               }`}
             >
               Dashboard
@@ -162,15 +162,15 @@ export default function DashboardHeader() {
               href="/borrow-lend"
               className={cn(
                 "flex items-center gap-2 px-3 py-2 rounded-md transition-colors",
-                pathname === "/borrow-lend" ? "bg-[#1358EC] text-white" : "text-foreground/60 hover:text-foreground"
+                pathname === "/borrow-lend" ? "text-white" : "text-white/60 hover:text-white"
               )}
             >
               Borrow / Lend
             </Link>
             <Link
               href="/loan-offers"
-              className={`transition-colors hover:text-foreground/80 ${
-                pathname === "/loan-offers" ? "text-foreground" : "text-foreground/60"
+              className={`transition-colors hover:text-white/80 ${
+                pathname === "/loan-offers" ? "text-white" : "text-white/60"
               }`}
             >
               Loan Offers
@@ -181,7 +181,7 @@ export default function DashboardHeader() {
           <SheetTrigger asChild>
             <Button
               variant="ghost"
-              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+              className="mr-2 px-0 text-base text-white hover:bg-transparent hover:text-white/80 focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
             >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle Menu</span>
@@ -237,6 +237,7 @@ export default function DashboardHeader() {
               variant="ghost"
               size="icon"
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              className="text-white hover:bg-transparent hover:text-white/80 focus-visible:ring-0 focus-visible:ring-offset-0"
             >
               <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -250,7 +251,7 @@ export default function DashboardHeader() {
               <div className="flex items-center gap-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <div className="bg-blue-800 text-white px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all hover:bg-blue-700 cursor-pointer">
+                    <div className="bg-blue-800 dark:bg-blue-800 text-white px-3 py-1.5 rounded-lg flex items-center gap-2 transition-all hover:bg-blue-700 dark:hover:bg-blue-700 cursor-pointer">
                       <Wallet className="h-4 w-4" />
                       <span className="font-medium text-sm">
                         {getWalletDisplayName()}: {formatWalletAddress(walletAddress)}
@@ -266,7 +267,7 @@ export default function DashboardHeader() {
                 </DropdownMenu>
                 
                 <Avatar 
-                  className="h-8 w-8 cursor-pointer border-2 border-blue-500" 
+                  className="h-8 w-8 cursor-pointer border-2 border-white dark:border-blue-500" 
                   onClick={navigateToProfile}
                 >
                   <AvatarImage src="/placeholder.svg" alt="Profile" />
@@ -275,7 +276,7 @@ export default function DashboardHeader() {
               </div>
             ) : (
               <Button 
-                className="bg-[#1358EC] text-white hover:bg-[#104BCA]"
+                className="bg-white text-blue-600 hover:bg-gray-100 dark:bg-[#1358EC] dark:text-white dark:hover:bg-[#104BCA]"
                 onClick={() => setIsWalletModalOpen(true)}
               >
                 CONNECT WALLET

@@ -178,6 +178,16 @@ export default function DashboardPage() {
     router.push(`/dashboard?tab=${value}`)
   }
 
+  // Definir cores baseadas no tema
+  const titleColor = theme === 'dark' ? 'text-blue-200' : 'text-blue-600'
+  const subtitleColor = theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+  const textColor = theme === 'dark' ? 'text-white' : 'text-black'
+  const descriptionColor = theme === 'dark' ? 'text-gray-300' : 'text-gray-700'
+
+  // Cores para gráficos baseadas no tema
+  const chartAxisColor = theme === 'dark' ? '#e0e7ef' : '#374151'
+  const chartGridColor = theme === 'dark' ? '#b6c6e3' : '#6b7280'
+
   return (
     <div className="container mx-auto p-6">
       <div className="flex flex-col space-y-6">
@@ -206,13 +216,13 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Available Liquidity */}
                 <Card className="border-2 p-6">
-                  <div className="text-blue-200 flex items-center justify-center gap-2 mb-2">
+                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span className="font-semibold">Available Liquidity</span>
                   </div>
-                  <div className="text-gray-400 text-sm mb-4 text-center">Total funds available for lending</div>
+                  <div className={`${subtitleColor} text-sm mb-4 text-center`}>Total funds available for lending</div>
                   
                   {isLoading ? (
                     <div className="flex justify-center items-center h-24">
@@ -235,7 +245,7 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex flex-col items-end">
                             <span className="font-bold">{token.balance.toLocaleString(undefined, { maximumFractionDigits: 6 })}</span>
-                            <span className="text-xs text-gray-400">${token.usdValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                            <span className={`text-xs ${subtitleColor}`}>${token.usdValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
                           </div>
                         </div>
                       ))}
@@ -247,49 +257,49 @@ export default function DashboardPage() {
                     </div>
                   ) : (
                     <div className="text-center py-4">
-                      <div className="text-white text-lg font-medium mb-2">No tokens available</div>
-                      <div className="text-gray-400 text-sm">Connect your wallet to see your available tokens</div>
+                      <div className={`${textColor} text-lg font-medium mb-2`}>No tokens available</div>
+                      <div className={`${subtitleColor} text-sm`}>Connect your wallet to see your available tokens</div>
                     </div>
                   )}
                 </Card>
                 {/* Risk Analysis */}
                 <Card className="border-2 p-6 flex flex-col items-center justify-center">
-                  <div className="text-blue-200 flex items-center justify-center gap-2 mb-2">
+                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                     </svg>
                     <span className="font-semibold">Risk Analysis</span>
                   </div>
-                  <div className="text-gray-400 text-sm mb-2">Assessment of your loan portfolio risk</div>
+                  <div className={`${subtitleColor} text-sm mb-2`}>Assessment of your loan portfolio risk</div>
                   <div className="flex flex-col items-center justify-center mb-2">
                     <div className="rounded-full border-4 border-blue-600 w-24 h-24 flex items-center justify-center mb-2">
                       <span className="text-3xl text-blue-400 font-bold">Low</span>
                     </div>
-                    <div className="text-gray-300 text-center text-sm">Your portfolio has a low risk profile with good diversification</div>
+                    <div className={`${descriptionColor} text-center text-sm`}>Your portfolio has a low risk profile with good diversification</div>
                   </div>
                   <div className="flex gap-4 mt-2">
                     <div className="bg-blue-900 rounded-lg px-4 py-2 flex flex-col items-center">
-                      <span className="text-xs text-gray-400">Default Risk</span>
+                      <span className="text-xs text-white">Default Risk</span>
                       <span className="text-green-400 font-semibold">2.3%</span>
                     </div>
                     <div className="bg-blue-900 rounded-lg px-4 py-2 flex flex-col items-center">
-                      <span className="text-xs text-gray-400">Diversification</span>
+                      <span className="text-xs text-white">Diversification</span>
                       <span className="text-green-400 font-semibold">High</span>
                     </div>
                   </div>
                 </Card>
                 {/* Asset Distribution */}
                 <Card className="border-2 p-6 flex flex-col items-center justify-center">
-                  <div className="text-blue-200 flex items-center justify-center gap-2 mb-2">
+                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
                       <path strokeLinecap="round" strokeLinejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                     </svg>
                     <span className="font-semibold">Asset Distribution</span>
                   </div>
-                  <div className="text-gray-400 text-sm mb-2">Distribution of your loans by asset type</div>
+                  <div className={`${subtitleColor} text-sm mb-2`}>Distribution of your loans by asset type</div>
                   <div className="flex flex-col items-center w-full">
-                    <div className="w-48 h-48">
+                    <div className="w-56 h-56">
                       <ResponsivePie
                         data={[
                           { id: 'SOL', value: 45, color: '#60A5FA' },
@@ -297,8 +307,8 @@ export default function DashboardPage() {
                           { id: 'BONK', value: 15, color: '#FBBF24' },
                           { id: 'JUP', value: 10, color: '#F87171' },
                         ]}
-                        margin={{ top: 30, right: 50, bottom: 30, left: 50 }}
-                        innerRadius={0.6}
+                        margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+                        innerRadius={0.5}
                         padAngle={2}
                         cornerRadius={3}
                         colors={({ data }) => data.color}
@@ -306,18 +316,19 @@ export default function DashboardPage() {
                         borderColor="#fff"
                         enableArcLabels={false}
                         enableArcLinkLabels={true}
-                        arcLinkLabelsSkipAngle={0}
+                        arcLinkLabelsSkipAngle={5}
                         arcLinkLabelsTextColor={({ data }) => data.color}
-                        arcLinkLabelsThickness={0.5}
-                        arcLinkLabelsDiagonalLength={10}
-                        arcLinkLabelsStraightLength={16}
-                        arcLinkLabelsOffset={2}
+                        arcLinkLabelsThickness={2}
+                        arcLinkLabelsDiagonalLength={16}
+                        arcLinkLabelsStraightLength={24}
+                        arcLinkLabelsOffset={4}
                         arcLinkLabel={d => `${d.value}%`}
                         isInteractive={true}
                         theme={{
                           labels: {
                             text: {
-                              fontWeight: 700
+                              fontWeight: 700,
+                              fontSize: 14
                             }
                           },
                           tooltip: {
@@ -344,13 +355,13 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Volume Trend */}
                 <Card className="border-2 p-6">
-                  <div className="text-blue-200 flex items-center justify-center gap-2 mb-2">
+                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                     </svg>
                     <span className="font-semibold">Volume Trend</span>
                   </div>
-                  <div className="text-gray-400 text-sm mb-2 text-center">Loan volume over the last 6 months</div>
+                  <div className={`${subtitleColor} text-sm mb-2 text-center`}>Loan volume over the last 6 months</div>
                   <div className="w-full h-40 md:h-56">
                     <ResponsiveBar
                       data={[
@@ -389,14 +400,14 @@ export default function DashboardPage() {
                       borderColor="#fff"
                       theme={{
                         axis: {
-                          ticks: { text: { fill: '#e0e7ef', fontWeight: 700 } },
-                          legend: { text: { fill: '#e0e7ef', fontWeight: 700, textAlign: 'center' } }
+                          ticks: { text: { fill: chartAxisColor, fontWeight: 700 } },
+                          legend: { text: { fill: chartAxisColor, fontWeight: 700, textAlign: 'center' } }
                         },
-                        grid: { line: { stroke: '#b6c6e3', strokeWidth: 2, opacity: 0.7 } },
+                        grid: { line: { stroke: chartGridColor, strokeWidth: 2, opacity: 0.7 } },
                         tooltip: { container: { background: '#fff', color: '#1358EC', borderRadius: 10, fontSize: 16, fontWeight: 700, boxShadow: '0 2px 8px #0003', border: '1px solid #1358EC' } },
                         crosshair: { line: { stroke: '#2563eb', strokeWidth: 3, strokeDasharray: '4 4' } }
                       }}
-                      gridYValues={2}
+                      gridYValues={[8000, 16000, 25000]}
                       enableGridY={true}
                       enableGridX={false}
                       tooltip={({ value, indexValue }) => (
@@ -420,13 +431,13 @@ export default function DashboardPage() {
                 </Card>
                 {/* Quick Actions */}
                 <Card className="border-2 p-6 flex flex-col items-center justify-center">
-                  <div className="text-blue-200 flex items-center justify-center gap-2 mb-2">
+                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                     <span className="font-semibold">Quick Actions</span>
                   </div>
-                  <div className="text-gray-400 text-sm mb-4 text-center">Start lending or borrowing</div>
+                  <div className={`${subtitleColor} text-sm mb-4 text-center`}>Start lending or borrowing</div>
                   <Link href="/loan-offers" className="w-3/4 mb-2">
                     <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold">Loan Offers</Button>
                   </Link>
@@ -440,13 +451,13 @@ export default function DashboardPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Active Loans */}
                 <Card className="border-2 p-6">
-                  <div className="text-blue-200 flex items-center justify-center gap-2 mb-2">
+                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                     <span className="font-semibold">Active Loans</span>
                   </div>
-                  <div className="text-gray-400 text-sm mb-2 text-center">Number of active loans over time</div>
+                  <div className={`${subtitleColor} text-sm mb-2 text-center`}>Number of active loans over time</div>
                   <div className="w-full h-40 md:h-56">
                     <ResponsiveLine
                       data={[
@@ -471,7 +482,7 @@ export default function DashboardPage() {
                         tickPadding: 12,
                         legend: 'Month',
                         legendPosition: 'middle',
-                        legendOffset: 40,
+                        legendOffset: 32,
                         tickRotation: 0
                       }}
                       axisLeft={{
@@ -486,7 +497,7 @@ export default function DashboardPage() {
                       colors={["#2563eb"]}
                       enablePoints={true}
                       pointSize={16}
-                      pointColor="#fff"
+                      pointColor="#2563eb"
                       pointBorderWidth={5}
                       pointBorderColor={{ from: 'serieColor' }}
                       enableArea={true}
@@ -498,10 +509,10 @@ export default function DashboardPage() {
                       lineWidth={5}
                       theme={{
                         axis: {
-                          ticks: { text: { fill: '#e0e7ef', fontWeight: 700 } },
-                          legend: { text: { fill: '#e0e7ef', fontWeight: 700, textAlign: 'center' } }
+                          ticks: { text: { fill: chartAxisColor, fontWeight: 700 } },
+                          legend: { text: { fill: chartAxisColor, fontWeight: 700, textAlign: 'center' } }
                         },
-                        grid: { line: { stroke: '#b6c6e3', strokeWidth: 2, opacity: 0.7 } },
+                        grid: { line: { stroke: chartGridColor, strokeWidth: 2, opacity: 0.7 } },
                         tooltip: { container: { background: '#fff', color: '#1358EC', borderRadius: 10, fontSize: 16, fontWeight: 700, boxShadow: '0 2px 8px #0003', border: '1px solid #1358EC' } },
                         crosshair: { line: { stroke: '#2563eb', strokeWidth: 3, strokeDasharray: '4 4' } }
                       }}
@@ -519,13 +530,13 @@ export default function DashboardPage() {
                 </Card>
                 {/* Reputation Growth */}
                 <Card className="border-2 p-6">
-                  <div className="text-blue-200 flex items-center justify-center gap-2 mb-2">
+                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                     </svg>
                     <span className="font-semibold">Reputation Growth</span>
                   </div>
-                  <div className="text-gray-400 text-sm mb-2 text-center">Your reputation score over time</div>
+                  <div className={`${subtitleColor} text-sm mb-2 text-center`}>Your reputation score over time</div>
                   <div className="w-full h-40 md:h-56">
                     <ResponsiveLine
                       data={[
@@ -550,7 +561,7 @@ export default function DashboardPage() {
                         tickPadding: 12,
                         legend: 'Month',
                         legendPosition: 'middle',
-                        legendOffset: 40,
+                        legendOffset: 32,
                         tickRotation: 0
                       }}
                       axisLeft={{
@@ -565,7 +576,7 @@ export default function DashboardPage() {
                       colors={["#10B981"]}
                       enablePoints={true}
                       pointSize={16}
-                      pointColor="#fff"
+                      pointColor="#10B981"
                       pointBorderWidth={5}
                       pointBorderColor={{ from: 'serieColor' }}
                       enableArea={true}
@@ -577,10 +588,10 @@ export default function DashboardPage() {
                       lineWidth={5}
                       theme={{
                         axis: {
-                          ticks: { text: { fill: '#e0e7ef', fontWeight: 700 } },
-                          legend: { text: { fill: '#e0e7ef', fontWeight: 700, textAlign: 'center' } }
+                          ticks: { text: { fill: chartAxisColor, fontWeight: 700 } },
+                          legend: { text: { fill: chartAxisColor, fontWeight: 700, textAlign: 'center' } }
                         },
-                        grid: { line: { stroke: '#b6c6e3', strokeWidth: 2, opacity: 0.7 } },
+                        grid: { line: { stroke: chartGridColor, strokeWidth: 2, opacity: 0.7 } },
                         tooltip: { container: { background: '#fff', color: '#10B981', borderRadius: 10, fontSize: 16, fontWeight: 700, boxShadow: '0 2px 8px #0003', border: '1px solid #10B981' } },
                         crosshair: { line: { stroke: '#10B981', strokeWidth: 3, strokeDasharray: '4 4' } }
                       }}
@@ -601,18 +612,18 @@ export default function DashboardPage() {
               {/* Loan Activity Table */}
               <Card className="border-2 p-8 mt-8">
                 <div className="flex flex-col items-center mb-6">
-                  <div className="text-blue-200 flex items-center gap-2 mb-1 text-lg font-semibold">
+                  <div className={`${titleColor} flex items-center gap-2 mb-1 text-lg font-semibold`}>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                     Loan Activity
                   </div>
-                  <div className="text-gray-400 text-sm">History of your loans</div>
+                  <div className={`${subtitleColor} text-sm`}>History of your loans</div>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="min-w-full text-sm text-center">
                     <thead>
-                      <tr className="text-gray-400 border-b border-blue-900">
+                      <tr className={`${subtitleColor} border-b border-blue-900`}>
                         <th className="py-2 px-3 font-normal">ID</th>
                         <th className="py-2 px-3 font-normal">Date</th>
                         <th className="py-2 px-3 font-normal">Type</th>
@@ -623,9 +634,9 @@ export default function DashboardPage() {
                         <th className="py-2 px-3 font-normal">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="text-white">
+                    <tbody className={textColor}>
                       {recentActivity.map((loan) => (
-                        <tr key={loan.id} className="border-b border-blue-900">
+                        <tr key={loan.id} className={`border-b border-blue-900`}>
                           <td className="py-2 px-3">#{loan.id}</td>
                           <td className="py-2 px-3">{loan.date}</td>
                           <td className="py-2 px-3">

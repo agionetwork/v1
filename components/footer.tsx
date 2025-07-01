@@ -7,7 +7,6 @@ import { Linkedin, Send } from "lucide-react"
 import { FaXTwitter } from "react-icons/fa6"
 import { FaDiscord } from "react-icons/fa"
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
 
 interface FooterLink {
   name: string
@@ -48,19 +47,12 @@ const footerLinks: FooterSection[] = [
 
 export default function Footer(): JSX.Element {
   const { theme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) return <></>
   
   const textColor = theme === 'dark' ? 'text-white' : 'text-black'
   const hoverColor = theme === 'dark' ? 'hover:text-gray-300' : 'hover:text-gray-600'
 
   return (
-    <footer className="w-full py-12 md:py-16 border-t-[0.5px] border-gray-300 bg-gradient-to-b from-blue-950 via-blue-950 to-blue-700 [background-size:100%_120%]">
+    <footer className="w-full py-12 md:py-16 bg-gradient-to-b from-blue-950 via-blue-950 to-blue-700 dark:bg-transparent">
       <div className="container px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
