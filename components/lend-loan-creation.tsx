@@ -32,7 +32,7 @@ export function LendLoanCreation() {
   const [loanAmount, setLoanAmount] = useState(1000)
   const [loanTerm, setLoanTerm] = useState(30)
   const [apy, setApy] = useState(5)
-  const [token, setToken] = useState("SOL")
+  const [token, setToken] = useState("USDC")
   const [tokenCollateral, setTokenCollateral] = useState("SOL")
   const [collateralPercentage, setCollateralPercentage] = useState(150)
   const [receiverAddress, setReceiverAddress] = useState("")
@@ -77,7 +77,7 @@ export function LendLoanCreation() {
     setLoanAmount(1000)
     setLoanTerm(30)
     setApy(5)
-    setToken("SOL")
+    setToken("USDC")
     setTokenCollateral("SOL")
     setCollateralPercentage(150)
     setReceiverAddress("")
@@ -102,6 +102,41 @@ export function LendLoanCreation() {
     
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
+  }
+
+  // Lista de tokens disponíveis
+  const availableTokens = ["SOL", "USDC", "USDT", "mSOL"]
+  
+  // Filtrar tokens de collateral excluindo o token selecionado em AMOUNT
+  const collateralTokens = availableTokens.filter(t => t !== token)
+  
+  // Atualizar tokenCollateral se o token atual foi selecionado em AMOUNT
+  const handleTokenChange = (newToken: string) => {
+    setToken(newToken)
+    // Se o token de collateral é o mesmo que foi selecionado em AMOUNT, 
+    // selecionar o primeiro token disponível para collateral
+    if (tokenCollateral === newToken) {
+      const availableCollateralTokens = availableTokens.filter(t => t !== newToken)
+      const firstAvailableCollateral = availableCollateralTokens[0]
+      if (firstAvailableCollateral) {
+        setTokenCollateral(firstAvailableCollateral)
+      }
+    }
+  }
+
+  // Atualizar tokenCollateral e verificar se não é igual ao token em AMOUNT
+  const handleCollateralChange = (newCollateralToken: string) => {
+    if (newCollateralToken === token) {
+      // Se o token de collateral é igual ao token em AMOUNT, 
+      // selecionar o primeiro token disponível para collateral
+      const availableCollateralTokens = availableTokens.filter(t => t !== token)
+      const firstAvailableCollateral = availableCollateralTokens[0]
+      if (firstAvailableCollateral) {
+        setTokenCollateral(firstAvailableCollateral)
+      }
+    } else {
+      setTokenCollateral(newCollateralToken)
+    }
   }
 
   return (
@@ -144,7 +179,7 @@ export function LendLoanCreation() {
                     onChange={(e) => setLoanAmount(Number(e.target.value))}
                     className="h-8 text-black dark:text-white rounded-r-none w-1/2 border-r-[0.5px] border-r-black dark:border-r-white bg-transparent dark:bg-transparent"
                   />
-                  <Select value={token} onValueChange={setToken}>
+                  <Select value={token} onValueChange={handleTokenChange}>
                     <SelectTrigger className="w-1/2 h-8 text-black dark:text-white rounded-l-none border-l-[0.5px] border-l-black dark:border-l-white bg-transparent dark:bg-transparent">
                       <div className="flex items-center gap-1">
                         <img 
@@ -201,7 +236,7 @@ export function LendLoanCreation() {
                     </Tooltip>
                   </TooltipProvider>
                 </div>
-                <Select value={tokenCollateral} onValueChange={setTokenCollateral}>
+                <Select value={tokenCollateral} onValueChange={handleCollateralChange}>
                   <SelectTrigger className="w-full h-8 text-black dark:text-white bg-transparent dark:bg-transparent">
                     <div className="flex items-center gap-1">
                       <img 
@@ -213,30 +248,18 @@ export function LendLoanCreation() {
                     </div>
                   </SelectTrigger>
                   <SelectContent className="text-black dark:text-white bg-white dark:bg-blue-950">
-                    <SelectItem value="SOL">
-                      <div className="flex items-center gap-1">
-                        <img src="/images/sol-logo.png" alt="SOL" className="w-4 h-4" />
-                        SOL
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="USDC">
-                      <div className="flex items-center gap-1">
-                        <img src="/images/usdc-logo.png" alt="USDC" className="w-4 h-4" />
-                        USDC
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="USDT">
-                      <div className="flex items-center gap-1">
-                        <img src="/images/tether-usdt-logo.png" alt="USDT" className="w-4 h-4" />
-                        USDT
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="mSOL">
-                      <div className="flex items-center gap-1">
-                        <img src="/images/msol-logo.png" alt="mSOL" className="w-4 h-4" />
-                        mSOL
-                      </div>
-                    </SelectItem>
+                    {collateralTokens.map((collateralToken) => (
+                      <SelectItem key={collateralToken} value={collateralToken}>
+                        <div className="flex items-center gap-1">
+                          <img 
+                            src={`/images/${collateralToken === "USDT" ? "tether-usdt-logo.png" : collateralToken.toLowerCase() + "-logo.png"}`} 
+                            alt={collateralToken} 
+                            className="w-4 h-4" 
+                          />
+                          {collateralToken}
+                        </div>
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>

@@ -7,7 +7,7 @@ const __dirname = dirname(__filename)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     remotePatterns: [
       {
@@ -49,7 +49,7 @@ const nextConfig = {
           headers: [
             {
               key: 'Content-Security-Policy',
-              value: "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss: blob:;"
+              value: "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https: blob:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https: blob:; font-src 'self' data: https:; connect-src 'self' https: wss: blob:; frame-src 'self' https:; object-src 'none';"
             }
           ]
         }

@@ -17,6 +17,8 @@ import { toast } from "sonner"
 import { formatDistanceToNow } from "date-fns"
 import Link from "next/link"
 import { ReputationBadge } from "@/components/ui/badge-reputation"
+import { ManageLoanModal } from "./manage-loan-modal"
+import { BorrowLoanModal } from "./borrow-loan-modal"
 
 interface Loan {
   id: number
@@ -53,6 +55,10 @@ interface Opportunity {
 
 export default function BorrowDashboard() {
   const [activeTab, setActiveTab] = useState("myloans")
+  const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null)
+  const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null)
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false)
+  const [isBorrowModalOpen, setIsBorrowModalOpen] = useState(false)
   
   const [activeLoans, setActiveLoans] = useState<Loan[]>([
     {
@@ -198,86 +204,28 @@ export default function BorrowDashboard() {
       collateral: "140%",
       verified: true,
       trend: { value: 0.1, direction: "down" },
-      reputation: 94
-    },
-    {
-      id: 8,
-      lender: "Dz9RtKp...xL4Vb",
-      asset: "SOL",
-      available: 35,
-      term: "30 days",
-      apr: "4.2%",
-      interest: "0.735 SOL",
-      collateral: "165%",
-      verified: true,
-      trend: { value: 0.3, direction: "up" },
-      reputation: 93
-    },
-    {
-      id: 9,
-      lender: "Gf7HjKl...mN2Xz",
-      asset: "USDC",
-      available: 15000,
-      term: "90 days",
-      apr: "5.8%",
-      interest: "870 USDC",
-      collateral: "155%",
-      trend: { value: 0.4, direction: "up" },
-      reputation: 87
-    },
-    {
-      id: 10,
-      lender: "Jp5TqRs...bC8Vn",
-      asset: "BONK",
-      available: 750000,
-      term: "21 days",
-      apr: "8.1%",
-      interest: "3543.75 BONK",
-      collateral: "180%",
-      verified: true,
-      trend: { value: 0.7, direction: "up" },
-      reputation: 90
-    },
-    {
-      id: 11,
-      lender: "Lm3WxYz...kP7Qr",
-      asset: "JUP",
-      available: 5,
-      term: "75 days",
-      apr: "3.5%",
-      interest: "0.109 JUP",
-      collateral: "145%",
-      trend: { value: 0.2, direction: "down" },
       reputation: 92
     }
   ])
 
+  const handleManageLoan = (loan: Loan) => {
+    setSelectedLoan(loan)
+    setIsManageModalOpen(true)
+  }
+
   const handleBorrow = (opportunity: Opportunity) => {
-    toast.promise(
-      new Promise((resolve) => setTimeout(resolve, 2000)),
-      {
-        loading: "Processing loan...",
-        success: () => {
-          const newLoan: Loan = {
-            id: activeLoans.length + 1,
-            lender: opportunity.lender,
-            asset: opportunity.asset,
-            amount: opportunity.available,
-            interest: opportunity.interest,
-            dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString(),
-            status: "Active",
-            collateral: opportunity.collateral,
-            term: opportunity.term,
-            verified: opportunity.verified,
-            reputation: opportunity.reputation
-          }
-          setActiveLoans([...activeLoans, newLoan])
-          setOpportunities(opportunities.filter(o => o.id !== opportunity.id))
-          return "Loan successfully processed!"
-        },
-        error: "Error processing loan"
-      }
-    )
+    setSelectedOpportunity(opportunity)
+    setIsBorrowModalOpen(true)
+  }
+
+  const handleCloseManageModal = () => {
+    setIsManageModalOpen(false)
+    setSelectedLoan(null)
+  }
+
+  const handleCloseBorrowModal = () => {
+    setIsBorrowModalOpen(false)
+    setSelectedOpportunity(null)
   }
 
   const totalBorrowed = activeLoans.reduce((total, loan) => total + loan.amount, 0)
@@ -416,7 +364,14 @@ export default function BorrowDashboard() {
                           {loan.dueDate}
                         </TableCell>
                         <TableCell className="text-center align-middle whitespace-nowrap">
-                          <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-medium">Manage</Button>
+                          <Button 
+                            variant="default" 
+                            size="sm" 
+                            className="bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                            onClick={() => handleManageLoan(loan)}
+                          >
+                            Manage
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -517,6 +472,19 @@ export default function BorrowDashboard() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Modais específicos */}
+      <ManageLoanModal
+        loan={selectedLoan}
+        isOpen={isManageModalOpen}
+        onClose={handleCloseManageModal}
+      />
+      
+      <BorrowLoanModal
+        opportunity={selectedOpportunity}
+        isOpen={isBorrowModalOpen}
+        onClose={handleCloseBorrowModal}
+      />
     </div>
   )
 }

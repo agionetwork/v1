@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useTheme } from "next-themes"
 import { useWalletTokens } from "../../hooks/useWalletTokens"
+import { useTokenPrices } from "../../hooks/useTokenPrices"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import { Badge } from "../../components/ui/badge"
@@ -149,6 +150,7 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState(tab)
   const { theme } = useTheme()
   const { tokens, isLoading, error } = useWalletTokens()
+  const { prices } = useTokenPrices()
   
   const [chartData, setChartData] = useState(loanHistory)
   const [selectedLoan, setSelectedLoan] = useState<any>(null)
@@ -187,6 +189,35 @@ export default function DashboardPage() {
   // Cores para gráficos baseadas no tema
   const chartAxisColor = theme === 'dark' ? '#e0e7ef' : '#374151'
   const chartGridColor = theme === 'dark' ? '#b6c6e3' : '#6b7280'
+
+  // Gerar dados do gráfico de distribuição baseado nos tokens reais
+  const getAssetDistributionData = () => {
+    if (tokens.length === 0) {
+      return [
+        { id: 'SOL', value: 45, color: '#60A5FA' },
+        { id: 'USDC', value: 30, color: '#34D399' },
+        { id: 'BONK', value: 15, color: '#FBBF24' },
+        { id: 'JUP', value: 10, color: '#F87171' },
+      ]
+    }
+
+    return tokens.map(token => {
+      const colors: Record<string, string> = {
+        SOL: '#60A5FA',
+        USDC: '#34D399',
+        USDT: '#10B981',
+        mSOL: '#8B5CF6',
+        BONK: '#FBBF24',
+        JUP: '#F87171'
+      }
+      
+      return {
+        id: token.symbol,
+        value: Math.round(token.percentOfTotal),
+        color: colors[token.symbol] || '#6B7280'
+      }
+    }).filter(item => item.value > 0)
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -230,25 +261,42 @@ export default function DashboardPage() {
                     </div>
                   ) : tokens.length > 0 ? (
                     <div className="space-y-3">
-                      {tokens.map((token, index) => (
-                        <div key={index} className="flex justify-between items-center border-b border-blue-900 pb-2 last:border-0">
-                          <div className="flex items-center gap-2">
-                            <img 
-                              src={`/images/${token.symbol.toLowerCase()}-logo.png`} 
-                              alt={token.symbol} 
-                              className="w-6 h-6 rounded-full"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = '/images/token-placeholder.png'
-                              }}
-                            />
-                            <span className="font-medium">{token.symbol}</span>
+                      {tokens.map((token, index) => {
+                        const tokenPrice = prices[token.symbol]
+                        const priceChange = tokenPrice?.change24h || 0
+                        const isPositive = priceChange >= 0
+                        
+                        return (
+                          <div key={index} className="flex justify-between items-center border-b border-blue-900 pb-2 last:border-0">
+                            <div className="flex items-center gap-2">
+                              <img 
+                                src={`/images/${token.symbol === "USDT" ? "tether-usdt-logo.png" : token.symbol.toLowerCase()}-logo.png`} 
+                                alt={token.symbol} 
+                                className="w-6 h-6 rounded-full"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = '/images/token-placeholder.png'
+                                }}
+                              />
+                              <div className="flex flex-col">
+                                <span className="font-medium text-sm">{token.symbol}</span>
+                                {tokenPrice && (
+                                  <div className="flex items-center gap-1">
+                                    <span className="text-xs text-gray-500">${tokenPrice.price.toFixed(4)}</span>
+                                    <span className={`text-xs ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
+                                      {isPositive ? '+' : ''}{priceChange.toFixed(2)}%
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-end">
+                              <span className="font-bold text-sm">{token.balance.toLocaleString(undefined, { maximumFractionDigits: 6 })}</span>
+                              <span className={`text-xs ${subtitleColor}`}>${token.usdValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
+                              <span className="text-xs text-gray-400">{token.percentOfTotal.toFixed(1)}%</span>
+                            </div>
                           </div>
-                          <div className="flex flex-col items-end">
-                            <span className="font-bold">{token.balance.toLocaleString(undefined, { maximumFractionDigits: 6 })}</span>
-                            <span className={`text-xs ${subtitleColor}`}>${token.usdValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-                          </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                       <div className="pt-2 text-center">
                         <div className="font-bold text-lg text-blue-400">
                           Total: ${tokens.reduce((sum, token) => sum + token.usdValue, 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}
@@ -297,16 +345,11 @@ export default function DashboardPage() {
                     </svg>
                     <span className="font-semibold">Asset Distribution</span>
                   </div>
-                  <div className={`${subtitleColor} text-sm mb-2`}>Distribution of your loans by asset type</div>
+                  <div className={`${subtitleColor} text-sm mb-2`}>Distribution of your assets by token type</div>
                   <div className="flex flex-col items-center w-full">
                     <div className="w-56 h-56">
                       <ResponsivePie
-                        data={[
-                          { id: 'SOL', value: 45, color: '#60A5FA' },
-                          { id: 'USDC', value: 30, color: '#34D399' },
-                          { id: 'BONK', value: 15, color: '#FBBF24' },
-                          { id: 'JUP', value: 10, color: '#F87171' },
-                        ]}
+                        data={getAssetDistributionData()}
                         margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
                         innerRadius={0.5}
                         padAngle={2}
@@ -341,11 +384,23 @@ export default function DashboardPage() {
                         }}
                       />
                     </div>
-                    <div className="flex flex-row gap-4 mt-2 text-sm justify-center">
-                      <div className="flex items-center gap-2 text-blue-400"><span className="w-3 h-3 rounded-full bg-blue-400 inline-block"></span>SOL</div>
-                      <div className="flex items-center gap-2 text-green-400"><span className="w-3 h-3 rounded-full bg-green-400 inline-block"></span>USDC</div>
-                      <div className="flex items-center gap-2 text-yellow-400"><span className="w-3 h-3 rounded-full bg-yellow-400 inline-block"></span>BONK</div>
-                      <div className="flex items-center gap-2 text-red-400"><span className="w-3 h-3 rounded-full bg-red-400 inline-block"></span>JUP</div>
+                    <div className="flex flex-wrap gap-2 mt-2 text-xs justify-center">
+                      {tokens.map((token) => {
+                        const colors: Record<string, string> = {
+                          SOL: 'text-blue-400',
+                          USDC: 'text-green-400',
+                          USDT: 'text-emerald-400',
+                          mSOL: 'text-purple-400',
+                          BONK: 'text-yellow-400',
+                          JUP: 'text-red-400'
+                        }
+                        return (
+                          <div key={token.symbol} className={`flex items-center gap-1 ${colors[token.symbol] || 'text-gray-400'}`}>
+                            <span className="w-2 h-2 rounded-full bg-current"></span>
+                            {token.symbol}
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </Card>

@@ -9,23 +9,64 @@ import { ArrowUpIcon, ArrowDownIcon } from "@radix-ui/react-icons"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
 import { ReputationBadge } from "@/components/ui/badge-reputation"
+import { ManageLoanModal } from "./manage-loan-modal"
+import { AcceptOfferModal } from "./accept-offer-modal"
+
+interface Loan {
+  id: number
+  borrower: string
+  asset: string
+  amount: number
+  interest: string
+  apy: string
+  collateral: string
+  dueDate: string
+  status: string
+  verified?: boolean
+  reputation?: number
+}
+
+interface Offer {
+  id: number
+  borrower: string
+  asset: string
+  amount: number
+  interest: string
+  apy: string
+  collateral: string
+  term: string
+  reputation?: number
+  verified?: boolean
+}
 
 export default function LendDashboard() {
   const [activeTab, setActiveTab] = useState("myloans")
+  const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null)
+  const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null)
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false)
+  const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false)
   
-  const handleAcceptOffer = (offer: any) => {
-    toast.success(`Offer from ${offer.borrower} accepted successfully!`, {
-      description: `You will lend ${offer.amount} ${offer.asset} with ${offer.interest} interest.`,
-    })
+  const handleAcceptOffer = (offer: Offer) => {
+    setSelectedOffer(offer)
+    setIsAcceptModalOpen(true)
   }
   
-  const handleLoanAction = (loan: any) => {
-    toast.success(`Action taken on loan for ${loan.borrower}`, {
-      description: `You are managing your loan of ${loan.amount} ${loan.asset}.`,
-    })
+  const handleLoanAction = (loan: Loan) => {
+    setSelectedLoan(loan)
+    setIsManageModalOpen(true)
+  }
+
+  const handleCloseManageModal = () => {
+    setIsManageModalOpen(false)
+    setSelectedLoan(null)
+  }
+
+  const handleCloseAcceptModal = () => {
+    setIsAcceptModalOpen(false)
+    setSelectedOffer(null)
   }
   
-  const activeLoans = [
+  const activeLoans: Loan[] = [
     {
       id: 1,
       borrower: "Rt7PqLm...kN3Zx",
@@ -67,7 +108,7 @@ export default function LendDashboard() {
     }
   ];
   
-  const myOffers = [
+  const myOffers: Offer[] = [
     {
       id: 1,
       borrower: "Rt7PqLm...kN3Zx",
@@ -365,6 +406,19 @@ export default function LendDashboard() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Modais específicos */}
+      <ManageLoanModal
+        loan={selectedLoan}
+        isOpen={isManageModalOpen}
+        onClose={handleCloseManageModal}
+      />
+      
+      <AcceptOfferModal
+        offer={selectedOffer}
+        isOpen={isAcceptModalOpen}
+        onClose={handleCloseAcceptModal}
+      />
     </div>
   )
 }

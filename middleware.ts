@@ -7,7 +7,7 @@ export default authMiddleware({
   // Use hardcoded client ID to avoid any import issues
   clientId: CIVIC_CLIENT_ID,
   // Routes that require authentication
-  include: ["/dashboard/*", "/borrow-lend/*", "/loan-offers/*"],
+  include: ["/dashboard/*", "/borrow-lend/*"],
   // Public routes that don't require authentication - expanded to include all static assets
   exclude: [
     "/_next/*", 
@@ -20,7 +20,8 @@ export default authMiddleware({
     "/_next/webpack-hmr",
     "/manifest.json",
     "/robots.txt",
-    "/sitemap.xml"
+    "/sitemap.xml",
+    "/loan-offers/*"
   ]
 })
 

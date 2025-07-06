@@ -149,7 +149,7 @@ export function HeroSection() {
               transition={{ duration: 0.2 }}
             >
               <div className="p-3 bg-blue-500/20 rounded-full">
-                <Shield className="h-6 w-6 text-blue-400" />
+              <Shield className="h-6 w-6 text-blue-400" />
               </div>
               <div className="text-left">
                 <h3 className={`font-semibold ${cardTitle}`}>P2P Lending</h3>
@@ -163,7 +163,7 @@ export function HeroSection() {
             >
               <div className="p-3 bg-blue-500/20 rounded-full">
                 <Coins className="h-6 w-6 text-blue-400" />
-              </div>
+            </div>
               <div className="text-left">
                 <h3 className={`font-semibold ${cardTitle}`}>Customizable Agreement</h3>
                 <p className={`text-sm ${cardDesc}`}>Period, Interest and Collateral</p>
@@ -176,7 +176,7 @@ export function HeroSection() {
             >
               <div className="p-3 bg-blue-500/20 rounded-full">
                 <Sparkles className="h-6 w-6 text-blue-400" />
-              </div>
+            </div>
               <div className="text-left">
                 <h3 className={`font-semibold ${cardTitle}`}>Score System</h3>
                 <p className={`text-sm ${cardDesc}`}>Build your reputation</p>

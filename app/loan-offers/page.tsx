@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,6 +10,14 @@ import { QuestionMarkCircledIcon } from "@radix-ui/react-icons"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { Badge } from "@/components/ui/badge"
 import { ReputationBadge } from "@/components/ui/badge-reputation"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog"
 
 interface LoanOffer {
   id: number
@@ -73,9 +81,39 @@ export default function LoanOffers() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedToken, setSelectedToken] = useState("all")
   const [sortBy, setSortBy] = useState("newest")
+  const [selectedOffer, setSelectedOffer] = useState<LoanOffer | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [acceptedOffers, setAcceptedOffers] = useState<Set<number>>(new Set())
+
+  // Debug: monitorar mudanças no estado do modal
+  useEffect(() => {
+    console.log("Estado do modal mudou - isModalOpen:", isModalOpen, "selectedOffer:", selectedOffer)
+  }, [isModalOpen, selectedOffer])
+
+  const handleAcceptOffer = (offer: LoanOffer) => {
+    console.log("handleAcceptOffer chamado com:", offer)
+    setSelectedOffer(offer)
+    setIsModalOpen(true)
+    console.log("Estado atualizado - selectedOffer:", offer, "isModalOpen: true")
+  }
+
+  const handleConfirmAccept = () => {
+    // Marcar a oferta como aceita
+    if (selectedOffer) {
+      setAcceptedOffers(prev => new Set([...prev, selectedOffer.id]))
+    }
+    setIsModalOpen(false)
+    setSelectedOffer(null)
+  }
+
+  const handleDecline = () => {
+    setIsModalOpen(false)
+    setSelectedOffer(null)
+  }
 
   const filteredOffers = mockOffers
     .filter(offer => 
+      !acceptedOffers.has(offer.id) &&
       (selectedToken === "all" || offer.token === selectedToken) &&
       (searchTerm === "" || 
         offer.lender?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -348,7 +386,7 @@ export default function LoanOffers() {
             <CardFooter className="py-2 flex justify-center bg-transparent">
               <Button 
                 className="bg-[#1358EC] text-white hover:bg-[#104BCA] w-full"
-                onClick={() => console.log("Accept offer:", offer.id)}
+                onClick={() => handleAcceptOffer(offer)}
               >
                 Accept Offer
               </Button>
@@ -359,9 +397,74 @@ export default function LoanOffers() {
 
       {filteredOffers.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500 dark:text-gray-400">No loan offers found matching your criteria.</p>
+          <p className="text-gray-500 dark:text-gray-400">
+            {acceptedOffers.size > 0 
+              ? "All available offers have been accepted. Check back later for new offers."
+              : "No loan offers found matching your criteria."
+            }
+          </p>
         </div>
       )}
+
+      {/* Modal para detalhes da oferta */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Confirm Offer Acceptance</DialogTitle>
+            <DialogDescription>
+              Review the offer details before accepting
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedOffer && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="text-muted-foreground">Loan Amount:</span>
+                  <p className="font-medium">{selectedOffer.amount.toLocaleString()} {selectedOffer.token}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Interest Rate:</span>
+                  <p className="font-medium">{selectedOffer.apy}% {selectedOffer.borrower ? "APR" : "APY"}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Duration:</span>
+                  <p className="font-medium">{selectedOffer.term} days</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Collateral:</span>
+                  <p className="font-medium">{(selectedOffer.amount * (selectedOffer.collateralPercentage / 100)).toFixed(2)} {selectedOffer.collateralToken}</p>
+                </div>
+                <div className="col-span-2">
+                  <span className="text-muted-foreground">{selectedOffer.lender ? "Lender" : "Borrower"}:</span>
+                  <p className="font-medium">{selectedOffer.lender || selectedOffer.borrower}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Reputation:</span>
+                  <p className="font-medium">{selectedOffer.reputation}/100</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground">Total Interest:</span>
+                  <p className="font-medium">{selectedOffer.interest?.toFixed(2)} {selectedOffer.token}</p>
+                </div>
+                <div className="col-span-2">
+                  <span className="text-muted-foreground">Total Amount to Pay:</span>
+                  <p className="font-medium text-lg">{(selectedOffer.amount + (selectedOffer.interest || 0)).toFixed(2)} {selectedOffer.token}</p>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter className="flex gap-2">
+            <Button variant="outline" onClick={handleDecline}>
+              Decline
+            </Button>
+            <Button onClick={handleConfirmAccept}>
+              Accept
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 } 
