@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useTheme } from "next-themes"
 import { useWalletTokens } from "../../hooks/useWalletTokens"
 import { useTokenPrices } from "../../hooks/useTokenPrices"
@@ -143,7 +143,7 @@ const badges: Badge[] = [
   },
 ]
 
-export default function DashboardPage() {
+function DashboardContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const tab = searchParams.get("tab") || "overview"
@@ -201,561 +201,551 @@ export default function DashboardPage() {
       ]
     }
 
-    return tokens.map(token => {
-      const colors: Record<string, string> = {
-        SOL: '#60A5FA',
-        USDC: '#34D399',
-        USDT: '#10B981',
-        mSOL: '#8B5CF6',
-        BONK: '#FBBF24',
-        JUP: '#F87171'
-      }
-      
-      return {
-        id: token.symbol,
-        value: Math.round(token.percentOfTotal),
-        color: colors[token.symbol] || '#6B7280'
-      }
-    }).filter(item => item.value > 0)
+    const totalValue = tokens.reduce((sum, token) => {
+      const price = prices[token.symbol]?.price || 0
+      return sum + (token.balance * price)
+    }, 0)
+
+    return tokens
+      .filter(token => {
+        const price = prices[token.symbol]?.price || 0
+        return token.balance * price > 0
+      })
+      .map(token => {
+        const price = prices[token.symbol]?.price || 0
+        const value = (token.balance * price / totalValue) * 100
+        
+        // Cores baseadas no token
+        const colors: { [key: string]: string } = {
+          'SOL': '#60A5FA',
+          'USDC': '#34D399',
+          'USDT': '#F87171',
+          'mSOL': '#8B5CF6',
+          'BONK': '#FBBF24',
+          'JUP': '#F59E0B'
+        }
+        
+        return {
+          id: token.symbol,
+          value: Math.round(value * 100) / 100,
+          color: colors[token.symbol] || '#6B7280'
+        }
+      })
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex flex-col space-y-6">
-        <div className="flex flex-col space-y-2 text-center">
-          <div className="flex items-center justify-center gap-2">
-            <h1 className="text-3xl font-bold tracking-tighter">
-              Dashboard
-            </h1>
-          </div>
-          <p className="text-muted-foreground">
-            Gerencie seus empréstimos e investimentos
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className={`text-4xl font-bold ${titleColor} mb-2`}>
+            Dashboard
+          </h1>
+          <p className={`text-lg ${subtitleColor}`}>
+            Gerencie seus empréstimos, ofertas e portfólio
           </p>
         </div>
 
-        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="profile">Profile</TabsTrigger>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="borrow">Borrow</TabsTrigger>
-            <TabsTrigger value="lend">Lend</TabsTrigger>
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+            <TabsTrigger value="borrow">Empréstimos</TabsTrigger>
+            <TabsTrigger value="lend">Emprestar</TabsTrigger>
+            <TabsTrigger value="profile">Perfil</TabsTrigger>
+            <TabsTrigger value="settings">Configurações</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="overview">
-            <div className="flex flex-col gap-8">
-              {/* Linha de cards principais */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Available Liquidity */}
-                <Card className="border-2 p-6">
-                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="font-semibold">Available Liquidity</span>
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-6">
+            {/* Available Liquidity Section */}
+            <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className={`text-2xl font-bold ${titleColor}`}>
+                  Liquidez Disponível
+                </CardTitle>
+                <CardDescription className={descriptionColor}>
+                  Seus ativos disponíveis para empréstimos e investimentos
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <div className="flex items-center justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                   </div>
-                  <div className={`${subtitleColor} text-sm mb-4 text-center`}>Total funds available for lending</div>
-                  
-                  {isLoading ? (
-                    <div className="flex justify-center items-center h-24">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                    </div>
-                  ) : tokens.length > 0 ? (
-                    <div className="space-y-3">
-                      {tokens.map((token, index) => {
-                        const tokenPrice = prices[token.symbol]
-                        const priceChange = tokenPrice?.change24h || 0
-                        const isPositive = priceChange >= 0
-                        
-                        return (
-                          <div key={index} className="flex justify-between items-center border-b border-blue-900 pb-2 last:border-0">
-                            <div className="flex items-center gap-2">
-                              <img 
-                                src={`/images/${token.symbol === "USDT" ? "tether-usdt-logo.png" : token.symbol.toLowerCase()}-logo.png`} 
-                                alt={token.symbol} 
-                                className="w-6 h-6 rounded-full"
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).src = '/images/token-placeholder.png'
-                                }}
-                              />
-                              <div className="flex flex-col">
-                                <span className="font-medium text-sm">{token.symbol}</span>
-                                {tokenPrice && (
-                                  <div className="flex items-center gap-1">
-                                    <span className="text-xs text-gray-500">${tokenPrice.price.toFixed(4)}</span>
-                                    <span className={`text-xs ${isPositive ? 'text-green-500' : 'text-red-500'}`}>
-                                      {isPositive ? '+' : ''}{priceChange.toFixed(2)}%
-                                    </span>
-                                  </div>
-                                )}
+                ) : error ? (
+                  <div className="text-red-500 text-center py-4">
+                    Erro ao carregar tokens: {error}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {tokens.map((token) => {
+                      const price = prices[token.symbol]?.price || 0
+                      const valueUSD = token.balance * price
+                      const priceChange24h = prices[token.symbol]?.change24h || 0
+                      
+                      return (
+                        <Card key={token.symbol} className="border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between mb-2">
+                              <div className="flex items-center space-x-2">
+                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm font-bold">
+                                  {token.symbol.charAt(0)}
+                                </div>
+                                <span className="font-semibold text-gray-900 dark:text-white">
+                                  {token.symbol}
+                                </span>
+                              </div>
+                              <Badge 
+                                variant={priceChange24h >= 0 ? "default" : "destructive"}
+                                className="text-xs"
+                              >
+                                {priceChange24h >= 0 ? '+' : ''}{priceChange24h.toFixed(2)}%
+                              </Badge>
+                            </div>
+                            <div className="space-y-1">
+                              <div className="text-2xl font-bold text-gray-900 dark:text-white">
+                                {token.balance.toFixed(4)}
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-gray-400">
+                                ${valueUSD.toFixed(2)} USD
+                              </div>
+                              <div className="text-xs text-gray-500 dark:text-gray-500">
+                                ${price.toFixed(4)} por {token.symbol}
                               </div>
                             </div>
-                            <div className="flex flex-col items-end">
-                              <span className="font-bold text-sm">{token.balance.toLocaleString(undefined, { maximumFractionDigits: 6 })}</span>
-                              <span className={`text-xs ${subtitleColor}`}>${token.usdValue.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
-                              <span className="text-xs text-gray-400">{token.percentOfTotal.toFixed(1)}%</span>
-                            </div>
-                          </div>
-                        )
-                      })}
-                      <div className="pt-2 text-center">
-                        <div className="font-bold text-lg text-blue-400">
-                          Total: ${tokens.reduce((sum, token) => sum + token.usdValue, 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-center py-4">
-                      <div className={`${textColor} text-lg font-medium mb-2`}>No tokens available</div>
-                      <div className={`${subtitleColor} text-sm`}>Connect your wallet to see your available tokens</div>
-                    </div>
-                  )}
-                </Card>
-                {/* Risk Analysis */}
-                <Card className="border-2 p-6 flex flex-col items-center justify-center">
-                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                    <span className="font-semibold">Risk Analysis</span>
+                          </CardContent>
+                        </Card>
+                      )
+                    })}
                   </div>
-                  <div className={`${subtitleColor} text-sm mb-2`}>Assessment of your loan portfolio risk</div>
-                  <div className="flex flex-col items-center justify-center mb-2">
-                    <div className="rounded-full border-4 border-blue-600 w-24 h-24 flex items-center justify-center mb-2">
-                      <span className="text-3xl text-blue-400 font-bold">Low</span>
-                    </div>
-                    <div className={`${descriptionColor} text-center text-sm`}>Your portfolio has a low risk profile with good diversification</div>
-                  </div>
-                  <div className="flex gap-4 mt-2">
-                    <div className="bg-blue-900 rounded-lg px-4 py-2 flex flex-col items-center">
-                      <span className="text-xs text-white">Default Risk</span>
-                      <span className="text-green-400 font-semibold">2.3%</span>
-                    </div>
-                    <div className="bg-blue-900 rounded-lg px-4 py-2 flex flex-col items-center">
-                      <span className="text-xs text-white">Diversification</span>
-                      <span className="text-green-400 font-semibold">High</span>
-                    </div>
-                  </div>
-                </Card>
-                {/* Asset Distribution */}
-                <Card className="border-2 p-6 flex flex-col items-center justify-center">
-                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                    </svg>
-                    <span className="font-semibold">Asset Distribution</span>
-                  </div>
-                  <div className={`${subtitleColor} text-sm mb-2`}>Distribution of your assets by token type</div>
-                  <div className="flex flex-col items-center w-full">
-                    <div className="w-56 h-56">
-                      <ResponsivePie
-                        data={getAssetDistributionData()}
-                        margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
-                        innerRadius={0.5}
-                        padAngle={2}
-                        cornerRadius={3}
-                        colors={({ data }) => data.color}
-                        borderWidth={1}
-                        borderColor="#fff"
-                        enableArcLabels={false}
-                        enableArcLinkLabels={true}
-                        arcLinkLabelsSkipAngle={5}
-                        arcLinkLabelsTextColor={({ data }) => data.color}
-                        arcLinkLabelsThickness={2}
-                        arcLinkLabelsDiagonalLength={16}
-                        arcLinkLabelsStraightLength={24}
-                        arcLinkLabelsOffset={4}
-                        arcLinkLabel={d => `${d.value}%`}
-                        isInteractive={true}
-                        theme={{
-                          labels: {
-                            text: {
-                              fontWeight: 700,
-                              fontSize: 14
-                            }
-                          },
-                          tooltip: {
-                            container: {
-                              background: '#ffffff',
-                              color: '#333333',
-                              fontSize: 12
-                            }
-                          }
-                        }}
-                      />
-                    </div>
-                    <div className="flex flex-wrap gap-2 mt-2 text-xs justify-center">
-                      {tokens.map((token) => {
-                        const colors: Record<string, string> = {
-                          SOL: 'text-blue-400',
-                          USDC: 'text-green-400',
-                          USDT: 'text-emerald-400',
-                          mSOL: 'text-purple-400',
-                          BONK: 'text-yellow-400',
-                          JUP: 'text-red-400'
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Asset Distribution Chart */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className={`text-xl font-bold ${titleColor}`}>
+                    Distribuição de Ativos
+                  </CardTitle>
+                  <CardDescription className={descriptionColor}>
+                    Composição do seu portfólio
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsivePie
+                      data={getAssetDistributionData()}
+                      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                      innerRadius={0.5}
+                      padAngle={0.7}
+                      cornerRadius={3}
+                      activeOuterRadiusOffset={8}
+                      colors={{ datum: 'data.color' }}
+                      borderWidth={1}
+                      borderColor={{ from: 'color', modifiers: [['darker', 0.2]] }}
+                      arcLinkLabelsSkipAngle={10}
+                      arcLinkLabelsTextColor={chartAxisColor}
+                      arcLinkLabelsThickness={2}
+                      arcLinkLabelsColor={{ from: 'color' }}
+                      arcLabelsSkipAngle={10}
+                      arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
+                      legends={[
+                        {
+                          anchor: 'bottom',
+                          direction: 'row',
+                          justify: false,
+                          translateX: 0,
+                          translateY: 56,
+                          itemsSpacing: 0,
+                          itemWidth: 100,
+                          itemHeight: 18,
+                          itemTextColor: chartAxisColor,
+                          itemDirection: 'left-to-right',
+                          itemOpacity: 1,
+                          symbolSize: 18,
+                          symbolShape: 'circle'
                         }
-                        return (
-                          <div key={token.symbol} className={`flex items-center gap-1 ${colors[token.symbol] || 'text-gray-400'}`}>
-                            <span className="w-2 h-2 rounded-full bg-current"></span>
-                            {token.symbol}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                </Card>
-              </div>
-
-              {/* Linha de gráficos e ações */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Volume Trend */}
-                <Card className="border-2 p-6">
-                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                    </svg>
-                    <span className="font-semibold">Volume Trend</span>
-                  </div>
-                  <div className={`${subtitleColor} text-sm mb-2 text-center`}>Loan volume over the last 6 months</div>
-                  <div className="w-full h-40 md:h-56">
-                    <ResponsiveBar
-                      data={[
-                        { month: 'Jan', volume: 8000 },
-                        { month: 'Feb', volume: 12000 },
-                        { month: 'Mar', volume: 15000 },
-                        { month: 'Apr', volume: 18000 },
-                        { month: 'May', volume: 21000 },
-                        { month: 'Jun', volume: 25000 },
-                      ]}
-                      keys={['volume']}
-                      indexBy="month"
-                      margin={{ top: 20, right: 20, bottom: 48, left: 60 }}
-                      padding={0.38}
-                      colors={({ id, data }) => `url(#volumeBarGradient)`}
-                      axisBottom={{
-                        tickSize: 0,
-                        tickPadding: 12,
-                        legend: 'Month',
-                        legendPosition: 'middle',
-                        legendOffset: 40,
-                        tickRotation: 0
-                      }}
-                      axisLeft={{
-                        tickSize: 0,
-                        tickPadding: 12,
-                        legend: 'Volume',
-                        legendPosition: 'middle',
-                        legendOffset: -50,
-                        format: v => Math.round(v),
-                        tickValues: [8000, 16000, 25000],
-                      }}
-                      enableLabel={false}
-                      isInteractive={true}
-                      borderRadius={8}
-                      borderColor="#fff"
-                      theme={{
-                        axis: {
-                          ticks: { text: { fill: chartAxisColor, fontWeight: 700 } },
-                          legend: { text: { fill: chartAxisColor, fontWeight: 700, textAlign: 'center' } }
-                        },
-                        grid: { line: { stroke: chartGridColor, strokeWidth: 2, opacity: 0.7 } },
-                        tooltip: { container: { background: '#fff', color: '#1358EC', borderRadius: 10, fontSize: 16, fontWeight: 700, boxShadow: '0 2px 8px #0003', border: '1px solid #1358EC' } },
-                        crosshair: { line: { stroke: '#2563eb', strokeWidth: 3, strokeDasharray: '4 4' } }
-                      }}
-                      gridYValues={[8000, 16000, 25000]}
-                      enableGridY={true}
-                      enableGridX={false}
-                      tooltip={({ value, indexValue }) => (
-                        <div style={{ padding: 12, background: '#fff', color: '#1358EC', borderRadius: 10, fontWeight: 700, fontSize: 16, border: '1px solid #1358EC', boxShadow: '0 2px 8px #0003' }}>
-                          <strong>{indexValue}</strong>: <span style={{ color: '#2563eb' }}>${value}</span>
-                        </div>
-                      )}
-                      layers={['grid', 'axes', 'bars', 'markers', 'legends',
-                        (props) => (
-                          <defs>
-                            <linearGradient id="volumeBarGradient" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="0%" stopColor="#60a5fa" />
-                              <stop offset="100%" stopColor="#2563eb" />
-                            </linearGradient>
-                          </defs>
-                        )
                       ]}
                     />
                   </div>
-                  <div className="text-blue-400 text-xs mt-2">Volume ($)</div>
-                </Card>
-                {/* Quick Actions */}
-                <Card className="border-2 p-6 flex flex-col items-center justify-center">
-                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                    <span className="font-semibold">Quick Actions</span>
-                  </div>
-                  <div className={`${subtitleColor} text-sm mb-4 text-center`}>Start lending or borrowing</div>
-                  <Link href="/loan-offers" className="w-3/4 mb-2">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold">Loan Offers</Button>
-                  </Link>
-                  <Link href="/borrow-lend" className="w-3/4">
-                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold">Create Loan Request</Button>
-                  </Link>
-                </Card>
-              </div>
-
-              {/* Linha de gráficos inferiores */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Active Loans */}
-                <Card className="border-2 p-6">
-                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    <span className="font-semibold">Active Loans</span>
-                  </div>
-                  <div className={`${subtitleColor} text-sm mb-2 text-center`}>Number of active loans over time</div>
-                  <div className="w-full h-40 md:h-56">
-                    <ResponsiveLine
-                      data={[
-                        {
-                          id: 'Active Loans',
-                          color: '#2563eb',
-                          data: [
-                            { x: 'Jan', y: 1 },
-                            { x: 'Feb', y: 2 },
-                            { x: 'Mar', y: 2 },
-                            { x: 'Apr', y: 3 },
-                            { x: 'May', y: 2 },
-                            { x: 'Jun', y: 3 },
-                          ],
-                        },
-                      ]}
-                      margin={{ top: 20, right: 20, bottom: 48, left: 60 }}
-                      xScale={{ type: 'point' }}
-                      yScale={{ type: 'linear', min: 0, max: 5 }}
-                      axisBottom={{
-                        tickSize: 0,
-                        tickPadding: 12,
-                        legend: 'Month',
-                        legendPosition: 'middle',
-                        legendOffset: 32,
-                        tickRotation: 0
-                      }}
-                      axisLeft={{
-                        tickSize: 0,
-                        tickPadding: 12,
-                        legend: 'Loans',
-                        legendPosition: 'middle',
-                        legendOffset: -50,
-                        format: v => Number.isInteger(v) ? v : '',
-                        tickValues: [0, 1, 2, 3, 4, 5],
-                      }}
-                      colors={["#2563eb"]}
-                      enablePoints={true}
-                      pointSize={16}
-                      pointColor="#2563eb"
-                      pointBorderWidth={5}
-                      pointBorderColor={{ from: 'serieColor' }}
-                      enableArea={true}
-                      areaOpacity={0.22}
-                      isInteractive={true}
-                      enableGridX={false}
-                      enableGridY={true}
-                      gridYValues={6}
-                      lineWidth={5}
-                      theme={{
-                        axis: {
-                          ticks: { text: { fill: chartAxisColor, fontWeight: 700 } },
-                          legend: { text: { fill: chartAxisColor, fontWeight: 700, textAlign: 'center' } }
-                        },
-                        grid: { line: { stroke: chartGridColor, strokeWidth: 2, opacity: 0.7 } },
-                        tooltip: { container: { background: '#fff', color: '#1358EC', borderRadius: 10, fontSize: 16, fontWeight: 700, boxShadow: '0 2px 8px #0003', border: '1px solid #1358EC' } },
-                        crosshair: { line: { stroke: '#2563eb', strokeWidth: 3, strokeDasharray: '4 4' } }
-                      }}
-                      tooltip={({ point }) => (
-                        <div style={{ padding: 12, background: '#fff', color: '#1358EC', borderRadius: 10, fontWeight: 700, fontSize: 16, border: '1px solid #1358EC', boxShadow: '0 2px 8px #0003' }}>
-                          <strong>{point.data.x}</strong>: <span style={{ color: '#2563eb' }}>{point.data.y}</span>
-                        </div>
-                      )}
-                      pointLabel="y"
-                      pointLabelYOffset={-16}
-                      enableSlices="x"
-                    />
-                  </div>
-                  <div className="text-blue-400 text-xs mt-2 text-center w-full">Active Loans</div>
-                </Card>
-                {/* Reputation Growth */}
-                <Card className="border-2 p-6">
-                  <div className={`${titleColor} flex items-center justify-center gap-2 mb-2`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                    </svg>
-                    <span className="font-semibold">Reputation Growth</span>
-                  </div>
-                  <div className={`${subtitleColor} text-sm mb-2 text-center`}>Your reputation score over time</div>
-                  <div className="w-full h-40 md:h-56">
-                    <ResponsiveLine
-                      data={[
-                        {
-                          id: 'Reputation Score',
-                          color: '#10B981',
-                          data: [
-                            { x: 'Jan', y: 20 },
-                            { x: 'Feb', y: 40 },
-                            { x: 'Mar', y: 60 },
-                            { x: 'Apr', y: 80 },
-                            { x: 'May', y: 95 },
-                            { x: 'Jun', y: 100 },
-                          ],
-                        },
-                      ]}
-                      margin={{ top: 20, right: 20, bottom: 48, left: 60 }}
-                      xScale={{ type: 'point' }}
-                      yScale={{ type: 'linear', min: 0, max: 100 }}
-                      axisBottom={{
-                        tickSize: 0,
-                        tickPadding: 12,
-                        legend: 'Month',
-                        legendPosition: 'middle',
-                        legendOffset: 32,
-                        tickRotation: 0
-                      }}
-                      axisLeft={{
-                        tickSize: 0,
-                        tickPadding: 12,
-                        legend: 'Score',
-                        legendPosition: 'middle',
-                        legendOffset: -50,
-                        format: v => Math.round(v),
-                        tickValues: [0, 20, 40, 60, 80, 100],
-                      }}
-                      colors={["#10B981"]}
-                      enablePoints={true}
-                      pointSize={16}
-                      pointColor="#10B981"
-                      pointBorderWidth={5}
-                      pointBorderColor={{ from: 'serieColor' }}
-                      enableArea={true}
-                      areaOpacity={0.22}
-                      isInteractive={true}
-                      enableGridX={false}
-                      enableGridY={true}
-                      gridYValues={6}
-                      lineWidth={5}
-                      theme={{
-                        axis: {
-                          ticks: { text: { fill: chartAxisColor, fontWeight: 700 } },
-                          legend: { text: { fill: chartAxisColor, fontWeight: 700, textAlign: 'center' } }
-                        },
-                        grid: { line: { stroke: chartGridColor, strokeWidth: 2, opacity: 0.7 } },
-                        tooltip: { container: { background: '#fff', color: '#10B981', borderRadius: 10, fontSize: 16, fontWeight: 700, boxShadow: '0 2px 8px #0003', border: '1px solid #10B981' } },
-                        crosshair: { line: { stroke: '#10B981', strokeWidth: 3, strokeDasharray: '4 4' } }
-                      }}
-                      tooltip={({ point }) => (
-                        <div style={{ padding: 12, background: '#fff', color: '#10B981', borderRadius: 10, fontWeight: 700, fontSize: 16, border: '1px solid #10B981', boxShadow: '0 2px 8px #0003' }}>
-                          <strong>{point.data.x}</strong>: <span style={{ color: '#10B981' }}>{point.data.y}</span>
-                        </div>
-                      )}
-                      pointLabel="y"
-                      pointLabelYOffset={-16}
-                      enableSlices="x"
-                    />
-                  </div>
-                  <div className="text-green-400 text-xs mt-2 text-center w-full">Reputation Score</div>
-                </Card>
-              </div>
-
-              {/* Loan Activity Table */}
-              <Card className="border-2 p-8 mt-8">
-                <div className="flex flex-col items-center mb-6">
-                  <div className={`${titleColor} flex items-center gap-2 mb-1 text-lg font-semibold`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                    Loan Activity
-                  </div>
-                  <div className={`${subtitleColor} text-sm`}>History of your loans</div>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-sm text-center">
-                    <thead>
-                      <tr className={`${subtitleColor} border-b border-blue-900`}>
-                        <th className="py-2 px-3 font-normal">ID</th>
-                        <th className="py-2 px-3 font-normal">Date</th>
-                        <th className="py-2 px-3 font-normal">Type</th>
-                        <th className="py-2 px-3 font-normal">Asset</th>
-                        <th className="py-2 px-3 font-normal">Amount</th>
-                        <th className="py-2 px-3 font-normal">Counterparty</th>
-                        <th className="py-2 px-3 font-normal">Status</th>
-                        <th className="py-2 px-3 font-normal">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody className={textColor}>
-                      {recentActivity.map((loan) => (
-                        <tr key={loan.id} className={`border-b border-blue-900`}>
-                          <td className="py-2 px-3">#{loan.id}</td>
-                          <td className="py-2 px-3">{loan.date}</td>
-                          <td className="py-2 px-3">
-                            <span className={`${
-                              loan.type === "Borrowed" ? "bg-green-700" : "bg-blue-700"
-                            } text-white px-3 py-1 rounded-full text-xs font-semibold`}>
-                              {loan.type}
-                            </span>
-                          </td>
-                          <td className="py-2 px-3 flex items-center justify-center gap-2">
-                            <img src={`/images/${loan.token.toLowerCase()}-logo.png`} alt={loan.token} className="w-5 h-5" />
-                            <span className="font-medium">{loan.token}</span>
-                          </td>
-                          <td className="py-2 px-3">{loan.amount} {loan.token}</td>
-                          <td className="py-2 px-3">{loan.counterparty}</td>
-                          <td className="py-2 px-3">
-                            <span className={`${
-                              loan.status === "Completed" ? "bg-green-900 text-green-400" :
-                              loan.status === "Active" ? "bg-blue-900 text-blue-400" :
-                              "bg-yellow-600 text-white"
-                            } px-3 py-1 rounded-full text-xs font-semibold`}>
-                              {loan.status}
-                            </span>
-                          </td>
-                          <td className="py-2 px-3">
-                            <Button 
-                              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1 rounded-lg"
-                              onClick={() => handleViewLoan(loan)}
-                            >
-                              View
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                <div className="flex justify-center mt-6">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-lg">View All</Button>
-                </div>
+                </CardContent>
               </Card>
 
-              {/* Modal for viewing loan details */}
-              <LoanViewModal 
-                loan={selectedLoan}
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-              />
+              {/* Loan History Chart */}
+              <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className={`text-xl font-bold ${titleColor}`}>
+                    Histórico de Empréstimos
+                  </CardTitle>
+                  <CardDescription className={descriptionColor}>
+                    Evolução dos seus empréstimos ao longo do tempo
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-64">
+                    <ResponsiveLine
+                      data={chartData}
+                      margin={{ top: 20, right: 20, bottom: 40, left: 40 }}
+                      xScale={{ type: 'point' }}
+                      yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: true, reverse: false }}
+                      axisTop={null}
+                      axisRight={null}
+                      axisBottom={{
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Mês',
+                        legendOffset: 36,
+                        legendPosition: 'middle',
+                        truncateTickAt: 0
+                      }}
+                      axisLeft={{
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Valor ($)',
+                        legendOffset: -40,
+                        legendPosition: 'middle',
+                        truncateTickAt: 0
+                      }}
+                      pointSize={10}
+                      pointColor={{ theme: 'background' }}
+                      pointBorderWidth={2}
+                      pointBorderColor={{ from: 'serieColor' }}
+                      pointLabelYOffset={-12}
+                      useMesh={true}
+                      legends={[
+                        {
+                          anchor: 'top',
+                          direction: 'row',
+                          justify: false,
+                          translateX: 0,
+                          translateY: -20,
+                          itemsSpacing: 0,
+                          itemDirection: 'left-to-right',
+                          itemWidth: 80,
+                          itemHeight: 20,
+                          itemOpacity: 0.75,
+                          symbolSize: 12,
+                          symbolShape: 'circle',
+                          symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                          effects: [
+                            {
+                              on: 'hover',
+                              style: {
+                                itemBackground: 'rgba(0, 0, 0, .03)',
+                                itemOpacity: 1
+                              }
+                            }
+                          ]
+                        }
+                      ]}
+                      theme={{
+                        axis: {
+                          domain: {
+                            line: {
+                              stroke: chartGridColor,
+                              strokeWidth: 1
+                            }
+                          },
+                          ticks: {
+                            line: {
+                              stroke: chartGridColor,
+                              strokeWidth: 1
+                            },
+                            text: {
+                              fill: chartAxisColor,
+                              fontSize: 12
+                            }
+                          },
+                          legend: {
+                            text: {
+                              fill: chartAxisColor,
+                              fontSize: 12,
+                              fontWeight: 'bold'
+                            }
+                          }
+                        },
+                        grid: {
+                          line: {
+                            stroke: chartGridColor,
+                            strokeWidth: 1
+                          }
+                        },
+                        legends: {
+                          text: {
+                            fill: chartAxisColor,
+                            fontSize: 12
+                          }
+                        },
+                        tooltip: {
+                          container: {
+                            background: theme === 'dark' ? '#374151' : '#ffffff',
+                            color: theme === 'dark' ? '#ffffff' : '#000000',
+                            fontSize: 12,
+                            borderRadius: 8,
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
+
+            {/* Loan Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="border-0 shadow-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-blue-100 text-sm font-medium">Total Emprestado</p>
+                      <p className="text-2xl font-bold">${loanSummary.totalBorrowed}</p>
+                    </div>
+                    <div className="w-12 h-12 bg-blue-400/20 rounded-full flex items-center justify-center">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                      </svg>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-gradient-to-r from-green-500 to-green-600 text-white">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-green-100 text-sm font-medium">Total Emprestado</p>
+                      <p className="text-2xl font-bold">${loanSummary.totalLent}</p>
+                    </div>
+                    <div className="w-12 h-12 bg-green-400/20 rounded-full flex items-center justify-center">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                      </svg>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-purple-100 text-sm font-medium">Empréstimos Ativos</p>
+                      <p className="text-2xl font-bold">{loanSummary.activeLoans}</p>
+                    </div>
+                    <div className="w-12 h-12 bg-purple-400/20 rounded-full flex items-center justify-center">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-orange-100 text-sm font-medium">Taxa Média</p>
+                      <p className="text-2xl font-bold">{loanSummary.avgInterestRate}%</p>
+                    </div>
+                    <div className="w-12 h-12 bg-orange-400/20 rounded-full flex items-center justify-center">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Recent Activity */}
+            <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className={`text-xl font-bold ${titleColor}`}>
+                  Atividade Recente
+                </CardTitle>
+                <CardDescription className={descriptionColor}>
+                  Suas transações mais recentes
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentActivity.map((activity) => (
+                    <div key={activity.id} className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                      <div className="flex items-center space-x-4">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                          activity.type === 'Borrowed' ? 'bg-blue-100 dark:bg-blue-900' : 'bg-green-100 dark:bg-green-900'
+                        }`}>
+                          <svg className={`w-5 h-5 ${
+                            activity.type === 'Borrowed' ? 'text-blue-600 dark:text-blue-400' : 'text-green-600 dark:text-green-400'
+                          }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">
+                            {activity.type} {activity.amount} {activity.token}
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {activity.date} • {activity.counterparty}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge 
+                          variant={activity.status === 'Completed' ? 'default' : activity.status === 'Active' ? 'secondary' : 'outline'}
+                          className="text-xs"
+                        >
+                          {activity.status}
+                        </Badge>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewLoan(activity)}
+                          className="text-xs"
+                        >
+                          Ver Detalhes
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
-          <TabsContent value="profile">
-            <ProfileDashboard />
-          </TabsContent>
-
+          {/* Borrow Tab */}
           <TabsContent value="borrow">
             <BorrowDashboard />
           </TabsContent>
 
+          {/* Lend Tab */}
           <TabsContent value="lend">
             <LendDashboard />
           </TabsContent>
+
+          {/* Profile Tab */}
+          <TabsContent value="profile">
+            <ProfileDashboard />
+          </TabsContent>
+
+          {/* Settings Tab */}
+          <TabsContent value="settings" className="space-y-6">
+            <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className={`text-xl font-bold ${titleColor}`}>
+                  Configurações da Conta
+                </CardTitle>
+                <CardDescription className={descriptionColor}>
+                  Gerencie suas preferências e configurações de segurança
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-sm font-medium">Notificações por Email</Label>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Receba notificações sobre seus empréstimos
+                      </p>
+                    </div>
+                    <Switch />
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-sm font-medium">Notificações Push</Label>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Receba notificações em tempo real
+                      </p>
+                    </div>
+                    <Switch />
+                  </div>
+                  <Separator />
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-sm font-medium">Autenticação de Dois Fatores</Label>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Adicione uma camada extra de segurança
+                      </p>
+                    </div>
+                    <Switch />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 shadow-lg bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className={`text-xl font-bold ${titleColor}`}>
+                  Preferências de Empréstimo
+                </CardTitle>
+                <CardDescription className={descriptionColor}>
+                  Configure suas preferências para empréstimos automáticos
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="minAmount">Valor Mínimo de Empréstimo</Label>
+                    <Input id="minAmount" type="number" placeholder="100" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="maxAmount">Valor Máximo de Empréstimo</Label>
+                    <Input id="maxAmount" type="number" placeholder="10000" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="minAPR">APR Mínimo (%)</Label>
+                    <Input id="minAPR" type="number" placeholder="5.0" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="maxDuration">Duração Máxima (dias)</Label>
+                    <Input id="maxDuration" type="number" placeholder="90" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="description">Descrição do Perfil</Label>
+                  <Textarea 
+                    id="description" 
+                    placeholder="Descreva seu perfil de investimento e preferências..."
+                    rows={4}
+                  />
+                </div>
+                <Button className="w-full">
+                  Salvar Configurações
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
+
+      {/* Loan View Modal */}
+      {selectedLoan && (
+        <LoanViewModal
+          loan={selectedLoan}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    }>
+      <DashboardContent />
+    </Suspense>
   )
 }

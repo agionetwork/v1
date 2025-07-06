@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
+// Marcar como dinâmica para evitar renderização estática
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const cookieHeader = request.headers.get('cookie');

@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+// Marcar como dinâmica para evitar renderização estática
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const response = NextResponse.redirect(new URL('/', request.url));

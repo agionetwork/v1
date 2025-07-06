@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+// Marcar como dinâmica para evitar renderização estática
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     // Redirecionar para a página de login do Civic
